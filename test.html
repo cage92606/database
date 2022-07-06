@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Timeline | groups | Group example</title>
+
+  <style>
+    body, html {
+      /* font-family: Meiryo; */
+      font-family: arial, sans-serif;
+      font-size: 11pt;
+    }
+
+    #visualization {
+      box-sizing: border-box;
+      width: 100%;
+      height: 300px;
+    }
+    .vis-item.vis-background.workhours {
+    background: #AFD9FE;
+    z-index: -1;
+  }
+  </style>
+
+  <!-- note: moment.js must be loaded before vis-timeline-graph2d or the embedded version of moment.js is used -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+  <script type="text/javascript" src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+  <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+<p>
+  This example demonstrate using groups. Note that a DataSet is used for both
+  items and groups, allowing to dynamically add, update or remove both items
+  and groups via the DataSet.
+</p>
+<div id="visualization"></div>
+
+<script>
+// history: 
+//  base: groups.html
+//  nest: nestedThreeLevels.html
+//  nest: nestedGroups.html
+//  scrol: visibleGroups.html
+
+
+function showVisibleGroups() {
+            var a = timeline.getVisibleGroups();
+            document.getElementById("visibleGroupsContainer").innerHTML = ""
+            document.getElementById("visibleGroupsContainer").innerHTML += a;
+        };
+
+        var now = Date.now()
+
+  // var now = moment().minutes(0).seconds(0).milliseconds(0);
+  var groupCount = 5;
+  var itemCount = 20;
+
+  // create a data set with groups
+  // var names = ['US', 'EU', 'ASIA', 'JP'];
+  var groups = new vis.DataSet([
+  {id:0, content: 'US', value: 1, nestedGroups:[11, 12, 13]},
+  {id:1, content: 'EU', value: 2, nestedGroups:[21, 22, 23]},
+  {id:2, content: 'ASIA', value: 4},
+  {id:3, content: 'JP', value: 3, nestedGroups:[31, 32, 33]},
+  {id:4, content: 'Me', value: 4, nestedGroups:[41, 42, 43, 44, 45, 46]},     
+  {id:5, content: 'World', value: 5},
+  ]);
+
+  groups.add([
+  {id:11, content:"Reg", treeLevel: 2},
+  {id:12, content:"Pol", treeLevel: 2},
+  {id:13, content:"Pri", treeLevel: 2},
+  {id:21, content:"Reg", treeLevel: 2},
+  {id:22, content:"Pol", treeLevel: 2},
+  {id:23, content:"Pri", treeLevel: 2},
+  {id:31, content:"Reg", treeLevel: 2},
+  {id:32, content:"Pol", treeLevel: 2},
+  {id:33, content:"Pri", treeLevel: 2},
+  {id:41, content:"USD", treeLevel: 2},
+  {id:42, content:"EURO", treeLevel: 2},
+  {id:43, content:"CX", treeLevel: 2},
+  {id:44, content:"GX", treeLevel: 2},
+  {id:45, content:"DX", treeLevel: 2},
+  {id:46, content:"DAX", treeLevel: 2},
+  ])
+  // create a dataset with items
+  var items = new vis.DataSet();
+  items.add([ 
+  {id: 1, group: 11, content: 'FOMC', start: '2022/7/26', end: '2022/7/27', type:'box', title: '7/26~27'},
+  {id: 2, group: 11, content: 'FOMC', start: '2022/9/20', end: '2022/9/21', type:'box', title: '9/26~27'},
+  {id: 3, group: 11, content: 'FOMC', start: '2022/11/1', end: '2022/11/2', type:'box', title: '11/1~2'},
+  {id: 4, group: 11, content: 'FOMC', start: '2022/12/13', end: '2022/12/14', type:'box', title: '12/13~14'},
+  {id: 5, group: 12, content: 'Mid Election', start: '2022/11/8', type:'box', title: '11/8'},
+  {id: 6, group: 32, content: '参院選', start: '2022/7/10', type:'box', title:'7/10'},
+  {id: 7, group: 41, content: '300k', start: '2022/6/20', type:'box', title:'6/20'},
+  {id: 8, group: 42, content: '200k', start: '2022/6/20', type:'box', title:'6/20'},
+  {id: 9, group: 21, content: 'ECB', start: '2022/7/21', type:'box', title: '7/21'},
+  {id: 10, group: 21, content: 'ECB', start: '2022/9/8', type:'box', title: '9/8'},
+  {id: 11, group: 21, content: 'ECB', start: '2022/10/27', type:'box', title: '10/27'},
+  {id: 12, group: 21, content: 'ECB', start: '2022/12/15', type:'box', title: '12/15'},
+  {id: 13, group: 31, content: 'BOJ', start: '2022/7/21', type:'box', title: '7/20~21'},
+  {id: 14, group: 31, content: 'BOJ', start: '2022/9/22', type:'box', title: '9/21~22'},
+  {id: 15, group: 31, content: 'BOJ', start: '2022/10/28', type:'box', title: '10/27~28'},
+  {id: 16, group: 31, content: 'BOJ', start: '2022/12/20',  type:'box', title: '12/19~20'},
+  {id: 17, group: 43, content: '100k', start: '2022/5/6',  type:'box', title: '5/6'},
+  {id: 18, group: 44, content: '100k', start: '2022/5/6',  type:'box', title: '5/6'},
+  {id: 19, group: 42, content: '300k', start: '2022/4/20', type:'box', title:'4/20'},
+  {id: 20, group: 41, content: '250k', start: '2022/5/6',  type:'box', title: '5/6'},
+  {id: 21, group: 42, content: '160k', start: '2022/5/6',  type:'box', title: '5/6'},
+  {id: 22, group: 43, content: '100k', start: '2022/3/29',  type:'box', title: '3/29'},
+  {id: 23, group: 44, content: '100k', start: '2022/3/29',  type:'box', title: '3/29'},
+  {id: 24, group: 45, content: '100k', start: '2022/3/29',  type:'box', title: '3/29'},
+  {id: 25, group: 46, content: '100k', start: '2022/3/9',  type:'box', title: '3/9'},
+  {id: 26, group: 43, content: '100k', start: '2022/2/15',  type:'box', title: '2/15'},
+  {id: 27, group: 44, content: '100k', start: '2022/2/15',  type:'box', title: '2/15'},
+  {id: 28, group: 45, content: '100k', start: '2022/2/15',  type:'box', title: '2/15'},
+  {id: 29, group: 43, content: '100k', start: '2022/1/11',  type:'box', title: '1/11'},
+  {id: 30, group: 44, content: '100k', start: '2022/1/11',  type:'box', title: '1/11'},
+  {id: 31, group: 45, content: '100k', start: '2022/1/11',  type:'box', title: '1/11'},
+  {id: 32, group: 43, content: '100k', start: '2021/11/28',  type:'box', title: '11/28'},
+  {id: 33, group: 44, content: '100k', start: '2021/11/28',  type:'box', title: '11/28'},
+  {id: 34, group: 45, content: '100k', start: '2021/11/28',  type:'box', title: '11/28'},
+  {id: 35, group: 43, content: '100k', start: '2021/10/15',  type:'box', title: '10/15'},
+  {id: 36, group: 44, content: '100k', start: '2021/10/15',  type:'box', title: '10/15'},
+  {id: 37, group: 45, content: '100k', start: '2021/10/15',  type:'box', title: '10/15'},
+  {id: 38, group: 43, content: '100k', start: '2021/9/21',  type:'box', title: '9/21'},
+  {id: 39, group: 44, content: '100k', start: '2021/9/21',  type:'box', title: '9/21'},
+  {id: 40, group: 45, content: '100k', start: '2021/9/21',  type:'box', title: '9/21'},
+  {id: 41, group: 5, content: 'Ukraine War', start: '2022/2/24', end: '2022/7/31', type:'range', title: '2/24~7/31'},
+  {id: 42, group: 5, content: 'Energy Inflation', start: '2022/2/24', end: '2022/7/31',   type:'range', title: '2/24~7/31'},
+  {id: 43, group: 5, content: 'Food Inflation ', start: '2022/2/24', end: '2022/7/31',   type:'range', title: '2/24~7/31'},
+  {id: 44, group: 5, content: 'Pandemic', start: '2020/2/1', end: '2023/1/1',   type:'range'},
+  {id: 45, group: 5, content: 'US$ Stronger', start: '2022/1/1', end: '2022/7/1',   type:'range'},
+  ])
+
+  // create visualization
+  var container = document.getElementById('visualization');
+
+  var options = {
+            stack: true,
+            // maxHeight: 640,
+            horizontalScroll: true,
+            verticalScroll: true,
+            zoomKey: "ctrlKey",
+            start: Date.now() - 1000 * 60 * 60 * 24 * 3, // minus 3 days
+            end: Date.now() + 1000 * 60 * 60 * 24 * 21, // plus 1 months aprox.
+            orientation: {
+                axis: "both",
+                item: "top"
+            },
+            editable: true,
+            groupOrder: function(a, b) {
+      return a.value - b.value
+    },
+        };
+  // var options = {
+  //   groupOrder: 'content'  // groupOrder can be a property name or a sorting function
+  // };
+
+  var timeline = new vis.Timeline(container, items, groups, options);
+  // timeline.setOptions(options);
+  // timeline.setGroups(groups);
+  // timeline.setItems(items);
+
+  function debounce(func, wait = 100) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(this, args);
+                }, wait);
+            };
+        }
+
+        let groupFocus = (e) => {
+            let vGroups = timeline.getVisibleGroups()
+            let vItems = vGroups.reduce((res, groupId) => {
+                let group = timeline.itemSet.groups[groupId]
+                if (group.items) {
+                    res = res.concat(Object.keys(group.items))
+                }
+                return res
+            }, [])
+            timeline.focus(vItems)
+        }
+        this.timeline.on("scroll", debounce(groupFocus, 200))
+        // Enabling the next line leads to a continuous since calling focus might scroll vertically even if it shouldn't
+        // this.timeline.on("scrollSide", debounce(groupFocus, 200))
+</script>
+</body>
+</html>
