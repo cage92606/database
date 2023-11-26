@@ -28,14 +28,12 @@ function RenderInputTable({
   updateInput,
   resetInputForm,
   auth,
+  isUpdating,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   // const classNameForEditAndDelete = this.props.isMobile ? '' : 'sticky-td';
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
 
-  {
-    /* Performs similarly to componentDidMount in classes */
-  }
   useEffect(() => {
     window.addEventListener(
       'resize',
@@ -47,7 +45,7 @@ function RenderInputTable({
     );
   }, [isMobile]);
 
-  console.log('isMobile: ', isMobile);
+  // console.log('isMobile: ', isMobile);
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -67,8 +65,14 @@ function RenderInputTable({
         value.data,
         value.unit
       );
-      resetInputForm();
+      // console.log('isUpdating: ', isUpdating);
     }
+    // resetInputForm();
+    // <div className="container">
+    //   <div className="row">
+    //     <Loading />
+    //   </div>
+    // </div>;
   };
 
   return (
@@ -78,6 +82,7 @@ function RenderInputTable({
         toggle={toggleModal}
         size="lg"
         style={{ maxWidth: '1000px', width: '100%' }}
+        className="my-modal"
       >
         <ModalHeader toggle={toggleModal}>Update Input</ModalHeader>
         <ModalBody>
@@ -190,7 +195,15 @@ function RenderInputTable({
           input.place ? (
             input.place.indexOf('http') === 0 ? (
               <a href={input.place} target="_blank" rel="noreferrer">
-                <span className="fa fa-link"></span>
+                {/* <span className="fa fa-link"></span> */}
+                {/* {input.place.split('//')[1].split('/')[0].split('.')[1]} */}
+                {isMobile ? (
+                  <span className="fa fa-link"></span>
+                ) : (
+                  <span>
+                    {input.place.split('//')[1].split('/')[0].split('.')[1]}
+                  </span>
+                )}
               </a>
             ) : (
               <a href={`file:${input.place}`} target="_blank" rel="noreferrer">
@@ -201,7 +214,7 @@ function RenderInputTable({
             ''
           )
         ) : (
-          <span>{input.place}</span>
+          <code>{input.place}</code>
         )}
       </td>
       <td>{input.person}</td>
@@ -215,7 +228,15 @@ function RenderInputTable({
           input.data ? (
             <a href={input.data} target="_blank" rel="noreferrer">
               {/* <span className="fa fa-link" color="pink"></span> */}
-              <span className="fa fa-link" style={{ color: 'crimson' }} />
+              {/* <span className="fa fa-link" style={{ color: 'crimson' }} /> */}
+              {/* {input.place.split('//')[1].split('/')[0].split('.')[1]} */}
+              {isMobile ? (
+                <span className="fa fa-link"></span>
+              ) : (
+                <span>
+                  {input.data.split('//')[1].split('/')[0].split('.')[1]}
+                </span>
+              )}
             </a>
           ) : (
             ''
@@ -231,6 +252,7 @@ function RenderInputTable({
           <Button
             outline
             color="danger"
+            disabled={isUpdating} // 2023.11.18
             onClick={() => {
               if (window.confirm('Are you sure?')) deleteInput(input._id);
             }}
@@ -247,7 +269,7 @@ function RenderInputTable({
 
 export let input_num;
 // export let foundInputs2ForExport;
-console.log('input_num in ListData is ', input_num);
+// console.log('input_num in ListData is ', input_num);
 
 export default function ListData(props) {
   // const searchDone = (display) => {
@@ -295,6 +317,7 @@ export default function ListData(props) {
   // };
 
   if (props.isLoading) {
+    // console.log('loading');
     return (
       <div className="container">
         <div className="row">
@@ -311,7 +334,7 @@ export default function ListData(props) {
       </div>
     );
   } else if (props.keyword !== '') {
-    console.log('you are in keyword');
+    // console.log('you are in keyword');
     // console.log('setIsKeywordChanged is now ', setIsKeywordChanged);
 
     const keywordAndArray = props.keyword.split('|');
@@ -339,10 +362,8 @@ export default function ListData(props) {
         }
       }
       keywords.push(keywords_temp); // OR演算子で分割した各々のキーワード群
-      exwords.push(exwords_temp);
+      exwords.push(exwords_temp); // NOT演算子, !, で分割した各々のキーワード郡
     }
-    console.log(`keywords is ${keywords}`);
-    console.log(`exwords is ${exwords}`);
     var foundInputs = [];
     for (let i = 0; i < keywords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
@@ -382,15 +403,15 @@ export default function ListData(props) {
       });
       foundInputs2 = foundInputs2.concat(foundInputs2_temp);
       //     }
+      foundInputs2.sort((a, b) => {
+        return a._id.localeCompare(b._id);
+      });
     }
 
     // 2023.5.5
     // Field buttons didn't work upon listing search result because it is always
     // overwritten by the sort here. So added this condition to not execute it
     // if one of the buttons are being pushed
-
-    console.log('isAnyFieldBtnPushed is ', isAnyFieldBtnPushed);
-    console.log('isPlaceAscending is ', isPlaceAscending);
 
     if (!isAnyFieldBtnPushed) {
       props.inputs.sort((a, b) => {
@@ -444,72 +465,72 @@ export default function ListData(props) {
           return day;
         };
         if (isDateAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             // return a.date.localeCompare(b.date);
             return new Date(conv(a.date)) - new Date(conv(b.date));
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             // return a.date.localeCompare(b.date).reverse();
             return new Date(conv(b.date)) - new Date(conv(a.date));
           });
         }
       } else if (isPlaceBtnPushed) {
         if (isPlaceAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.place.localeCompare(b.place);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.place.localeCompare(a.place);
           });
         }
         // setIsPlaceBtnPushed(false);
       } else if (isPersonBtnPushed) {
         if (isPersonAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.person.localeCompare(b.person);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.person.localeCompare(a.person);
           });
         }
         // setIsPersonBtnPushed(false);
       } else if (isSubjectBtnPushed) {
         if (isSubjectAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.subject.localeCompare(b.subject);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.subject.localeCompare(a.subject);
           });
         }
         // setIsSubjectBtnPushed(false);
       } else if (isReasonBtnPushed) {
         if (isReasonAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.reason.localeCompare(b.reason);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.reason.localeCompare(a.reason);
           });
         }
       } else if (isConditionBtnPushed) {
         if (isConditionAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.condition.localeCompare(b.condition);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.condition.localeCompare(a.condition);
           });
         }
       } else if (isDataBtnPushed) {
         if (isDataAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             // foundInputs2.sort((a, b) => {
             return a.data
               .replaceAll(',', '')
@@ -518,23 +539,23 @@ export default function ListData(props) {
               });
           });
         } else {
-          props.inputs.reverse((a, b) => {
+          foundInputs2.sort((a, b) => {
             // foundInputs2.reverse((a, b) => {
-            return a.data
+            return b.data
               .replaceAll(',', '')
-              .localeCompare(b.data.replaceAll(',', ''), undefined, {
+              .localeCompare(a.data.replaceAll(',', ''), undefined, {
                 numeric: true,
-              })
-              .reverse();
+              });
+            // .reverse();
           });
         }
       } else if (isUnitBtnPushed) {
         if (isUnitAscending === false) {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return a.unit.localeCompare(b.unit);
           });
         } else {
-          props.inputs.sort((a, b) => {
+          foundInputs2.sort((a, b) => {
             return b.unit.localeCompare(a.unit);
           });
         }
@@ -559,6 +580,7 @@ export default function ListData(props) {
             updateInput={props.updateInput}
             resetInputForm={props.resetInputForm}
             auth={props.auth}
+            isUpdating={props.isUpdating}
           />
           {/* </div> */}
         </Fragment>
@@ -670,7 +692,6 @@ export default function ListData(props) {
     };
 
     input_num = inputList.length;
-    console.log('number of inputs found is ', input_num);
 
     // Get current posts
     const indexOfLastInputList = currentPage * inputListPerPage;
@@ -793,9 +814,6 @@ export default function ListData(props) {
       </div>
     );
   } else if (props.inputs !== null) {
-    console.log('you are in inputs');
-    console.log('keyword is ', props.keyword);
-
     // this.props.getDisplay(props.inputs);
 
     const inputList = props.inputs.map((input) => {
@@ -809,6 +827,7 @@ export default function ListData(props) {
             updateInput={props.updateInput}
             resetInputForm={props.resetInputForm}
             auth={props.auth}
+            isUpdating={props.isUpdating}
           />
           {/* </div> */}
         </Fragment>
@@ -958,17 +977,15 @@ export default function ListData(props) {
           );
         });
       } else {
-        props.inputs.reverse((a, b) => {
-          return a.data
-            .replaceAll(',', '')
-            .localeCompare(
-              b.data.replaceAll(',', ''),
-              // 'en-u-kn-true'
-              undefined,
-              { numeric: true }
-              // { ignorePunctuation: true }
-            )
-            .reverse();
+        props.inputs.sort((a, b) => {
+          return b.data.replaceAll(',', '').localeCompare(
+            a.data.replaceAll(',', ''),
+            // 'en-u-kn-true'
+            undefined,
+            { numeric: true }
+            // { ignorePunctuation: true }
+          );
+          // .reverse();
         });
       }
     };
@@ -988,7 +1005,6 @@ export default function ListData(props) {
     };
 
     input_num = inputList.length;
-    console.log('number of inputs found is ', input_num);
     const csvData = props.inputs;
 
     // Get current posts
