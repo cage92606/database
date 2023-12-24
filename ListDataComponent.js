@@ -12,7 +12,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  Table,
+  Table
 } from 'reactstrap';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { Loading } from './LoadingComponent';
@@ -22,13 +22,13 @@ import { Control, Form } from 'react-redux-form';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Pagination from './Pagination';
 
-function RenderInputTable({
+function RenderInputTable ({
   input,
   deleteInput,
   updateInput,
   resetInputForm,
   auth,
-  isUpdating,
+  isUpdating
 }) {
   const [isOpen, setIsOpen] = useState(false);
   // const classNameForEditAndDelete = this.props.isMobile ? '' : 'sticky-td';
@@ -80,94 +80,94 @@ function RenderInputTable({
       <Modal
         isOpen={isOpen}
         toggle={toggleModal}
-        size="lg"
+        size='lg'
         style={{ maxWidth: '1000px', width: '100%' }}
-        className="my-modal"
+        className='my-modal'
       >
         <ModalHeader toggle={toggleModal}>Update Input</ModalHeader>
         <ModalBody>
-          <Form onSubmit={handleSubmit} model="input">
-            <Row className="form-group mb-2">
-              <Label htmlFor="date">date</Label>
+          <Form onSubmit={handleSubmit} model='input'>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='date'>date</Label>
               <Control.text
-                model=".date"
-                id="date"
-                name="date"
+                model='.date'
+                id='date'
+                name='date'
                 defaultValue={input.date}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="place">place</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='place'>place</Label>
               <Control.text
-                model=".place"
-                id="place"
-                name="place"
+                model='.place'
+                id='place'
+                name='place'
                 defaultValue={input.place}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="person">person</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='person'>person</Label>
               <Control.text
-                model=".person"
-                id="person"
-                name="person"
+                model='.person'
+                id='person'
+                name='person'
                 defaultValue={input.person}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="subject">subject</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='subject'>subject</Label>
               <Control.text
-                model=".subject"
-                id="subject"
-                name="subject"
+                model='.subject'
+                id='subject'
+                name='subject'
                 defaultValue={input.subject}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="reason">reason</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='reason'>reason</Label>
               <Control.textarea
-                model=".reason"
-                id="reason"
-                name="reason"
+                model='.reason'
+                id='reason'
+                name='reason'
                 defaultValue={input.reason}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="condition">condition</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='condition'>condition</Label>
               <Control.textarea
-                model=".condition"
-                id="condition"
-                name="condition"
+                model='.condition'
+                id='condition'
+                name='condition'
                 defaultValue={input.condition}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Row className="form-group mb-2">
-              <Label htmlFor="data">data</Label>
+            <Row className='form-group mb-2'>
+              <Label htmlFor='data'>data</Label>
               <Control.text
-                model=".data"
-                id="data"
-                name="data"
+                model='.data'
+                id='data'
+                name='data'
                 defaultValue={input.data}
-                className="form-control"
+                className='form-control'
               />
               {/* </Row>
               <Row className="form-group mb-2"> */}
-              <Label htmlFor="unit">unit</Label>
+              <Label htmlFor='unit'>unit</Label>
               <Control.text
-                model=".unit"
-                id="unit"
-                name="unit"
+                model='.unit'
+                id='unit'
+                name='unit'
                 defaultValue={input.unit}
-                className="form-control"
+                className='form-control'
               />
             </Row>
-            <Button type="submit" value="submit" color="primary">
+            <Button type='submit' value='submit' color='primary'>
               Submit
             </Button>
           </Form>
@@ -179,12 +179,12 @@ function RenderInputTable({
       <td className={`${isMobile ? '' : 'sticky-td'}`}>
         {/* <td className="sticky-td"> */}
         {auth.id === input.user ? (
-          <Button outline color="primary" onClick={toggleModal}>
-            <span className="fa fa-edit"></span>
+          <Button outline color='primary' onClick={toggleModal}>
+            <span className='fa fa-edit'></span>
           </Button>
         ) : (
-          <Button outline color="secondary">
-            <span className="fa fa-edit"></span>
+          <Button outline color='secondary'>
+            <span className='fa fa-edit'></span>
           </Button>
         )}
       </td>
@@ -194,20 +194,39 @@ function RenderInputTable({
         {input.place.indexOf('http') === 0 || input.place.indexOf('/') === 0 ? (
           input.place ? (
             input.place.indexOf('http') === 0 ? (
-              <a href={input.place} target="_blank" rel="noreferrer">
+              <a href={input.place} target='_blank' rel='noreferrer'>
                 {/* <span className="fa fa-link"></span> */}
                 {/* {input.place.split('//')[1].split('/')[0].split('.')[1]} */}
-                {isMobile ? (
-                  <span className="fa fa-link"></span>
-                ) : (
+                {/* {isMobile ? ( */}
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : input.place.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
                   <span>
                     {input.place.split('//')[1].split('/')[0].split('.')[1]}
+                  </span>
+                ) : input.place.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {input.place.split('//')[1].split('/')[0].split('.')[0]}
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                input.place.split('//')[1].split('/')[0].split('.')[0].length <
+                  input.place.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {input.place.split('//')[1].split('/')[0].split('.')[1]}
+                  </span>
+                ) : (
+                  <span>
+                    {input.place.split('//')[1].split('/')[0].split('.')[0]}
                   </span>
                 )}
               </a>
             ) : (
-              <a href={`file:${input.place}`} target="_blank" rel="noreferrer">
-                <span className="fa fa-folder-open"></span>
+              <a href={`file:${input.place}`} target='_blank' rel='noreferrer'>
+                <span className='fa fa-folder-open'></span>
               </a>
             )
           ) : (
@@ -224,20 +243,42 @@ function RenderInputTable({
       <td>{input.reason}</td>
       <td>{input.condition}</td>
       <td>
-        {input.data.indexOf('http') === 0 ? (
+        {input.data.indexOf('http') === 0 || input.data.indexOf('/') === 0 ? (
           input.data ? (
-            <a href={input.data} target="_blank" rel="noreferrer">
-              {/* <span className="fa fa-link" color="pink"></span> */}
-              {/* <span className="fa fa-link" style={{ color: 'crimson' }} /> */}
-              {/* {input.place.split('//')[1].split('/')[0].split('.')[1]} */}
-              {isMobile ? (
-                <span className="fa fa-link"></span>
-              ) : (
-                <span>
-                  {input.data.split('//')[1].split('/')[0].split('.')[1]}
-                </span>
-              )}
-            </a>
+            input.data.indexOf('http') === 0 ? (
+              <a href={input.data} target='_blank' rel='noreferrer'>
+                {/* {isMobile ? ( */}
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : input.data.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {input.data.split('//')[1].split('/')[0].split('.')[1]}
+                  </span>
+                ) : input.data.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {input.data.split('//')[1].split('/')[0].split('.')[0]}
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                input.data.split('//')[1].split('/')[0].split('.')[0].length <
+                  input.data.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {input.data.split('//')[1].split('/')[0].split('.')[1]}
+                  </span>
+                ) : (
+                  <span>
+                    {input.data.split('//')[1].split('/')[0].split('.')[0]}
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a href={`file:${input.data}`} target='_blank' rel='noreferrer'>
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
           ) : (
             ''
           )
@@ -251,13 +292,13 @@ function RenderInputTable({
         {auth.id === input.user ? (
           <Button
             outline
-            color="danger"
+            color='danger'
             disabled={isUpdating} // 2023.11.18
             onClick={() => {
               if (window.confirm('Are you sure?')) deleteInput(input._id);
             }}
           >
-            <span className="fa fa-times"></span>
+            <span className='fa fa-times'></span>
           </Button>
         ) : (
           <span></span>
@@ -271,7 +312,7 @@ export let input_num;
 // export let foundInputs2ForExport;
 // console.log('input_num in ListData is ', input_num);
 
-export default function ListData(props) {
+export default function ListData (props) {
   // const searchDone = (display) => {
   //   setDisplay(display);
   // };
@@ -299,7 +340,7 @@ export default function ListData(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [inputListPerPage] = useState(1000);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   // const toggleSort = () => {
   //   setIsAscending(!isAscending);
@@ -319,16 +360,16 @@ export default function ListData(props) {
   if (props.isLoading) {
     // console.log('loading');
     return (
-      <div className="container">
-        <div className="row">
+      <div className='container'>
+        <div className='row'>
           <Loading />
         </div>
       </div>
     );
   } else if (props.errMess) {
     return (
-      <div className="container">
-        <div className="row">
+      <div className='container'>
+        <div className='row'>
           <h4>{props.errMess}</h4>
         </div>
       </div>
@@ -367,9 +408,9 @@ export default function ListData(props) {
     var foundInputs = [];
     for (let i = 0; i < keywords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
-      const foundInputs_temp = props.inputs.filter((curr) => {
+      const foundInputs_temp = props.inputs.filter(curr => {
         const test = keywords[i].map(
-          (keyword) =>
+          keyword =>
             curr.date.toLowerCase().includes(keyword) ||
             curr.place.toLowerCase().includes(keyword) ||
             curr.person.toLowerCase().includes(keyword) ||
@@ -379,7 +420,7 @@ export default function ListData(props) {
             curr.data.toLowerCase().includes(keyword) ||
             curr.unit.toLowerCase().includes(keyword)
         );
-        return test.every((logic) => logic === true);
+        return test.every(logic => logic === true);
       });
       foundInputs = foundInputs.concat(foundInputs_temp);
       //     }
@@ -387,9 +428,9 @@ export default function ListData(props) {
     var foundInputs2 = [];
     for (let i = 0; i < exwords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
-      const foundInputs2_temp = foundInputs.filter((curr) => {
+      const foundInputs2_temp = foundInputs.filter(curr => {
         const test = exwords[i].map(
-          (exword) =>
+          exword =>
             curr.date.toLowerCase().includes(exword) ||
             curr.place.toLowerCase().includes(exword) ||
             curr.person.toLowerCase().includes(exword) ||
@@ -399,7 +440,7 @@ export default function ListData(props) {
             curr.data.toLowerCase().includes(exword) ||
             curr.unit.toLowerCase().includes(exword)
         );
-        return test.every((logic) => logic === false);
+        return test.every(logic => logic === false);
       });
       foundInputs2 = foundInputs2.concat(foundInputs2_temp);
       //     }
@@ -419,10 +460,8 @@ export default function ListData(props) {
       });
     } else {
       if (isDateBtnPushed) {
-        const conv = (inputDate) => {
-          let day = inputDate
-            .split(' ')
-            .find((element) => element.includes('-'));
+        const conv = inputDate => {
+          let day = inputDate.split(' ').find(element => element.includes('-'));
           if (day) {
             const len = day.split('-')[0].length;
             const firstnumber = day.split('-')[0];
@@ -460,7 +499,7 @@ export default function ListData(props) {
 
           const time = inputDate
             .split(' ')
-            .find((element) => element.includes(':'));
+            .find(element => element.includes(':'));
 
           return day;
         };
@@ -535,7 +574,7 @@ export default function ListData(props) {
             return a.data
               .replaceAll(',', '')
               .localeCompare(b.data.replaceAll(',', ''), undefined, {
-                numeric: true,
+                numeric: true
               });
           });
         } else {
@@ -544,7 +583,7 @@ export default function ListData(props) {
             return b.data
               .replaceAll(',', '')
               .localeCompare(a.data.replaceAll(',', ''), undefined, {
-                numeric: true,
+                numeric: true
               });
             // .reverse();
           });
@@ -562,14 +601,14 @@ export default function ListData(props) {
       }
     }
 
-    function onlyUnique(value, index, array) {
+    function onlyUnique (value, index, array) {
       return array.indexOf(value) === index;
     }
     foundInputs2 = foundInputs2.filter(onlyUnique);
 
     const csvData = foundInputs2;
 
-    const inputList = foundInputs2.map((input) => {
+    const inputList = foundInputs2.map(input => {
       return (
         <Fragment>
           {/* <div key={input._id}> */}
@@ -705,17 +744,17 @@ export default function ListData(props) {
     return (
       <div>
         <Card>
-          <Row className="form-group">
+          <Row className='form-group'>
             <Col>
               <CardBody>
-                <div className="row">
-                  <div className="col-6">
+                <div className='row'>
+                  <div className='col-6'>
                     <h5>{input_num} items</h5>
                   </div>
-                  <div className="col-6">
+                  <div className='col-6'>
                     <CSVLink
                       data={csvData}
-                      className="fa fa-arrow-down"
+                      className='fa fa-arrow-down'
                     ></CSVLink>
                   </div>
                 </div>
@@ -726,7 +765,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleDateSort}
                         >
                           date
@@ -735,7 +774,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={togglePlaceSort}
                         >
                           place
@@ -744,7 +783,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={togglePersonSort}
                         >
                           person
@@ -753,7 +792,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleSubjectSort}
                         >
                           subject
@@ -762,7 +801,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleReasonSort}
                         >
                           reason
@@ -771,7 +810,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleConditionSort}
                         >
                           condition
@@ -780,7 +819,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleDataSort}
                         >
                           data
@@ -789,7 +828,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleUnitSort}
                         >
                           unit
@@ -816,7 +855,7 @@ export default function ListData(props) {
   } else if (props.inputs !== null) {
     // this.props.getDisplay(props.inputs);
 
-    const inputList = props.inputs.map((input) => {
+    const inputList = props.inputs.map(input => {
       return (
         <Fragment>
           {/* <div key={input._id}> */}
@@ -835,8 +874,8 @@ export default function ListData(props) {
     });
 
     const toggleDateSort = async () => {
-      const conv = (inputDate) => {
-        let day = inputDate.split(' ').find((element) => element.includes('-'));
+      const conv = inputDate => {
+        let day = inputDate.split(' ').find(element => element.includes('-'));
         if (day) {
           const len = day.split('-')[0].length;
           const firstnumber = day.split('-')[0];
@@ -874,7 +913,7 @@ export default function ListData(props) {
 
         const time = inputDate
           .split(' ')
-          .find((element) => element.includes(':'));
+          .find(element => element.includes(':'));
 
         return day;
       };
@@ -1015,30 +1054,30 @@ export default function ListData(props) {
       .slice(indexOfFirstInputList, indexOfLastInputList);
 
     return (
-      <div class="table-responsive">
+      <div class='table-responsive'>
         <Card>
-          <Row className="form-group">
+          <Row className='form-group'>
             <Col>
               <CardBody>
-                <div className="row">
-                  <div className="col-6">
+                <div className='row'>
+                  <div className='col-6'>
                     <h5>{input_num} items</h5>
                   </div>
-                  <div className="col-6">
+                  <div className='col-6'>
                     <CSVLink
                       data={csvData}
-                      className="fa fa-arrow-down"
+                      className='fa fa-arrow-down'
                     ></CSVLink>
                   </div>
                 </div>
-                <Table bordered responsive hover striped class="table">
+                <Table bordered responsive hover striped class='table'>
                   <thead>
                     <tr>
                       <th></th> {/* for Edit */}
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleDateSort}
                         >
                           date
@@ -1047,7 +1086,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={togglePlaceSort}
                         >
                           place
@@ -1056,7 +1095,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={togglePersonSort}
                         >
                           person
@@ -1065,7 +1104,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleSubjectSort}
                         >
                           subject
@@ -1074,7 +1113,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleReasonSort}
                         >
                           reason
@@ -1083,7 +1122,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleConditionSort}
                         >
                           condition
@@ -1092,7 +1131,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleDataSort}
                         >
                           data
@@ -1101,7 +1140,7 @@ export default function ListData(props) {
                       <th>
                         <Button
                           outline
-                          color="secondary"
+                          color='secondary'
                           onClick={toggleUnitSort}
                         >
                           unit

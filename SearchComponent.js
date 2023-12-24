@@ -43,14 +43,14 @@ export default function Search ({ findKirks }) {
           style={{
             position: 'absolute',
             top: '50%',
-            right: '5px', // Adjust this value to move the button inside the box
+            right: '1px', // Adjust this value to move the button inside the box
             transform: 'translateY(-50%)',
             backgroundColor: 'transparent',
             border: 'none',
             color: '#ccc'
           }}
         >
-          X
+          x
         </button>
       )}
     </div>

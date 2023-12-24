@@ -194,23 +194,35 @@ class Header extends Component {
     return (
       <Fragment>
         {/* <Navbar dark expand="lg" className="header mr-auto" fixed="top"> */}
-        <Navbar dark expand='xl' className='header mr-auto' fixed='top'>
+        {/* <Navbar dark expand='xl' className='header mr-auto' fixed='top'> */}
+        <Navbar dark expand='xl' className='header ml-auto' fixed='top'>
           <Container>
             <div className='container'>
               <div className='row'>
-                <div className='col-6 align-self-center'>
+                <div
+                  className={
+                    this.state.isNavOpen ? 'col-6' : 'col-6 align-self-center'
+                  }
+                >
                   <Search findKirks={this.findKirks} />
                 </div>
-                <div className='col-6'>
-                  <NavbarToggler onClick={this.toggleNav} />
-                  <Collapse isOpen={this.state.isNavOpen} navbar>
-                    <div className='row'>
-                      <Nav className='col-auto'>
+                <div className='col-6' align='right'>
+                  <div className='ml-auto'>
+                    <NavbarToggler onClick={this.toggleNav} />
+                    <Collapse
+                      isOpen={this.state.isNavOpen}
+                      navbar
+                      className='ml-auto'
+                    >
+                      <Nav className='ml-auto'>
                         {this.state.showAll ? (
                           <Button
                             outline
                             color='primary'
                             onClick={this.toggleShowAll}
+                            className={
+                              this.state.isNavOpen ? 'header-buttons' : ''
+                            }
                           >
                             All
                           </Button>
@@ -219,12 +231,15 @@ class Header extends Component {
                             outline
                             color='secondary'
                             onClick={this.toggleShowAll}
+                            className={
+                              this.state.isNavOpen ? 'header-buttons' : ''
+                            }
                           >
                             Mine
                           </Button>
                         )}
                       </Nav>
-                      <Nav className='col-auto'>
+                      <Nav className='ml-auto'>
                         {this.state.view ? (
                           <Button
                             outline
@@ -243,70 +258,74 @@ class Header extends Component {
                           </Button>
                         )}
                       </Nav>
-                    </div>
-                    <Nav>
-                      <NavLink
-                        tag={Link}
-                        to='/kirks'
-                        onClick={this.closeNavbar}
-                      >
-                        Kirk
-                      </NavLink>
-                    </Nav>
-                    <Nav>
-                      <NavLink tag={Link} to='/' onClick={this.closeNavbar}>
-                        Data
-                      </NavLink>
-                    </Nav>
-                    <Nav>
-                      <NavLink
-                        tag={Link}
-                        to='/proInputs'
-                        onClick={this.closeNavbar}
-                      >
-                        Pro
-                      </NavLink>
-                    </Nav>
-                    <Nav className='ms-auto' navbar>
-                      <NavItem>
-                        {!this.props.auth.isAuthenticated ? (
-                          <Fragment>
-                            <Button outline onClick={this.toggleSignupModal}>
-                              <span className='fa fa-sign-in fa-lg'></span>{' '}
-                              Signup
-                              {this.props.auth.isFetching ? (
-                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                              ) : null}
-                            </Button>{' '}
-                            <Button outline onClick={this.toggleModal}>
-                              <span className='fa fa-sign-in fa-lg'></span>{' '}
-                              Login
-                              {this.props.auth.isFetching ? (
-                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                              ) : null}
-                            </Button>
-                          </Fragment>
-                        ) : (
-                          <div className='navbar-text mr-3'>
-                            {this.props.auth.user.username}
-                            {'  '}
-                            <Button outline onClick={this.handleLogout}>
-                              <span className='fa fa-sign-out'></span> Logout
-                              {this.props.auth.isFetching ? (
-                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                              ) : null}
-                            </Button>
-                            <Button outline onClick={this.togglePwChangeModal}>
-                              <span className='fa fa-key'></span>
-                              {this.props.auth.isFetching ? (
-                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                              ) : null}
-                            </Button>
-                          </div>
-                        )}
-                      </NavItem>
-                    </Nav>
-                  </Collapse>
+                      {/* </div> */}
+                      <Nav className='ml-auto'>
+                        <NavLink
+                          tag={Link}
+                          to='/kirks'
+                          onClick={this.closeNavbar}
+                        >
+                          Kirk
+                        </NavLink>
+                      </Nav>
+                      <Nav className='ml-auto'>
+                        <NavLink tag={Link} to='/' onClick={this.closeNavbar}>
+                          Data
+                        </NavLink>
+                      </Nav>
+                      <Nav className='ml-auto'>
+                        <NavLink
+                          tag={Link}
+                          to='/proInputs'
+                          onClick={this.closeNavbar}
+                        >
+                          Pro
+                        </NavLink>
+                      </Nav>
+                      <Nav className='ml-auto'>
+                        <NavItem>
+                          {!this.props.auth.isAuthenticated ? (
+                            <Fragment>
+                              <Button outline onClick={this.toggleSignupModal}>
+                                <span className='fa fa-sign-in fa-lg'></span>{' '}
+                                Signup
+                                {this.props.auth.isFetching ? (
+                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                                ) : null}
+                              </Button>{' '}
+                              <Button outline onClick={this.toggleModal}>
+                                <span className='fa fa-sign-in fa-lg'></span>{' '}
+                                Login
+                                {this.props.auth.isFetching ? (
+                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                                ) : null}
+                              </Button>
+                            </Fragment>
+                          ) : (
+                            <Fragment className='navbar-text mr-3 user-info'>
+                              {this.props.auth.user.username}
+                              {'  '}
+                              <Button outline onClick={this.handleLogout}>
+                                <span className='fa fa-sign-out'></span> Logout
+                                {this.props.auth.isFetching ? (
+                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                                ) : null}
+                              </Button>
+                              <Button
+                                outline
+                                onClick={this.togglePwChangeModal}
+                              >
+                                <span className='fa fa-key'></span>
+                                {this.props.auth.isFetching ? (
+                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                                ) : null}
+                              </Button>
+                            </Fragment>
+                          )}
+                        </NavItem>
+                      </Nav>
+                    </Collapse>
+                  </div>
                 </div>
               </div>
             </div>
