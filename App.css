@@ -64,6 +64,7 @@ ul li {
 .main {
   font-size: 20px;
   font-family: 'メイリオ', 'Meiryo', sans-serif;
+  /* font-family: Helvetica, Helvetica, sans-serif; */
 }
 
 .header {
@@ -71,9 +72,18 @@ ul li {
   border-bottom: 1px ridge;
   font-size: 20px;
   font-family: 'メイリオ', 'Meiryo', sans-serif;
+  /* font-family: Helvetica, Helvetica, sans-serif; */
   display: flex;
 }
 
+body {
+  /* font-family: 'メイリオ', 'Meiryo', sans-serif; */
+  font-family: Meiryo, Helvetica, sans-serif;
+}
+/* 
+.number-font {
+  font-family: sans-serif;
+} */
 /* .header {
   margin-bottom: 0;
   height: 10%;
@@ -208,7 +218,8 @@ Table thead {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.01);
+  /* background-color: rgba(0, 0, 0, 0.01); */
+  background-color: rgba(213, 204, 204, 0.01);
 }
 
 .vis-timeline {
@@ -264,4 +275,27 @@ Table thead {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.vis-item.vis-line {
+  display: none;
+}
+.vis-item.vis-dot {
+  display: none;
+}
+/* .vis-time-axis .vis-grid.vis-minor {
+  border-width: 1px; 
+  border-color: grey; 
+  }  */
+
+.vis-time-axis .vis-grid.vis-major {
+  border-width: 1px; /* Change this to adjust the thickness */
+  border-color: black; /* Change this to adjust the color */
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100px; /* adjust this value as needed */
 }
