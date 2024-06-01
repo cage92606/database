@@ -6,7 +6,8 @@ export default function Search ({ findKirks }) {
   const handleChange = event => {
     setKeyword(event.target.value);
     // findKirks(event.target.value);
-    setTimeout(() => findKirks(event.target.value), 500);
+    // setTimeout(() => findKirks(event.target.value), 300); 2024.6.1 Reaction on the search bar is too slow
+    setTimeout(() => findKirks(event.target.value), 1000);
   };
 
   const clearSearch = () => {
@@ -35,6 +36,10 @@ export default function Search ({ findKirks }) {
         onChange={handleChange}
         placeholder='Search...'
         style={{ paddingRight: '30px' }} // Adjust padding to make room for the button
+        onClick={event => {
+          // 2024-3-5
+          event.stopPropagation();
+        }}
       />
       {keyword && (
         <button
