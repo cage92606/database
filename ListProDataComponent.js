@@ -143,6 +143,44 @@ function RenderProInputTable ({
     setTempValue(e.target.value); // Update the temporary value on each key press
   };
   const handleBlur = e => {
+    if (!document.hasFocus()) {
+      // The page or application does not have focus, so ignore the blur event
+      return;
+    }
+    if (
+      !(
+        isDateEditing ||
+        isPlaceEditing ||
+        isPersonEditing ||
+        isSubjectEditing ||
+        isReasonEditing ||
+        isCondition1Editing ||
+        isCondition2Editing ||
+        isCondition3Editing ||
+        isCondition4Editing ||
+        isCondition5Editing ||
+        isCondition6Editing ||
+        isCondition7Editing ||
+        isCondition8Editing ||
+        isCondition9Editing ||
+        isCondition10Editing ||
+        isCondition11Editing ||
+        isCondition12Editing ||
+        isCondition13Editing ||
+        isCondition14Editing ||
+        isCondition15Editing ||
+        isCondition16Editing ||
+        isCondition17Editing ||
+        isCondition18Editing ||
+        isCondition19Editing ||
+        isCondition20Editing ||
+        isDataEditing ||
+        isUnitEditing
+      )
+    ) {
+      // If it is not in editing mode,
+      return;
+    }
     const fieldName = e.target.name;
     if (tempValue !== proInput[fieldName]) {
       // Check if the proInput has changed
@@ -209,9 +247,16 @@ function RenderProInputTable ({
     if (fieldName === 'unit') setIsUnitEditing(false);
   };
 
+  // const handleKeyDown = event => {
+  //   if (event.key === 'Enter') {
+  //     event.target.blur();
+  //   }
+  // };
+
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
-      event.target.blur();
+      event.preventDefault();
+      // event.target.blur();
     }
   };
 
@@ -688,17 +733,13 @@ function RenderProInputTable ({
           proInput.reason
         )}
       </td>
+
       <td
         name='condition1'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
-        onKeyDown={handleKeyDown}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
-        style={
-          isNaN(proInput.condition1.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
+        onKeyDown={handleKeyDown}
       >
         {auth.id === proInput.user && isCondition1Editing ? (
           <Input
@@ -709,6 +750,70 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition1.indexOf('http') === 0 ||
+          proInput.condition1.indexOf('/') === 0 ? (
+          proInput.condition1 ? (
+            proInput.condition1.indexOf('http') === 0 ? (
+              <a href={proInput.condition1} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition1.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition1
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition1.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition1
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition1.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition1.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition1
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition1
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition1}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition1
         )}
@@ -719,11 +824,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition2.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition2Editing ? (
           <Input
@@ -734,6 +834,70 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition2.indexOf('http') === 0 ||
+          proInput.condition2.indexOf('/') === 0 ? (
+          proInput.condition2 ? (
+            proInput.condition2.indexOf('http') === 0 ? (
+              <a href={proInput.condition2} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition2.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition2
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition2.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition2
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition2.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition2.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition2
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition2
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition2}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition2
         )}
@@ -744,11 +908,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition3.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition3Editing ? (
           <Input
@@ -759,6 +918,70 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition3.indexOf('http') === 0 ||
+          proInput.condition3.indexOf('/') === 0 ? (
+          proInput.condition3 ? (
+            proInput.condition3.indexOf('http') === 0 ? (
+              <a href={proInput.condition3} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition3.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition3
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition3.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition3
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition3.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition3.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition3
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition3
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition3}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition3
         )}
@@ -769,11 +992,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition4.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition4Editing ? (
           <Input
@@ -784,21 +1002,81 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition4.indexOf('http') === 0 ||
+          proInput.condition4.indexOf('/') === 0 ? (
+          proInput.condition4 ? (
+            proInput.condition4.indexOf('http') === 0 ? (
+              <a href={proInput.condition4} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition4.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition4
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition4.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition4
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition4.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition4.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition4
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition4
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition4}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition4
         )}
       </td>
+
       <td
         name='condition5'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition5.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition5Editing ? (
           <Input
@@ -806,25 +1084,84 @@ function RenderProInputTable ({
             type='text'
             value={tempValue}
             // onBlur={handleBlur}
-
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition5.indexOf('http') === 0 ||
+          proInput.condition5.indexOf('/') === 0 ? (
+          proInput.condition5 ? (
+            proInput.condition5.indexOf('http') === 0 ? (
+              <a href={proInput.condition5} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition5.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition5
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition5.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition5
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition5.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition5.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition5
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition5
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition5}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition5
         )}
       </td>
+
       <td
         name='condition6'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition6.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition6Editing ? (
           <Input
@@ -835,21 +1172,81 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition6.indexOf('http') === 0 ||
+          proInput.condition6.indexOf('/') === 0 ? (
+          proInput.condition6 ? (
+            proInput.condition6.indexOf('http') === 0 ? (
+              <a href={proInput.condition6} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition6.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition6
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition6.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition6
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition6.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition6.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition6
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition6
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition6}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition6
         )}
       </td>
+
       <td
         name='condition7'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition7.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition7Editing ? (
           <Input
@@ -860,21 +1257,81 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition7.indexOf('http') === 0 ||
+          proInput.condition7.indexOf('/') === 0 ? (
+          proInput.condition7 ? (
+            proInput.condition7.indexOf('http') === 0 ? (
+              <a href={proInput.condition7} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition7.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition7
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition7.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition7
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition7.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition7.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition7
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition7
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition7}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition7
         )}
       </td>
+
       <td
         name='condition8'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition8.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition8Editing ? (
           <Input
@@ -885,21 +1342,81 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition8.indexOf('http') === 0 ||
+          proInput.condition8.indexOf('/') === 0 ? (
+          proInput.condition8 ? (
+            proInput.condition8.indexOf('http') === 0 ? (
+              <a href={proInput.condition8} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition8.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition8
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition8.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition8
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition8.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition8.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition8
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition8
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition8}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition8
         )}
       </td>
+
       <td
         name='condition9'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition9.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition9Editing ? (
           <Input
@@ -910,21 +1427,81 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition9.indexOf('http') === 0 ||
+          proInput.condition9.indexOf('/') === 0 ? (
+          proInput.condition9 ? (
+            proInput.condition9.indexOf('http') === 0 ? (
+              <a href={proInput.condition9} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition9.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition9
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition9.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition9
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition9.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition9.split('//')[1].split('/')[0].split('.')[1]
+                    .length ? (
+                  <span>
+                    {
+                      proInput.condition9
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition9
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition9}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition9
         )}
       </td>
+
       <td
         name='condition10'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition10.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition10Editing ? (
           <Input
@@ -935,21 +1512,83 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition10.indexOf('http') === 0 ||
+          proInput.condition10.indexOf('/') === 0 ? (
+          proInput.condition10 ? (
+            proInput.condition10.indexOf('http') === 0 ? (
+              <a href={proInput.condition10} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition10.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition10
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition10.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition10
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition10.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition10
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition10
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition10
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition10}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition10
         )}
       </td>
+
       <td
         name='condition11'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition11.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition11Editing ? (
           <Input
@@ -960,6 +1599,72 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition11.indexOf('http') === 0 ||
+          proInput.condition11.indexOf('/') === 0 ? (
+          proInput.condition11 ? (
+            proInput.condition11.indexOf('http') === 0 ? (
+              <a href={proInput.condition11} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition11.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition11
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition11.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition11
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition11.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition11
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition11
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition11
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition11}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition11
         )}
@@ -970,11 +1675,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition12.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition12Editing ? (
           <Input
@@ -985,21 +1685,83 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition12.indexOf('http') === 0 ||
+          proInput.condition12.indexOf('/') === 0 ? (
+          proInput.condition12 ? (
+            proInput.condition12.indexOf('http') === 0 ? (
+              <a href={proInput.condition12} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition12.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition12
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition12.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition12
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition12.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition12
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition12
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition12
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition12}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition12
         )}
       </td>
+
       <td
         name='condition13'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition13.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition13Editing ? (
           <Input
@@ -1010,21 +1772,83 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition13.indexOf('http') === 0 ||
+          proInput.condition13.indexOf('/') === 0 ? (
+          proInput.condition13 ? (
+            proInput.condition13.indexOf('http') === 0 ? (
+              <a href={proInput.condition13} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition13.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition13
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition13.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition13
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition13.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition13
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition13
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition13
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition13}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition13
         )}
       </td>
+
       <td
         name='condition14'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition14.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition14Editing ? (
           <Input
@@ -1035,21 +1859,83 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition14.indexOf('http') === 0 ||
+          proInput.condition14.indexOf('/') === 0 ? (
+          proInput.condition14 ? (
+            proInput.condition14.indexOf('http') === 0 ? (
+              <a href={proInput.condition14} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition14.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition14
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition14.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition14
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition14.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition14
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition14
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition14
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition14}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition14
         )}
       </td>
+
       <td
         name='condition15'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition15.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition15Editing ? (
           <Input
@@ -1060,22 +1946,82 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition15.indexOf('http') === 0 ||
+          proInput.condition15.indexOf('/') === 0 ? (
+          proInput.condition15 ? (
+            proInput.condition15.indexOf('http') === 0 ? (
+              <a href={proInput.condition15} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition15.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition15
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition15.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition15
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition15.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition15
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition15
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition15
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition15}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition15
         )}
       </td>
-
       <td
         name='condition16'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition16.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition16Editing ? (
           <Input
@@ -1086,6 +2032,72 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition16.indexOf('http') === 0 ||
+          proInput.condition16.indexOf('/') === 0 ? (
+          proInput.condition16 ? (
+            proInput.condition16.indexOf('http') === 0 ? (
+              <a href={proInput.condition16} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition16.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition16
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition16.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition16
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition16.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition16
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition16
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition16
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition16}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition16
         )}
@@ -1096,11 +2108,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition17.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition17Editing ? (
           <Input
@@ -1111,6 +2118,72 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition17.indexOf('http') === 0 ||
+          proInput.condition17.indexOf('/') === 0 ? (
+          proInput.condition17 ? (
+            proInput.condition17.indexOf('http') === 0 ? (
+              <a href={proInput.condition17} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition17.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition17
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition17.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition17
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition17.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition17
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition17
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition17
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition17}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition17
         )}
@@ -1121,11 +2194,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition18.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition18Editing ? (
           <Input
@@ -1136,21 +2204,83 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition18.indexOf('http') === 0 ||
+          proInput.condition18.indexOf('/') === 0 ? (
+          proInput.condition18 ? (
+            proInput.condition18.indexOf('http') === 0 ? (
+              <a href={proInput.condition18} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition18.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition18
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition18.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition18
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition18.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition18
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition18
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition18
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition18}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition18
         )}
       </td>
+
       <td
         name='condition19'
         onDoubleClick={handleDoubleClick}
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition19.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition19Editing ? (
           <Input
@@ -1161,6 +2291,72 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition19.indexOf('http') === 0 ||
+          proInput.condition19.indexOf('/') === 0 ? (
+          proInput.condition19 ? (
+            proInput.condition19.indexOf('http') === 0 ? (
+              <a href={proInput.condition19} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition19.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition19
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition19.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition19
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition19.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition19
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition19
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition19
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition19}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition19
         )}
@@ -1171,11 +2367,6 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.condition20.replace(/,/g, ''))
-            ? {}
-            : { textAlign: 'right' }
-        }
       >
         {auth.id === proInput.user && isCondition20Editing ? (
           <Input
@@ -1186,10 +2377,77 @@ function RenderProInputTable ({
             onChange={handleChange}
             autoFocus
           />
+        ) : proInput.condition20.indexOf('http') === 0 ||
+          proInput.condition20.indexOf('/') === 0 ? (
+          proInput.condition20 ? (
+            proInput.condition20.indexOf('http') === 0 ? (
+              <a href={proInput.condition20} target='_blank' rel='noreferrer'>
+                {0 ? (
+                  <span className='fa fa-link'></span>
+                ) : proInput.condition20.indexOf('www') !== -1 ? (
+                  // If the first word is 'www', use the second word
+                  <span>
+                    {
+                      proInput.condition20
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : proInput.condition20.split('//')[1].split('/')[0].split('.')
+                    .length === 2 ? (
+                  // otherwise and if domain consists of 2 words, use the first word
+                  <span>
+                    {
+                      proInput.condition20
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                ) : // otherwise use whichever is longer among the first and second words
+                proInput.condition20.split('//')[1].split('/')[0].split('.')[0]
+                    .length <
+                  proInput.condition20
+                    .split('//')[1]
+                    .split('/')[0]
+                    .split('.')[1].length ? (
+                  <span>
+                    {
+                      proInput.condition20
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[1]
+                    }
+                  </span>
+                ) : (
+                  <span>
+                    {
+                      proInput.condition20
+                        .split('//')[1]
+                        .split('/')[0]
+                        .split('.')[0]
+                    }
+                  </span>
+                )}
+              </a>
+            ) : (
+              <a
+                href={`file:${proInput.condition20}`}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <span className='fa fa-folder-open'></span>
+              </a>
+            )
+          ) : (
+            ''
+          )
         ) : (
           proInput.condition20
         )}
       </td>
+
       <td
         name='data'
         onDoubleClick={handleDoubleClick}
@@ -1629,42 +2887,67 @@ export default function ListData (props) {
       let day = proInputDate.split(' ').find(element => element.includes('-'));
       if (day) {
         const len = day.split('-')[0].length;
-        const firstnumber = day.split('-')[0];
-        const secondnumber = day.split('-')[1];
-        const thirdnumber = day.split('-')[2];
+
+        if (!day.split('-')[0]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[1]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[2]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        const firstnumber = day.split('-')[0].padStart(2, '0');
+        const secondnumber = day.split('-')[1].padStart(2, '0');
+        const thirdnumber = day.split('-')[2].padStart(2, '0');
 
         if (len === 1 || len === 2) {
+          // len is the length of the first number like 25-2023-1 or 1-2023-3
           // In the case of like "25-2023-1"
-          if (thirdnumber === '1')
-            day = `January-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '2')
-            day = `Febrary-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '3')
-            day = `March-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '4')
-            day = `April-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '5')
-            day = `May-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '6')
-            day = `June-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '7')
-            day = `July-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '8')
-            day = `August-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '9')
-            day = `September-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '10')
-            day = `October-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '11')
-            day = `November-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '12')
-            day = `December-${secondnumber}-${firstnumber}`;
+          // if (thirdnumber === '1')
+          //   day = `January-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '2')
+          //   day = `Febrary-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '3')
+          //   day = `March-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '4')
+          //   day = `April-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '5')
+          //   day = `May-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '6')
+          //   day = `June-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '7')
+          //   day = `July-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '8')
+          //   day = `August-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '9')
+          //   day = `September-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '10')
+          //   day = `October-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '11')
+          //   day = `November-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '12')
+          //   day = `December-${secondnumber}-${firstnumber}`;
+          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        } else {
+          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
         }
       }
 
-      const time = proInputDate
-        .split(' ')
-        .find(element => element.includes(':'));
+      // const time = proInputDate
+      //   .split(' ')
+      //   .find(element => element.includes(':'));
+
+      if (!day) {
+        // console.error(`Unable to parse date from "${inputDate}"`);
+        return '';
+      }
 
       return day;
     };
@@ -1681,16 +2964,22 @@ export default function ListData (props) {
           });
         }
         break;
+
       case 'DATE':
         if (isProInputDateAscending === false) {
           foundProInputs2.sort((a, b) => {
-            return new Date(conv(a.date)) - new Date(conv(b.date));
+            // return a.date.localeCompare(b.date);
+            return conv(a.date).localeCompare(conv(b.date));
+            // return new Date(conv(a.date)) - new Date(conv(b.date));
           });
         } else {
           foundProInputs2.sort((a, b) => {
-            return new Date(conv(b.date)) - new Date(conv(a.date));
+            // return b.date.localeCompare(a.date);
+            return conv(b.date).localeCompare(conv(a.date));
+            // return new Date(conv(b.date)) - new Date(conv(a.date));
           });
         }
+
         break;
       case 'PLACE':
         if (isProInputPlaceAscending === false) {
@@ -2518,42 +3807,67 @@ export default function ListData (props) {
       let day = proInputDate.split(' ').find(element => element.includes('-'));
       if (day) {
         const len = day.split('-')[0].length;
-        const firstnumber = day.split('-')[0];
-        const secondnumber = day.split('-')[1];
-        const thirdnumber = day.split('-')[2];
+
+        if (!day.split('-')[0]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[1]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[2]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        const firstnumber = day.split('-')[0].padStart(2, '0');
+        const secondnumber = day.split('-')[1].padStart(2, '0');
+        const thirdnumber = day.split('-')[2].padStart(2, '0');
 
         if (len === 1 || len === 2) {
+          // len is the length of the first number like 25-2023-1 or 1-2023-3
           // In the case of like "25-2023-1"
-          if (thirdnumber === '1')
-            day = `January-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '2')
-            day = `Febrary-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '3')
-            day = `March-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '4')
-            day = `April-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '5')
-            day = `May-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '6')
-            day = `June-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '7')
-            day = `July-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '8')
-            day = `August-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '9')
-            day = `September-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '10')
-            day = `October-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '11')
-            day = `November-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '12')
-            day = `December-${secondnumber}-${firstnumber}`;
+          // if (thirdnumber === '1')
+          //   day = `January-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '2')
+          //   day = `Febrary-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '3')
+          //   day = `March-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '4')
+          //   day = `April-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '5')
+          //   day = `May-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '6')
+          //   day = `June-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '7')
+          //   day = `July-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '8')
+          //   day = `August-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '9')
+          //   day = `September-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '10')
+          //   day = `October-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '11')
+          //   day = `November-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '12')
+          //   day = `December-${secondnumber}-${firstnumber}`;
+          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        } else {
+          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
         }
       }
 
-      const time = proInputDate
-        .split(' ')
-        .find(element => element.includes(':'));
+      // const time = proInputDate
+      //   .split(' ')
+      //   .find(element => element.includes(':'));
+
+      if (!day) {
+        // console.error(`Unable to parse date from "${inputDate}"`);
+        return '';
+      }
 
       return day;
     };
@@ -2570,16 +3884,22 @@ export default function ListData (props) {
           });
         }
         break;
+
       case 'DATE':
         if (isProInputDateAscending === false) {
           props.proInputs.sort((a, b) => {
-            return new Date(conv(a.date)) - new Date(conv(b.date));
+            // return a.date.localeCompare(b.date);
+            return conv(a.date).localeCompare(conv(b.date));
+            // return new Date(conv(a.date)) - new Date(conv(b.date));
           });
         } else {
           props.proInputs.sort((a, b) => {
-            return new Date(conv(b.date)) - new Date(conv(a.date));
+            // return b.date.localeCompare(a.date);
+            return conv(b.date).localeCompare(conv(a.date));
+            // return new Date(conv(b.date)) - new Date(conv(a.date));
           });
         }
+
         break;
       case 'PLACE':
         if (isProInputPlaceAscending === false) {
