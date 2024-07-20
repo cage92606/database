@@ -1,5 +1,15 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useEffect, Fragment } from 'react';
+import React, {
+  useEffect,
+  Fragment,
+  useContext,
+  useCallback,
+  useRef
+} from 'react';
+// import {ScrollPosition} from '../contexts/scrollPositionContext';
+// import { ScrollPositionContext } from './ScrollPositionContext';
+// import ScrollPositionContext from '../contexts/ScrollPositionContext';
+
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 // import { Control } from 'react-redux-form';
@@ -14,7 +24,8 @@ import {
   ModalHeader,
   ModalBody,
   Table,
-  Input
+  Input,
+  UncontrolledTooltip
 } from 'reactstrap';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 import { Loading } from './LoadingComponent';
@@ -23,6 +34,8 @@ import { Control, Form } from 'react-redux-form';
 // import { fetchKirks, fetchInputs } from '../redux/ActionCreators';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Pagination from './Pagination';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
+// import ReactTooltip from 'react-tooltip';
 
 function RenderInputTable ({
   input,
@@ -56,6 +69,7 @@ function RenderInputTable ({
   };
 
   const handleSubmit = (value, event) => {
+    event.stopPropagation(); // 2024-3-5
     toggleModal();
     if (window.confirm('OK to change data?')) {
       updateInput(
@@ -109,6 +123,25 @@ function RenderInputTable ({
     setTempValue(e.target.value); // Update the temporary value on each key press
   };
   const handleBlur = e => {
+    if (!document.hasFocus()) {
+      // The page or application does not have focus, so ignore the blur event
+      return;
+    }
+    if (
+      !(
+        isDateEditing ||
+        isPlaceEditing ||
+        isPersonEditing ||
+        isSubjectEditing ||
+        isReasonEditing ||
+        isConditionEditing ||
+        isDataEditing ||
+        isUnitEditing
+      )
+    ) {
+      // If it is not in editing mode,
+      return;
+    }
     const fieldName = e.target.name;
     if (tempValue !== input[fieldName]) {
       // Check if the input has changed
@@ -127,6 +160,7 @@ function RenderInputTable ({
         );
       }
     }
+    // to know which field is being edited
     if (fieldName === 'date') setIsDateEditing(false);
     if (fieldName === 'place') setIsPlaceEditing(false);
     if (fieldName === 'person') setIsPersonEditing(false);
@@ -139,7 +173,8 @@ function RenderInputTable ({
 
   const handleKeyDown = event => {
     if (event.key === 'Enter') {
-      event.target.blur();
+      event.preventDefault();
+      // event.target.blur();
     }
   };
 
@@ -532,20 +567,31 @@ export let input_num;
 // console.log('input_num in ListData is ', input_num);
 
 export default function ListData (props) {
-  // const searchDone = (display) => {
-  //   setDisplay(display);
-  // };
+  const tableRef = useRef(null);
 
-  // const [isFullContentShown, setIsFullContentShown] = useState(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (tableRef.current) {
+        console.log(
+          'tableRef.current.scrollLeft: ',
+          tableRef.current.scrollLeft
+        ); // Logs the horizontal scroll position
+      }
+    };
+
+    if (tableRef.current) {
+      const tableElement = tableRef.current;
+      tableElement.addEventListener('scroll', handleScroll);
+
+      return () => {
+        tableElement.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
 
   const isFullContentShown = useSelector(
     state => state.fieldButtons.isFullContentShown
   );
-
-  // const toggleContent = () => {
-  //   setIsFullContentShown(!isFullContentShown);
-  //   // console.log('isFullContentShown is now ', isFullContentShown);
-  // };
 
   const toggledInputFieldButton = useSelector(
     state => state.fieldButtons.toggledInputFieldButton
@@ -618,6 +664,18 @@ export default function ListData (props) {
     dispatch({ type: 'TOGGLE_IS_FULL_CONTENT_SHOWN' });
   };
 
+  // const tableRef = useRef(null); //2024.3.2
+  // useEffect(() => {
+  //   //2024.3.2
+  //   if (tableRef.current) {
+  //     const rect = tableRef.current.getBoundingClientRect();
+  //     const tableXPosition = rect.left + window.scrollX;
+
+  //     console.log('Table X position:', rect.left);
+  //     console.log('Table X position relative to the document:', tableXPosition);
+  //   }
+  // }, []);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [inputListPerPage] = useState(1000);
 
@@ -656,14 +714,27 @@ export default function ListData (props) {
       for (let i = 0; i < keywordArray.length; i++) {
         if ((keywordArray[i] !== ' ') & (keywordArray[i] !== '')) {
           if (keywordArray[i].split('')[0] === '!') {
-            exwords_temp[m] = keywordArray[i]
-              .toLowerCase()
-              .split('')
-              .splice(1)
-              .join('');
+            if (keywordArray[i].length === 2) {
+              exwords_temp[m] = keywordArray[i]
+                // .toLowerCase()
+                .split('')
+                .splice(1)
+                .join('');
+            } else {
+              exwords_temp[m] = keywordArray[i]
+                .toLowerCase()
+                .split('')
+                .splice(1)
+                .join('');
+            }
             m = m + 1;
           } else {
-            keywords_temp[j] = keywordArray[i].toLowerCase();
+            if (keywordArray[i].length === 1) {
+              keywords_temp[j] = keywordArray[i];
+            } else {
+              keywords_temp[j] = keywordArray[i].toLowerCase();
+            }
+            // keywords_temp[j] = keywordArray[i].toLowerCase();
             j = j + 1;
           }
         }
@@ -675,17 +746,33 @@ export default function ListData (props) {
     for (let i = 0; i < keywords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
       const foundInputs_temp = props.inputs.filter(curr => {
-        const test = keywords[i].map(
-          keyword =>
-            curr.date.toLowerCase().includes(keyword) ||
-            curr.place.toLowerCase().includes(keyword) ||
-            curr.person.toLowerCase().includes(keyword) ||
-            curr.subject.toLowerCase().includes(keyword) ||
-            curr.reason.toLowerCase().includes(keyword) ||
-            curr.condition.toLowerCase().includes(keyword) ||
-            curr.data.toLowerCase().includes(keyword) ||
-            curr.unit.toLowerCase().includes(keyword)
-        );
+        const test = keywords[i].map(keyword => {
+          if (keyword.length === 1) {
+            // console.log('length is 1 and keyword is', keyword);
+            return (
+              curr.date.includes(keyword) ||
+              curr.place.includes(keyword) ||
+              curr.person.includes(keyword) ||
+              curr.subject.includes(keyword) ||
+              curr.reason.includes(keyword) ||
+              curr.condition.includes(keyword) ||
+              curr.data.includes(keyword) ||
+              curr.unit.includes(keyword)
+            );
+          } else {
+            // console.log('length is NOT 1 and keyword is', keyword);
+            return (
+              curr.date.toLowerCase().includes(keyword) ||
+              curr.place.toLowerCase().includes(keyword) ||
+              curr.person.toLowerCase().includes(keyword) ||
+              curr.subject.toLowerCase().includes(keyword) ||
+              curr.reason.toLowerCase().includes(keyword) ||
+              curr.condition.toLowerCase().includes(keyword) ||
+              curr.data.toLowerCase().includes(keyword) ||
+              curr.unit.toLowerCase().includes(keyword)
+            );
+          }
+        });
         return test.every(logic => logic === true);
       });
       foundInputs = foundInputs.concat(foundInputs_temp);
@@ -695,17 +782,31 @@ export default function ListData (props) {
     for (let i = 0; i < exwords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
       const foundInputs2_temp = foundInputs.filter(curr => {
-        const test = exwords[i].map(
-          exword =>
-            curr.date.toLowerCase().includes(exword) ||
-            curr.place.toLowerCase().includes(exword) ||
-            curr.person.toLowerCase().includes(exword) ||
-            curr.subject.toLowerCase().includes(exword) ||
-            curr.reason.toLowerCase().includes(exword) ||
-            curr.condition.toLowerCase().includes(exword) ||
-            curr.data.toLowerCase().includes(exword) ||
-            curr.unit.toLowerCase().includes(exword)
-        );
+        const test = exwords[i].map(exword => {
+          if (exword.length === 1) {
+            return (
+              curr.date.includes(exword) ||
+              curr.place.includes(exword) ||
+              curr.person.includes(exword) ||
+              curr.subject.includes(exword) ||
+              curr.reason.includes(exword) ||
+              curr.condition.includes(exword) ||
+              curr.data.includes(exword) ||
+              curr.unit.includes(exword)
+            );
+          } else {
+            return (
+              curr.date.toLowerCase().includes(exword) ||
+              curr.place.toLowerCase().includes(exword) ||
+              curr.person.toLowerCase().includes(exword) ||
+              curr.subject.toLowerCase().includes(exword) ||
+              curr.reason.toLowerCase().includes(exword) ||
+              curr.condition.toLowerCase().includes(exword) ||
+              curr.data.toLowerCase().includes(exword) ||
+              curr.unit.toLowerCase().includes(exword)
+            );
+          }
+        });
         return test.every(logic => logic === false);
       });
       foundInputs2 = foundInputs2.concat(foundInputs2_temp);
@@ -719,41 +820,66 @@ export default function ListData (props) {
       let day = inputDate.split(' ').find(element => element.includes('-'));
       if (day) {
         const len = day.split('-')[0].length;
-        const firstnumber = day.split('-')[0];
-        const secondnumber = day.split('-')[1];
-        const thirdnumber = day.split('-')[2];
+
+        if (!day.split('-')[0]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[1]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[2]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        const firstnumber = day.split('-')[0].padStart(2, '0');
+        const secondnumber = day.split('-')[1].padStart(2, '0');
+        const thirdnumber = day.split('-')[2].padStart(2, '0');
 
         if (len === 1 || len === 2) {
+          // len is the length of the first number like 25-2023-1 or 1-2023-3
           // In the case of like "25-2023-1"
-          if (thirdnumber === '1')
-            day = `January-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '2')
-            day = `Febrary-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '3')
-            day = `March-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '4')
-            day = `April-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '5')
-            day = `May-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '6')
-            day = `June-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '7')
-            day = `July-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '8')
-            day = `August-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '9')
-            day = `September-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '10')
-            day = `October-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '11')
-            day = `November-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '12')
-            day = `December-${secondnumber}-${firstnumber}`;
+          // if (thirdnumber === '1')
+          //   day = `January-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '2')
+          //   day = `Febrary-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '3')
+          //   day = `March-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '4')
+          //   day = `April-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '5')
+          //   day = `May-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '6')
+          //   day = `June-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '7')
+          //   day = `July-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '8')
+          //   day = `August-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '9')
+          //   day = `September-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '10')
+          //   day = `October-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '11')
+          //   day = `November-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '12')
+          //   day = `December-${secondnumber}-${firstnumber}`;
+          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        } else {
+          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
         }
       }
 
-      const time = inputDate.split(' ').find(element => element.includes(':'));
+      if (!day) {
+        // console.error(`Unable to parse date from "${inputDate}"`);
+        return '';
+      }
+      // const time = inputDate.split(' ').find(element => element.includes(':'));
 
+      // console.log('day.toISOString() is', day.toISOString());
       return day;
     };
 
@@ -773,12 +899,14 @@ export default function ListData (props) {
         if (isInputDateAscending === false) {
           foundInputs2.sort((a, b) => {
             // return a.date.localeCompare(b.date);
-            return new Date(conv(a.date)) - new Date(conv(b.date));
+            return conv(a.date).localeCompare(conv(b.date));
+            // return new Date(conv(a.date)) - new Date(conv(b.date));
           });
         } else {
           foundInputs2.sort((a, b) => {
-            // return a.date.localeCompare(b.date).reverse();
-            return new Date(conv(b.date)) - new Date(conv(a.date));
+            // return b.date.localeCompare(a.date);
+            return conv(b.date).localeCompare(conv(a.date));
+            // return new Date(conv(b.date)) - new Date(conv(a.date));
           });
         }
         break;
@@ -937,9 +1065,13 @@ export default function ListData (props) {
                       // color='secondary'
                       onClick={toggleIsInputIdAscending}
                       // style={{ border: 'none' }}
+                      id='TooltipExample'
+                      data-tip='Your tooltip text'
+                      // title='test title'
                     >
                       {input_num} items
                     </Button>
+                    <Tooltip id='TooltipExample' />
                     <Button
                       outline
                       onClick={toggleIsFullContentShown}
@@ -956,6 +1088,8 @@ export default function ListData (props) {
                   </div>
                 </div>
                 <Table bordered responsive hover striped>
+                  {' '}
+                  {/*2024.3.2*/}
                   <thead>
                     <tr>
                       <th></th> {/* for Edit */}
@@ -1027,6 +1161,7 @@ export default function ListData (props) {
                           outline
                           color='secondary'
                           onClick={toggleIsInputUnitAscending}
+                          // innerRef={tableRef}
                         >
                           unit
                         </Button>
@@ -1080,41 +1215,67 @@ export default function ListData (props) {
       let day = inputDate.split(' ').find(element => element.includes('-'));
       if (day) {
         const len = day.split('-')[0].length;
-        const firstnumber = day.split('-')[0];
-        const secondnumber = day.split('-')[1];
-        const thirdnumber = day.split('-')[2];
+
+        if (!day.split('-')[0]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[1]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        if (!day.split('-')[2]) {
+          // console.error(`Unable to parse date from "${inputDate}"`);
+          return '';
+        }
+
+        const firstnumber = day.split('-')[0].padStart(2, '0');
+        const secondnumber = day.split('-')[1].padStart(2, '0');
+        const thirdnumber = day.split('-')[2].padStart(2, '0');
 
         if (len === 1 || len === 2) {
+          // len is the length of the first number like 25-2023-1 or 1-2023-3
           // In the case of like "25-2023-1"
-          if (thirdnumber === '1')
-            day = `January-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '2')
-            day = `Febrary-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '3')
-            day = `March-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '4')
-            day = `April-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '5')
-            day = `May-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '6')
-            day = `June-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '7')
-            day = `July-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '8')
-            day = `August-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '9')
-            day = `September-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '10')
-            day = `October-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '11')
-            day = `November-${secondnumber}-${firstnumber}`;
-          else if (thirdnumber === '12')
-            day = `December-${secondnumber}-${firstnumber}`;
+          // if (thirdnumber === '1')
+          //   day = `January-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '2')
+          //   day = `Febrary-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '3')
+          //   day = `March-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '4')
+          //   day = `April-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '5')
+          //   day = `May-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '6')
+          //   day = `June-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '7')
+          //   day = `July-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '8')
+          //   day = `August-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '9')
+          //   day = `September-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '10')
+          //   day = `October-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '11')
+          //   day = `November-${secondnumber}-${firstnumber}`;
+          // else if (thirdnumber === '12')
+          //   day = `December-${secondnumber}-${firstnumber}`;
+          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        } else {
+          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
         }
       }
 
-      const time = inputDate.split(' ').find(element => element.includes(':'));
+      // const time = inputDate.split(' ').find(element => element.includes(':'));
 
+      if (!day) {
+        // console.error(`Unable to parse date from "${inputDate}"`);
+        return '';
+      }
+
+      // console.log('day.toISOString() is', day.toISOString());
       return day;
     };
 
@@ -1134,12 +1295,14 @@ export default function ListData (props) {
         if (isInputDateAscending === false) {
           props.inputs.sort((a, b) => {
             // return a.date.localeCompare(b.date);
-            return new Date(conv(a.date)) - new Date(conv(b.date));
+            return conv(a.date).localeCompare(conv(b.date));
+            // return new Date(conv(a.date)) - new Date(conv(b.date));
           });
         } else {
           props.inputs.sort((a, b) => {
-            // return a.date.localeCompare(b.date).reverse();
-            return new Date(conv(b.date)) - new Date(conv(a.date));
+            // return b.date.localeCompare(a.date);
+            return conv(b.date).localeCompare(conv(a.date));
+            // return new Date(conv(b.date)) - new Date(conv(a.date));
           });
         }
         break;
@@ -1288,88 +1451,90 @@ export default function ListData (props) {
                     ></CSVLink>
                   </div>
                 </div>
-                <Table bordered responsive hover striped class='table'>
-                  <thead>
-                    <tr>
-                      <th></th> {/* for Edit */}
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputDateAscending}
-                        >
-                          date
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputPlaceAscending}
-                        >
-                          place
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputPersonAscending}
-                        >
-                          person
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputSubjectAscending}
-                        >
-                          subject
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputReasonAscending}
-                        >
-                          reason
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputConditionAscending}
-                        >
-                          condition
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputDataAscending}
-                        >
-                          data
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputUnitAscending}
-                        >
-                          unit
-                        </Button>
-                      </th>
-                      <th></th> {/* for Delete */}
-                    </tr>
-                  </thead>
-                  {/* <tbody>{currentInputList.reverse()}</tbody> */}
-                  <tbody>{currentInputList}</tbody>
-                </Table>
+                <div ref={tableRef} style={{ overflowX: 'auto' }}>
+                  <Table bordered responsive hover striped class='table'>
+                    <thead>
+                      <tr>
+                        <th></th> {/* for Edit */}
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputDateAscending}
+                          >
+                            date
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputPlaceAscending}
+                          >
+                            place
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputPersonAscending}
+                          >
+                            person
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputSubjectAscending}
+                          >
+                            subject
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputReasonAscending}
+                          >
+                            reason
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputConditionAscending}
+                          >
+                            condition
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputDataAscending}
+                          >
+                            data
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputUnitAscending}
+                          >
+                            unit
+                          </Button>
+                        </th>
+                        <th></th> {/* for Delete */}
+                      </tr>
+                    </thead>
+                    {/* <tbody>{currentInputList.reverse()}</tbody> */}
+                    <tbody>{currentInputList}</tbody>
+                  </Table>
+                </div>
               </CardBody>
             </Col>
           </Row>

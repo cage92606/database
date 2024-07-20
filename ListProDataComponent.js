@@ -2782,14 +2782,27 @@ export default function ListData (props) {
       for (let i = 0; i < keywordArray.length; i++) {
         if ((keywordArray[i] !== ' ') & (keywordArray[i] !== '')) {
           if (keywordArray[i].split('')[0] === '!') {
-            exwords_temp[m] = keywordArray[i]
-              .toLowerCase()
-              .split('')
-              .splice(1)
-              .join('');
+            if (keywordArray[i].length === 2) {
+              exwords_temp[m] = keywordArray[i]
+                // .toLowerCase()
+                .split('')
+                .splice(1)
+                .join('');
+            } else {
+              exwords_temp[m] = keywordArray[i]
+                .toLowerCase()
+                .split('')
+                .splice(1)
+                .join('');
+            }
             m = m + 1;
           } else {
-            keywords_temp[j] = keywordArray[i].toLowerCase();
+            if (keywordArray[i].length === 1) {
+              keywords_temp[j] = keywordArray[i];
+            } else {
+              keywords_temp[j] = keywordArray[i].toLowerCase();
+            }
+            // keywords_temp[j] = keywordArray[i].toLowerCase();
             j = j + 1;
           }
         }
@@ -2801,36 +2814,69 @@ export default function ListData (props) {
     for (let i = 0; i < keywords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
       const foundProInputs_temp = props.proInputs.filter(curr => {
-        const test = keywords[i].map(
-          keyword =>
-            curr.date.toLowerCase().includes(keyword) ||
-            curr.place.toLowerCase().includes(keyword) ||
-            curr.person.toLowerCase().includes(keyword) ||
-            curr.subject.toLowerCase().includes(keyword) ||
-            curr.reason.toLowerCase().includes(keyword) ||
-            curr.condition1.toLowerCase().includes(keyword) ||
-            curr.condition2.toLowerCase().includes(keyword) ||
-            curr.condition3.toLowerCase().includes(keyword) ||
-            curr.condition4.toLowerCase().includes(keyword) ||
-            curr.condition5.toLowerCase().includes(keyword) ||
-            curr.condition6.toLowerCase().includes(keyword) ||
-            curr.condition7.toLowerCase().includes(keyword) ||
-            curr.condition8.toLowerCase().includes(keyword) ||
-            curr.condition9.toLowerCase().includes(keyword) ||
-            curr.condition10.toLowerCase().includes(keyword) ||
-            curr.condition11.toLowerCase().includes(keyword) ||
-            curr.condition12.toLowerCase().includes(keyword) ||
-            curr.condition13.toLowerCase().includes(keyword) ||
-            curr.condition14.toLowerCase().includes(keyword) ||
-            curr.condition15.toLowerCase().includes(keyword) ||
-            curr.condition16.toLowerCase().includes(keyword) ||
-            curr.condition17.toLowerCase().includes(keyword) ||
-            curr.condition18.toLowerCase().includes(keyword) ||
-            curr.condition19.toLowerCase().includes(keyword) ||
-            curr.condition20.toLowerCase().includes(keyword) ||
-            curr.data.toLowerCase().includes(keyword) ||
-            curr.unit.toLowerCase().includes(keyword)
-        );
+        const test = keywords[i].map(keyword => {
+          if (keyword.length === 1) {
+            return (
+              curr.date.includes(keyword) ||
+              curr.place.includes(keyword) ||
+              curr.person.includes(keyword) ||
+              curr.subject.includes(keyword) ||
+              curr.reason.includes(keyword) ||
+              curr.condition1.includes(keyword) ||
+              curr.condition2.includes(keyword) ||
+              curr.condition3.includes(keyword) ||
+              curr.condition4.includes(keyword) ||
+              curr.condition5.includes(keyword) ||
+              curr.condition6.includes(keyword) ||
+              curr.condition7.includes(keyword) ||
+              curr.condition8.includes(keyword) ||
+              curr.condition9.includes(keyword) ||
+              curr.condition10.includes(keyword) ||
+              curr.condition11.includes(keyword) ||
+              curr.condition12.includes(keyword) ||
+              curr.condition13.includes(keyword) ||
+              curr.condition14.includes(keyword) ||
+              curr.condition15.includes(keyword) ||
+              curr.condition16.includes(keyword) ||
+              curr.condition17.includes(keyword) ||
+              curr.condition18.includes(keyword) ||
+              curr.condition19.includes(keyword) ||
+              curr.condition20.includes(keyword) ||
+              curr.data.includes(keyword) ||
+              curr.unit.includes(keyword)
+            );
+          } else {
+            return (
+              curr.date.toLowerCase().includes(keyword) ||
+              curr.place.toLowerCase().includes(keyword) ||
+              curr.person.toLowerCase().includes(keyword) ||
+              curr.subject.toLowerCase().includes(keyword) ||
+              curr.reason.toLowerCase().includes(keyword) ||
+              curr.condition1.toLowerCase().includes(keyword) ||
+              curr.condition2.toLowerCase().includes(keyword) ||
+              curr.condition3.toLowerCase().includes(keyword) ||
+              curr.condition4.toLowerCase().includes(keyword) ||
+              curr.condition5.toLowerCase().includes(keyword) ||
+              curr.condition6.toLowerCase().includes(keyword) ||
+              curr.condition7.toLowerCase().includes(keyword) ||
+              curr.condition8.toLowerCase().includes(keyword) ||
+              curr.condition9.toLowerCase().includes(keyword) ||
+              curr.condition10.toLowerCase().includes(keyword) ||
+              curr.condition11.toLowerCase().includes(keyword) ||
+              curr.condition12.toLowerCase().includes(keyword) ||
+              curr.condition13.toLowerCase().includes(keyword) ||
+              curr.condition14.toLowerCase().includes(keyword) ||
+              curr.condition15.toLowerCase().includes(keyword) ||
+              curr.condition16.toLowerCase().includes(keyword) ||
+              curr.condition17.toLowerCase().includes(keyword) ||
+              curr.condition18.toLowerCase().includes(keyword) ||
+              curr.condition19.toLowerCase().includes(keyword) ||
+              curr.condition20.toLowerCase().includes(keyword) ||
+              curr.data.toLowerCase().includes(keyword) ||
+              curr.unit.toLowerCase().includes(keyword)
+            );
+          }
+        });
         return test.every(logic => logic === true);
       });
       foundProInputs = foundProInputs.concat(foundProInputs_temp);
@@ -2840,36 +2886,69 @@ export default function ListData (props) {
     for (let i = 0; i < exwords.length; i++) {
       //     for (let j = 0; j < keywords[i].length; j++) {
       const foundProInputs2_temp = foundProInputs.filter(curr => {
-        const test = exwords[i].map(
-          exword =>
-            curr.date.toLowerCase().includes(exword) ||
-            curr.place.toLowerCase().includes(exword) ||
-            curr.person.toLowerCase().includes(exword) ||
-            curr.subject.toLowerCase().includes(exword) ||
-            curr.reason.toLowerCase().includes(exword) ||
-            curr.condition1.toLowerCase().includes(exword) ||
-            curr.condition2.toLowerCase().includes(exword) ||
-            curr.condition3.toLowerCase().includes(exword) ||
-            curr.condition4.toLowerCase().includes(exword) ||
-            curr.condition5.toLowerCase().includes(exword) ||
-            curr.condition6.toLowerCase().includes(exword) ||
-            curr.condition7.toLowerCase().includes(exword) ||
-            curr.condition8.toLowerCase().includes(exword) ||
-            curr.condition9.toLowerCase().includes(exword) ||
-            curr.condition10.toLowerCase().includes(exword) ||
-            curr.condition11.toLowerCase().includes(exword) ||
-            curr.condition12.toLowerCase().includes(exword) ||
-            curr.condition13.toLowerCase().includes(exword) ||
-            curr.condition14.toLowerCase().includes(exword) ||
-            curr.condition15.toLowerCase().includes(exword) ||
-            curr.condition16.toLowerCase().includes(exword) ||
-            curr.condition17.toLowerCase().includes(exword) ||
-            curr.condition18.toLowerCase().includes(exword) ||
-            curr.condition19.toLowerCase().includes(exword) ||
-            curr.condition20.toLowerCase().includes(exword) ||
-            curr.data.toLowerCase().includes(exword) ||
-            curr.unit.toLowerCase().includes(exword)
-        );
+        const test = exwords[i].map(exword => {
+          if (exword.length === 1) {
+            return (
+              curr.date.includes(exword) ||
+              curr.place.includes(exword) ||
+              curr.person.includes(exword) ||
+              curr.subject.includes(exword) ||
+              curr.reason.includes(exword) ||
+              curr.condition1.includes(exword) ||
+              curr.condition2.includes(exword) ||
+              curr.condition3.includes(exword) ||
+              curr.condition4.includes(exword) ||
+              curr.condition5.includes(exword) ||
+              curr.condition6.includes(exword) ||
+              curr.condition7.includes(exword) ||
+              curr.condition8.includes(exword) ||
+              curr.condition9.includes(exword) ||
+              curr.condition10.includes(exword) ||
+              curr.condition11.includes(exword) ||
+              curr.condition12.includes(exword) ||
+              curr.condition13.includes(exword) ||
+              curr.condition14.includes(exword) ||
+              curr.condition15.includes(exword) ||
+              curr.condition16.includes(exword) ||
+              curr.condition17.includes(exword) ||
+              curr.condition18.includes(exword) ||
+              curr.condition19.includes(exword) ||
+              curr.condition20.includes(exword) ||
+              curr.data.includes(exword) ||
+              curr.unit.includes(exword)
+            );
+          } else {
+            return (
+              curr.date.toLowerCase().includes(exword) ||
+              curr.place.toLowerCase().includes(exword) ||
+              curr.person.toLowerCase().includes(exword) ||
+              curr.subject.toLowerCase().includes(exword) ||
+              curr.reason.toLowerCase().includes(exword) ||
+              curr.condition1.toLowerCase().includes(exword) ||
+              curr.condition2.toLowerCase().includes(exword) ||
+              curr.condition3.toLowerCase().includes(exword) ||
+              curr.condition4.toLowerCase().includes(exword) ||
+              curr.condition5.toLowerCase().includes(exword) ||
+              curr.condition6.toLowerCase().includes(exword) ||
+              curr.condition7.toLowerCase().includes(exword) ||
+              curr.condition8.toLowerCase().includes(exword) ||
+              curr.condition9.toLowerCase().includes(exword) ||
+              curr.condition10.toLowerCase().includes(exword) ||
+              curr.condition11.toLowerCase().includes(exword) ||
+              curr.condition12.toLowerCase().includes(exword) ||
+              curr.condition13.toLowerCase().includes(exword) ||
+              curr.condition14.toLowerCase().includes(exword) ||
+              curr.condition15.toLowerCase().includes(exword) ||
+              curr.condition16.toLowerCase().includes(exword) ||
+              curr.condition17.toLowerCase().includes(exword) ||
+              curr.condition18.toLowerCase().includes(exword) ||
+              curr.condition19.toLowerCase().includes(exword) ||
+              curr.condition20.toLowerCase().includes(exword) ||
+              curr.data.toLowerCase().includes(exword) ||
+              curr.unit.toLowerCase().includes(exword)
+            );
+          }
+        });
         return test.every(logic => logic === false);
       });
       foundProInputs2 = foundProInputs2.concat(foundProInputs2_temp);
