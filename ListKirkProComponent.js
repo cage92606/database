@@ -512,26 +512,1564 @@ function RenderKirkItem ({
         {/* <b>{kirk.subject} </b>
         <br /> */}
         {kirk.reason === '' ? '' : [kirk.reason, <br key='br' />]}
-        {kirk.condition1 === '' ? '' : [kirk.condition1, <br key='br' />]}
-        {kirk.condition2 === '' ? '' : [kirk.condition2, <br key='br' />]}
-        {kirk.condition3 === '' ? '' : [kirk.condition3, <br key='br' />]}
-        {kirk.condition4 === '' ? '' : [kirk.condition4, <br key='br' />]}
-        {kirk.condition5 === '' ? '' : [kirk.condition5, <br key='br' />]}
-        {kirk.condition6 === '' ? '' : [kirk.condition6, <br key='br' />]}
-        {kirk.condition7 === '' ? '' : [kirk.condition7, <br key='br' />]}
-        {kirk.condition8 === '' ? '' : [kirk.condition8, <br key='br' />]}
-        {kirk.condition9 === '' ? '' : [kirk.condition9, <br key='br' />]}
-        {kirk.condition10 === '' ? '' : [kirk.condition10, <br key='br' />]}
-        {kirk.condition11 === '' ? '' : [kirk.condition11, <br key='br' />]}
-        {kirk.condition12 === '' ? '' : [kirk.condition12, <br key='br' />]}
-        {kirk.condition13 === '' ? '' : [kirk.condition13, <br key='br' />]}
-        {kirk.condition14 === '' ? '' : [kirk.condition14, <br key='br' />]}
-        {kirk.condition15 === '' ? '' : [kirk.condition15, <br key='br' />]}
-        {kirk.condition16 === '' ? '' : [kirk.condition16, <br key='br' />]}
-        {kirk.condition17 === '' ? '' : [kirk.condition17, <br key='br' />]}
-        {kirk.condition18 === '' ? '' : [kirk.condition18, <br key='br' />]}
-        {kirk.condition19 === '' ? '' : [kirk.condition19, <br key='br' />]}
-        {kirk.condition20 === '' ? '' : [kirk.condition20, <br key='br' />]}
+        {kirk.condition1 === ''
+          ? ''
+          : [
+              kirk.condition1.indexOf('http') === 0 ||
+              kirk.condition1.indexOf('/') === 0 ? (
+                kirk.condition1 ? (
+                  kirk.condition1.indexOf('http') === 0 ? (
+                    <a href={kirk.condition1} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition1.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition1
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition1
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition1
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition1.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition1
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition1
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition1
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition1}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition1
+              ),
+              <br key='br' />
+            ]}
+        {kirk.condition2 === ''
+          ? ''
+          : [
+              kirk.condition2.indexOf('http') === 0 ||
+              kirk.condition2.indexOf('/') === 0 ? (
+                kirk.condition2 ? (
+                  kirk.condition2.indexOf('http') === 0 ? (
+                    <a href={kirk.condition2} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition2.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition2
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition2
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition2
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition2.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition2
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition2
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition2
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition2}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition2
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition3 === ''
+          ? ''
+          : [
+              kirk.condition3.indexOf('http') === 0 ||
+              kirk.condition3.indexOf('/') === 0 ? (
+                kirk.condition3 ? (
+                  kirk.condition3.indexOf('http') === 0 ? (
+                    <a href={kirk.condition3} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition3.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition3
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition3
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition3
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition3.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition3
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition3
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition3
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition3}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition3
+              ),
+              <br key='br' />
+            ]}
+        {kirk.condition4 === ''
+          ? ''
+          : [
+              kirk.condition4.indexOf('http') === 0 ||
+              kirk.condition4.indexOf('/') === 0 ? (
+                kirk.condition4 ? (
+                  kirk.condition4.indexOf('http') === 0 ? (
+                    <a href={kirk.condition4} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition4.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition4
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition4
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition4
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition4.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition4
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition4
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition4
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition4}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition4
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition5 === ''
+          ? ''
+          : [
+              kirk.condition5.indexOf('http') === 0 ||
+              kirk.condition5.indexOf('/') === 0 ? (
+                kirk.condition5 ? (
+                  kirk.condition5.indexOf('http') === 0 ? (
+                    <a href={kirk.condition5} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition5.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition5
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition5
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition5
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition5.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition5
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition5
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition5
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition5}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition5
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition6 === ''
+          ? ''
+          : [
+              kirk.condition6.indexOf('http') === 0 ||
+              kirk.condition6.indexOf('/') === 0 ? (
+                kirk.condition6 ? (
+                  kirk.condition6.indexOf('http') === 0 ? (
+                    <a href={kirk.condition6} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition6.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition6
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition6
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition6
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition6.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition6
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition6
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition6
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition6}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition6
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition7 === ''
+          ? ''
+          : [
+              kirk.condition7.indexOf('http') === 0 ||
+              kirk.condition7.indexOf('/') === 0 ? (
+                kirk.condition7 ? (
+                  kirk.condition7.indexOf('http') === 0 ? (
+                    <a href={kirk.condition7} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition7.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition7
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition7
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition7
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition7.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition7
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition7
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition7
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition7}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition7
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition8 === ''
+          ? ''
+          : [
+              kirk.condition8.indexOf('http') === 0 ||
+              kirk.condition8.indexOf('/') === 0 ? (
+                kirk.condition8 ? (
+                  kirk.condition8.indexOf('http') === 0 ? (
+                    <a href={kirk.condition8} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition8.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition8
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition8
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition8
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition8.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition8
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition8
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition8
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition8}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition8
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition9 === ''
+          ? ''
+          : [
+              kirk.condition9.indexOf('http') === 0 ||
+              kirk.condition9.indexOf('/') === 0 ? (
+                kirk.condition9 ? (
+                  kirk.condition9.indexOf('http') === 0 ? (
+                    <a href={kirk.condition9} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition9.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition9
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition9
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition9
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition9.split('//')[1].split('/')[0].split('.')[0]
+                          .length <
+                        kirk.condition9
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition9
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition9
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition9}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition9
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition10 === ''
+          ? ''
+          : [
+              kirk.condition10.indexOf('http') === 0 ||
+              kirk.condition10.indexOf('/') === 0 ? (
+                kirk.condition10 ? (
+                  kirk.condition10.indexOf('http') === 0 ? (
+                    <a href={kirk.condition10} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition10.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition10
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition10
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition10
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition10
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition10
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition10
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition10
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition10}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition10
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition11 === ''
+          ? ''
+          : [
+              kirk.condition11.indexOf('http') === 0 ||
+              kirk.condition11.indexOf('/') === 0 ? (
+                kirk.condition11 ? (
+                  kirk.condition11.indexOf('http') === 0 ? (
+                    <a href={kirk.condition11} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition11.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition11
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition11
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition11
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition11
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition11
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition11
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition11
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition11}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition11
+              ),
+              <br key='br' />
+            ]}
+        {kirk.condition12 === ''
+          ? ''
+          : [
+              kirk.condition12.indexOf('http') === 0 ||
+              kirk.condition12.indexOf('/') === 0 ? (
+                kirk.condition12 ? (
+                  kirk.condition12.indexOf('http') === 0 ? (
+                    <a href={kirk.condition12} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition12.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition12
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition12
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition12
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition12
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition12
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition12
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition12
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition12}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition12
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition13 === ''
+          ? ''
+          : [
+              kirk.condition13.indexOf('http') === 0 ||
+              kirk.condition13.indexOf('/') === 0 ? (
+                kirk.condition13 ? (
+                  kirk.condition13.indexOf('http') === 0 ? (
+                    <a href={kirk.condition13} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition13.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition13
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition13
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition13
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition13
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition13
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition13
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition13
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition13}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition13
+              ),
+              <br key='br' />
+            ]}
+        {kirk.condition14 === ''
+          ? ''
+          : [
+              kirk.condition14.indexOf('http') === 0 ||
+              kirk.condition14.indexOf('/') === 0 ? (
+                kirk.condition14 ? (
+                  kirk.condition14.indexOf('http') === 0 ? (
+                    <a href={kirk.condition14} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition14.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition14
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition14
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition14
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition14
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition14
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition14
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition14
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition14}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition14
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition15 === ''
+          ? ''
+          : [
+              kirk.condition15.indexOf('http') === 0 ||
+              kirk.condition15.indexOf('/') === 0 ? (
+                kirk.condition15 ? (
+                  kirk.condition15.indexOf('http') === 0 ? (
+                    <a href={kirk.condition15} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition15.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition15
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition15
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition15
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition15
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition15
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition15
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition15
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition15}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition15
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition16 === ''
+          ? ''
+          : [
+              kirk.condition16.indexOf('http') === 0 ||
+              kirk.condition16.indexOf('/') === 0 ? (
+                kirk.condition16 ? (
+                  kirk.condition16.indexOf('http') === 0 ? (
+                    <a href={kirk.condition16} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition16.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition16
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition16
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition16
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition16
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition16
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition16
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition16
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition16}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition16
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition17 === ''
+          ? ''
+          : [
+              kirk.condition17.indexOf('http') === 0 ||
+              kirk.condition17.indexOf('/') === 0 ? (
+                kirk.condition17 ? (
+                  kirk.condition17.indexOf('http') === 0 ? (
+                    <a href={kirk.condition17} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition17.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition17
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition17
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition17
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition17
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition17
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition17
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition17
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition17}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition17
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition18 === ''
+          ? ''
+          : [
+              kirk.condition18.indexOf('http') === 0 ||
+              kirk.condition18.indexOf('/') === 0 ? (
+                kirk.condition18 ? (
+                  kirk.condition18.indexOf('http') === 0 ? (
+                    <a href={kirk.condition18} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition18.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition18
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition18
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition18
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition18
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition18
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition18
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition18
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition18}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition18
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition19 === ''
+          ? ''
+          : [
+              kirk.condition19.indexOf('http') === 0 ||
+              kirk.condition19.indexOf('/') === 0 ? (
+                kirk.condition19 ? (
+                  kirk.condition19.indexOf('http') === 0 ? (
+                    <a href={kirk.condition19} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition19.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition19
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition19
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition19
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition19
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition19
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition19
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition19
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition19}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition19
+              ),
+              <br key='br' />
+            ]}
+
+        {kirk.condition20 === ''
+          ? ''
+          : [
+              kirk.condition20.indexOf('http') === 0 ||
+              kirk.condition20.indexOf('/') === 0 ? (
+                kirk.condition20 ? (
+                  kirk.condition20.indexOf('http') === 0 ? (
+                    <a href={kirk.condition20} target='_blank' rel='noreferrer'>
+                      {0 ? (
+                        <span className='fa fa-link'></span>
+                      ) : kirk.condition20.indexOf('www') !== -1 ? (
+                        // If the first word is 'www', use the second word
+                        <span>
+                          {
+                            kirk.condition20
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : kirk.condition20
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.').length === 2 ? (
+                        // otherwise and if domain consists of 2 words, use the first word
+                        <span>
+                          {
+                            kirk.condition20
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      ) : // otherwise use whichever is longer among the first and second words
+                      kirk.condition20
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[0].length <
+                        kirk.condition20
+                          .split('//')[1]
+                          .split('/')[0]
+                          .split('.')[1].length ? (
+                        <span>
+                          {
+                            kirk.condition20
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[1]
+                          }
+                        </span>
+                      ) : (
+                        <span>
+                          {
+                            kirk.condition20
+                              .split('//')[1]
+                              .split('/')[0]
+                              .split('.')[0]
+                          }
+                        </span>
+                      )}
+                    </a>
+                  ) : (
+                    <a
+                      href={`file:${kirk.condition20}`}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <span className='fa fa-folder-open'></span>
+                    </a>
+                  )
+                ) : (
+                  ''
+                )
+              ) : (
+                kirk.condition20
+              ),
+              <br key='br' />
+            ]}
+
         {kirk.data === ''
           ? ''
           : [
