@@ -50,6 +50,13 @@ function RenderInputTable ({
   const [isOpen, setIsOpen] = useState(false);
   // const classNameForEditAndDelete = this.props.isMobile ? '' : 'sticky-td';
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  // const [itemColors, setItemColors] = useState({});
+  const itemColors = useSelector(state => state.fieldButtons.itemColors);
+  const dispatch = useDispatch();
+  // const setItemColor = (id, color) => ({
+  //   type: 'SET_ITEM_COLOR',
+  //   payload: { id, color }
+  // });
 
   useEffect(() => {
     window.addEventListener(
@@ -85,12 +92,28 @@ function RenderInputTable ({
       );
       // console.log('isUpdating: ', isUpdating);
     }
-    // resetInputForm();
-    // <div className="container">
-    //   <div className="row">
-    //     <Loading />
-    //   </div>
-    // </div>;
+  };
+
+  // const handleRightClick = (event, id) => {
+  //   event.preventDefault();
+  //   setItemColors(prevColors => ({
+  //     ...prevColors,
+  //     [id]: prevColors[id] === '#d6eaf8' ? 'white' : '#d6eaf8' // Toggle color between red and black
+  //   }));
+  // };
+
+  const handleClick = (event, id) => {
+    event.preventDefault();
+    const newColor = itemColors[id] === '#d6eaf8' ? 'white' : '#d6eaf8';
+    // dispatch(setItemColor(id, newColor));
+    dispatch({
+      type: 'SET_ITEM_COLOR',
+      payload: { id, color: newColor }
+    });
+  };
+
+  const handleLinkClick = event => {
+    event.stopPropagation();
   };
 
   // const [isDateEditing, setIsDateEditing] = useState(false);
@@ -178,8 +201,14 @@ function RenderInputTable ({
     }
   };
 
+  const isNaNStyle = isNaN(input.data.replace(/,/g, ''))
+    ? {}
+    : { textAlign: 'right' };
+  const backgroundStyle = { backgroundColor: itemColors[input._id] || 'white' }; // Example new style
+  const dataStyle = { ...isNaNStyle, ...backgroundStyle };
+
   return (
-    <tr>
+    <tr style={{ backgroundColor: itemColors[input._id] || 'white' }}>
       <Modal
         isOpen={isOpen}
         toggle={toggleModal}
@@ -279,7 +308,13 @@ function RenderInputTable ({
 
       {/* <td className={classNameForEditAndDelete}> */}
 
-      <td className={`${isMobile ? '' : 'sticky-td'}`}>
+      <td
+        className={`${isMobile ? '' : 'sticky-td'}`}
+        onClick={event => handleClick(event, input._id)}
+        // style={{
+        //   backgroundColor: itemColors[input._id] || 'white'
+        // }}
+      >
         {/* <td className="sticky-td"> */}
         {auth.id === input.user ? (
           <Button
@@ -303,6 +338,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isDateEditing ? (
           <Input
@@ -324,6 +361,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isPlaceEditing ? (
           <Input
@@ -338,7 +377,12 @@ function RenderInputTable ({
         input.place.indexOf('http') === 0 || input.place.indexOf('/') === 0 ? (
           input.place ? (
             input.place.indexOf('http') === 0 ? (
-              <a href={input.place} target='_blank' rel='noreferrer'>
+              <a
+                href={input.place}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : input.place.indexOf('www') !== -1 ? (
@@ -366,7 +410,12 @@ function RenderInputTable ({
                 )}
               </a>
             ) : (
-              <a href={`file:${input.place}`} target='_blank' rel='noreferrer'>
+              <a
+                href={`file:${input.place}`}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 <span className='fa fa-folder-open'></span>
               </a>
             )
@@ -383,6 +432,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {/* {input.person} */}
         {auth.id === input.user && isPersonEditing ? (
@@ -404,6 +455,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isSubjectEditing ? (
           <Input
@@ -424,6 +477,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isReasonEditing ? (
           <Input
@@ -444,6 +499,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isConditionEditing ? (
           <Input
@@ -464,9 +521,11 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(input.data.replace(/,/g, '')) ? {} : { textAlign: 'right' }
-        }
+        // style={
+        //   isNaN(input.data.replace(/,/g, '')) ? {} : { textAlign: 'right' }
+        // }
+        onClick={event => handleClick(event, input._id)}
+        // style={dataStyle}
       >
         {auth.id === input.user && isDataEditing ? (
           <Input
@@ -481,7 +540,12 @@ function RenderInputTable ({
           input.data.indexOf('/') === 0 ? (
           input.data ? (
             input.data.indexOf('http') === 0 ? (
-              <a href={input.data} target='_blank' rel='noreferrer'>
+              <a
+                href={input.data}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : input.data.indexOf('www') !== -1 ? (
@@ -509,7 +573,12 @@ function RenderInputTable ({
                 )}
               </a>
             ) : (
-              <a href={`file:${input.data}`} target='_blank' rel='noreferrer'>
+              <a
+                href={`file:${input.data}`}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 <span className='fa fa-folder-open'></span>
               </a>
             )
@@ -526,6 +595,8 @@ function RenderInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, input._id)}
+        //style={{ backgroundColor: itemColors[input._id] || 'white' }}
       >
         {auth.id === input.user && isUnitEditing ? (
           <Input
@@ -540,7 +611,13 @@ function RenderInputTable ({
           input.unit
         )}
       </td>
-      <td className={`${isMobile ? '' : 'sticky-td'}`}>
+      <td
+        className={`${isMobile ? '' : 'sticky-td'}`}
+        onClick={event => handleClick(event, input._id)}
+        // style={{
+        //   backgroundColor: itemColors[input._id] || 'white'
+        // }}
+      >
         {/* <td className="sticky-td"> */}
         {auth.id === input.user ? (
           <Button
@@ -551,6 +628,11 @@ function RenderInputTable ({
               if (window.confirm('Are you sure?')) deleteInput(input._id);
             }}
             style={{ border: 'none' }}
+            // onClick={event => handleClick(event, input._id)}
+            // style={{
+            //   border: 'none',
+            //   backgroundColor: itemColors[input._id] || 'white'
+            // }}
           >
             <span className='fa fa-times'></span>
           </Button>
@@ -840,37 +922,28 @@ export default function ListData (props) {
         const secondnumber = day.split('-')[1].padStart(2, '0');
         const thirdnumber = day.split('-')[2].padStart(2, '0');
 
-        if (len === 1 || len === 2) {
-          // len is the length of the first number like 25-2023-1 or 1-2023-3
-          // In the case of like "25-2023-1"
-          // if (thirdnumber === '1')
-          //   day = `January-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '2')
-          //   day = `Febrary-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '3')
-          //   day = `March-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '4')
-          //   day = `April-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '5')
-          //   day = `May-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '6')
-          //   day = `June-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '7')
-          //   day = `July-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '8')
-          //   day = `August-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '9')
-          //   day = `September-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '10')
-          //   day = `October-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '11')
-          //   day = `November-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '12')
-          //   day = `December-${secondnumber}-${firstnumber}`;
-          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        let time = inputDate.split(' ').find(element => element.includes(':'));
+        if (!time) {
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         } else {
-          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
+          const [hour, minute] = time
+            .split(':')
+            .map(num => num.padStart(2, '0'));
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         }
+        // console.log('time is', time);
       }
 
       if (!day) {
@@ -1235,36 +1308,26 @@ export default function ListData (props) {
         const secondnumber = day.split('-')[1].padStart(2, '0');
         const thirdnumber = day.split('-')[2].padStart(2, '0');
 
-        if (len === 1 || len === 2) {
-          // len is the length of the first number like 25-2023-1 or 1-2023-3
-          // In the case of like "25-2023-1"
-          // if (thirdnumber === '1')
-          //   day = `January-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '2')
-          //   day = `Febrary-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '3')
-          //   day = `March-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '4')
-          //   day = `April-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '5')
-          //   day = `May-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '6')
-          //   day = `June-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '7')
-          //   day = `July-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '8')
-          //   day = `August-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '9')
-          //   day = `September-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '10')
-          //   day = `October-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '11')
-          //   day = `November-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '12')
-          //   day = `December-${secondnumber}-${firstnumber}`;
-          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        let time = inputDate.split(' ').find(element => element.includes(':'));
+        if (!time) {
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         } else {
-          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
+          const [hour, minute] = time
+            .split(':')
+            .map(num => num.padStart(2, '0'));
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         }
       }
 

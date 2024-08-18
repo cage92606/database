@@ -34,6 +34,9 @@ function RenderProInputTable ({
   toggleIsFullContentShown
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  // const [itemColors, setItemColors] = useState({});
+  const itemColors = useSelector(state => state.fieldButtons.itemColors);
+  const dispatch = useDispatch();
 
   const toggleModal = () => {
     setIsOpen(!isOpen);
@@ -74,6 +77,29 @@ function RenderProInputTable ({
       );
       // resetProInputForm();
     }
+  };
+
+  // const handleRightClick = (event, id) => {
+  //   event.preventDefault();
+  //   setItemColors(prevColors => ({
+  //     ...prevColors,
+  //     [id]: prevColors[id] === '#d6eaf8' ? 'white' : '#d6eaf8' // Toggle color between red and black
+  //   }));
+  //   // console.log('Right clicked on item with id:', id);
+  // };
+
+  const handleClick = (event, id) => {
+    event.preventDefault();
+    const newColor = itemColors[id] === '#d6eaf8' ? 'white' : '#d6eaf8';
+    // dispatch(setItemColor(id, newColor));
+    dispatch({
+      type: 'SET_ITEM_COLOR',
+      payload: { id, color: newColor }
+    });
+  };
+
+  const handleLinkClick = event => {
+    event.stopPropagation();
   };
 
   const [isDateEditing, setIsDateEditing] = useState(false);
@@ -260,8 +286,16 @@ function RenderProInputTable ({
     }
   };
 
+  const isNaNStyle = isNaN(proInput.data.replace(/,/g, ''))
+    ? {}
+    : { textAlign: 'right' };
+  const backgroundStyle = {
+    backgroundColor: itemColors[proInput._id] || 'white'
+  }; // Example new style
+  const dataStyle = { ...isNaNStyle, ...backgroundStyle };
+
   return (
-    <tr>
+    <tr style={{ backgroundColor: itemColors[proInput._id] || 'white' }}>
       <Modal
         isOpen={isOpen}
         toggle={toggleModal}
@@ -573,7 +607,13 @@ function RenderProInputTable ({
         </ModalBody>
       </Modal>
 
-      <td className='sticky-td'>
+      <td
+        className={'sticky-td'}
+        onClick={event => handleClick(event, proInput._id)}
+        // style={{
+        //   backgroundColor: itemColors[proInput._id] || 'white'
+        // }}
+      >
         {auth.id === proInput.user ? (
           <Button
             outline
@@ -595,6 +635,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        // style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isDateEditing ? (
           <Input
@@ -615,6 +657,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        // style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isPlaceEditing ? (
           <Input
@@ -629,7 +673,12 @@ function RenderProInputTable ({
           proInput.place.indexOf('/') === 0 ? (
           proInput.place ? (
             proInput.place.indexOf('http') === 0 ? (
-              <a href={proInput.place} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.place}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.place.indexOf('www') !== -1 ? (
@@ -662,6 +711,7 @@ function RenderProInputTable ({
                 href={`file:${proInput.place}`}
                 target='_blank'
                 rel='noreferrer'
+                onClick={handleLinkClick}
               >
                 <span className='fa fa-folder-open'></span>
               </a>
@@ -679,6 +729,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isPersonEditing ? (
           <Input
@@ -699,6 +751,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isSubjectEditing ? (
           <Input
@@ -719,6 +773,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isReasonEditing ? (
           <Input
@@ -740,6 +796,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition1Editing ? (
           <Input
@@ -754,7 +812,12 @@ function RenderProInputTable ({
           proInput.condition1.indexOf('/') === 0 ? (
           proInput.condition1 ? (
             proInput.condition1.indexOf('http') === 0 ? (
-              <a href={proInput.condition1} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition1}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition1.indexOf('www') !== -1 ? (
@@ -824,6 +887,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition2Editing ? (
           <Input
@@ -838,7 +903,12 @@ function RenderProInputTable ({
           proInput.condition2.indexOf('/') === 0 ? (
           proInput.condition2 ? (
             proInput.condition2.indexOf('http') === 0 ? (
-              <a href={proInput.condition2} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition2}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition2.indexOf('www') !== -1 ? (
@@ -908,6 +978,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition3Editing ? (
           <Input
@@ -922,7 +994,12 @@ function RenderProInputTable ({
           proInput.condition3.indexOf('/') === 0 ? (
           proInput.condition3 ? (
             proInput.condition3.indexOf('http') === 0 ? (
-              <a href={proInput.condition3} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition3}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition3.indexOf('www') !== -1 ? (
@@ -992,6 +1069,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition4Editing ? (
           <Input
@@ -1006,7 +1085,12 @@ function RenderProInputTable ({
           proInput.condition4.indexOf('/') === 0 ? (
           proInput.condition4 ? (
             proInput.condition4.indexOf('http') === 0 ? (
-              <a href={proInput.condition4} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition4}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition4.indexOf('www') !== -1 ? (
@@ -1077,6 +1161,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition5Editing ? (
           <Input
@@ -1091,7 +1177,12 @@ function RenderProInputTable ({
           proInput.condition5.indexOf('/') === 0 ? (
           proInput.condition5 ? (
             proInput.condition5.indexOf('http') === 0 ? (
-              <a href={proInput.condition5} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition5}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition5.indexOf('www') !== -1 ? (
@@ -1162,6 +1253,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition6Editing ? (
           <Input
@@ -1176,7 +1269,12 @@ function RenderProInputTable ({
           proInput.condition6.indexOf('/') === 0 ? (
           proInput.condition6 ? (
             proInput.condition6.indexOf('http') === 0 ? (
-              <a href={proInput.condition6} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition6}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition6.indexOf('www') !== -1 ? (
@@ -1247,6 +1345,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition7Editing ? (
           <Input
@@ -1261,7 +1361,12 @@ function RenderProInputTable ({
           proInput.condition7.indexOf('/') === 0 ? (
           proInput.condition7 ? (
             proInput.condition7.indexOf('http') === 0 ? (
-              <a href={proInput.condition7} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition7}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition7.indexOf('www') !== -1 ? (
@@ -1332,6 +1437,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition8Editing ? (
           <Input
@@ -1346,7 +1453,12 @@ function RenderProInputTable ({
           proInput.condition8.indexOf('/') === 0 ? (
           proInput.condition8 ? (
             proInput.condition8.indexOf('http') === 0 ? (
-              <a href={proInput.condition8} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition8}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition8.indexOf('www') !== -1 ? (
@@ -1417,6 +1529,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition9Editing ? (
           <Input
@@ -1431,7 +1545,12 @@ function RenderProInputTable ({
           proInput.condition9.indexOf('/') === 0 ? (
           proInput.condition9 ? (
             proInput.condition9.indexOf('http') === 0 ? (
-              <a href={proInput.condition9} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition9}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition9.indexOf('www') !== -1 ? (
@@ -1502,6 +1621,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition10Editing ? (
           <Input
@@ -1516,7 +1637,12 @@ function RenderProInputTable ({
           proInput.condition10.indexOf('/') === 0 ? (
           proInput.condition10 ? (
             proInput.condition10.indexOf('http') === 0 ? (
-              <a href={proInput.condition10} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition10}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition10.indexOf('www') !== -1 ? (
@@ -1589,6 +1715,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition11Editing ? (
           <Input
@@ -1603,7 +1731,12 @@ function RenderProInputTable ({
           proInput.condition11.indexOf('/') === 0 ? (
           proInput.condition11 ? (
             proInput.condition11.indexOf('http') === 0 ? (
-              <a href={proInput.condition11} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition11}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition11.indexOf('www') !== -1 ? (
@@ -1675,6 +1808,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition12Editing ? (
           <Input
@@ -1689,7 +1824,12 @@ function RenderProInputTable ({
           proInput.condition12.indexOf('/') === 0 ? (
           proInput.condition12 ? (
             proInput.condition12.indexOf('http') === 0 ? (
-              <a href={proInput.condition12} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition12}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition12.indexOf('www') !== -1 ? (
@@ -1762,6 +1902,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition13Editing ? (
           <Input
@@ -1776,7 +1918,12 @@ function RenderProInputTable ({
           proInput.condition13.indexOf('/') === 0 ? (
           proInput.condition13 ? (
             proInput.condition13.indexOf('http') === 0 ? (
-              <a href={proInput.condition13} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition13}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition13.indexOf('www') !== -1 ? (
@@ -1849,6 +1996,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition14Editing ? (
           <Input
@@ -1863,7 +2012,12 @@ function RenderProInputTable ({
           proInput.condition14.indexOf('/') === 0 ? (
           proInput.condition14 ? (
             proInput.condition14.indexOf('http') === 0 ? (
-              <a href={proInput.condition14} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition14}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition14.indexOf('www') !== -1 ? (
@@ -1936,6 +2090,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition15Editing ? (
           <Input
@@ -1950,7 +2106,12 @@ function RenderProInputTable ({
           proInput.condition15.indexOf('/') === 0 ? (
           proInput.condition15 ? (
             proInput.condition15.indexOf('http') === 0 ? (
-              <a href={proInput.condition15} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition15}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition15.indexOf('www') !== -1 ? (
@@ -2022,6 +2183,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition16Editing ? (
           <Input
@@ -2036,7 +2199,12 @@ function RenderProInputTable ({
           proInput.condition16.indexOf('/') === 0 ? (
           proInput.condition16 ? (
             proInput.condition16.indexOf('http') === 0 ? (
-              <a href={proInput.condition16} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition16}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition16.indexOf('www') !== -1 ? (
@@ -2108,6 +2276,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition17Editing ? (
           <Input
@@ -2122,7 +2292,12 @@ function RenderProInputTable ({
           proInput.condition17.indexOf('/') === 0 ? (
           proInput.condition17 ? (
             proInput.condition17.indexOf('http') === 0 ? (
-              <a href={proInput.condition17} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition17}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition17.indexOf('www') !== -1 ? (
@@ -2194,6 +2369,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition18Editing ? (
           <Input
@@ -2208,7 +2385,12 @@ function RenderProInputTable ({
           proInput.condition18.indexOf('/') === 0 ? (
           proInput.condition18 ? (
             proInput.condition18.indexOf('http') === 0 ? (
-              <a href={proInput.condition18} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition18}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition18.indexOf('www') !== -1 ? (
@@ -2281,6 +2463,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition19Editing ? (
           <Input
@@ -2295,7 +2479,12 @@ function RenderProInputTable ({
           proInput.condition19.indexOf('/') === 0 ? (
           proInput.condition19 ? (
             proInput.condition19.indexOf('http') === 0 ? (
-              <a href={proInput.condition19} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition19}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition19.indexOf('www') !== -1 ? (
@@ -2367,6 +2556,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isCondition20Editing ? (
           <Input
@@ -2381,7 +2572,12 @@ function RenderProInputTable ({
           proInput.condition20.indexOf('/') === 0 ? (
           proInput.condition20 ? (
             proInput.condition20.indexOf('http') === 0 ? (
-              <a href={proInput.condition20} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.condition20}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   <span className='fa fa-link'></span>
                 ) : proInput.condition20.indexOf('www') !== -1 ? (
@@ -2436,6 +2632,7 @@ function RenderProInputTable ({
                 href={`file:${proInput.condition20}`}
                 target='_blank'
                 rel='noreferrer'
+                onClick={handleLinkClick}
               >
                 <span className='fa fa-folder-open'></span>
               </a>
@@ -2454,9 +2651,11 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
-        style={
-          isNaN(proInput.data.replace(/,/g, '')) ? {} : { textAlign: 'right' }
-        }
+        // style={
+        //   isNaN(proInput.data.replace(/,/g, '')) ? {} : { textAlign: 'right' }
+        // }
+        onClick={event => handleClick(event, proInput._id)}
+        // style={dataStyle}
       >
         {auth.id === proInput.user && isDataEditing ? (
           <Input
@@ -2471,7 +2670,12 @@ function RenderProInputTable ({
           proInput.data.indexOf('/') === 0 ? (
           proInput.data ? (
             proInput.data.indexOf('http') === 0 ? (
-              <a href={proInput.data} target='_blank' rel='noreferrer'>
+              <a
+                href={proInput.data}
+                target='_blank'
+                rel='noreferrer'
+                onClick={handleLinkClick}
+              >
                 {0 ? (
                   // {0 ? (
                   <span className='fa fa-link'></span>
@@ -2505,6 +2709,7 @@ function RenderProInputTable ({
                 href={`file:${proInput.data}`}
                 target='_blank'
                 rel='noreferrer'
+                onClick={handleLinkClick}
               >
                 <span className='fa fa-folder-open'></span>
               </a>
@@ -2522,6 +2727,8 @@ function RenderProInputTable ({
         onBlur={handleBlur}
         className={`${isFullContentShown ? '' : 'ellipsis'}`}
         onKeyDown={handleKeyDown}
+        onClick={event => handleClick(event, proInput._id)}
+        //style={{ backgroundColor: itemColors[proInput._id] || 'white' }}
       >
         {auth.id === proInput.user && isUnitEditing ? (
           <Input
@@ -2536,7 +2743,14 @@ function RenderProInputTable ({
           proInput.unit
         )}
       </td>
-      <td className='sticky-td'>
+      <td
+        className={'sticky-td'}
+        onClick={event => handleClick(event, proInput._id)}
+        // style={{
+        //   backgroundColor: itemColors[proInput._id] || 'white'
+        // }}
+      >
+        {' '}
         {auth.id === proInput.user ? (
           <Button
             outline
@@ -2986,36 +3200,28 @@ export default function ListData (props) {
         const secondnumber = day.split('-')[1].padStart(2, '0');
         const thirdnumber = day.split('-')[2].padStart(2, '0');
 
-        if (len === 1 || len === 2) {
-          // len is the length of the first number like 25-2023-1 or 1-2023-3
-          // In the case of like "25-2023-1"
-          // if (thirdnumber === '1')
-          //   day = `January-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '2')
-          //   day = `Febrary-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '3')
-          //   day = `March-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '4')
-          //   day = `April-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '5')
-          //   day = `May-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '6')
-          //   day = `June-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '7')
-          //   day = `July-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '8')
-          //   day = `August-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '9')
-          //   day = `September-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '10')
-          //   day = `October-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '11')
-          //   day = `November-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '12')
-          //   day = `December-${secondnumber}-${firstnumber}`;
-          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        let time = proInputDate
+          .split(' ')
+          .find(element => element.includes(':'));
+        if (!time) {
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         } else {
-          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
+          const [hour, minute] = time
+            .split(':')
+            .map(num => num.padStart(2, '0'));
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         }
       }
 
@@ -3906,36 +4112,28 @@ export default function ListData (props) {
         const secondnumber = day.split('-')[1].padStart(2, '0');
         const thirdnumber = day.split('-')[2].padStart(2, '0');
 
-        if (len === 1 || len === 2) {
-          // len is the length of the first number like 25-2023-1 or 1-2023-3
-          // In the case of like "25-2023-1"
-          // if (thirdnumber === '1')
-          //   day = `January-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '2')
-          //   day = `Febrary-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '3')
-          //   day = `March-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '4')
-          //   day = `April-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '5')
-          //   day = `May-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '6')
-          //   day = `June-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '7')
-          //   day = `July-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '8')
-          //   day = `August-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '9')
-          //   day = `September-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '10')
-          //   day = `October-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '11')
-          //   day = `November-${secondnumber}-${firstnumber}`;
-          // else if (thirdnumber === '12')
-          //   day = `December-${secondnumber}-${firstnumber}`;
-          day = `${secondnumber}-${thirdnumber}-${firstnumber}`;
+        let time = proInputDate
+          .split(' ')
+          .find(element => element.includes(':'));
+        if (!time) {
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} 00:00:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         } else {
-          day = `${firstnumber}-${secondnumber}-${thirdnumber}`;
+          const [hour, minute] = time
+            .split(':')
+            .map(num => num.padStart(2, '0'));
+          if (len === 1 || len === 2) {
+            day = `${secondnumber}-${thirdnumber}-${firstnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          } else {
+            day = `${firstnumber}-${secondnumber}-${thirdnumber} ${hour}:${minute}:00`;
+            // console.log('day + time is', `${day} ${time}`);
+          }
         }
       }
 
