@@ -186,6 +186,10 @@ class Header extends Component {
 
   // prettier-ignore ignore
   render () {
+    // const isHamburgerMenu = window.innerWidth <= 1206; // Replace 768 with your actual breakpoint
+    // console.log(
+    //   `Is the menu currently a hamburger menu? ${isHamburgerMenu} and the width is ${window.innerWidth}`
+    // );
     const foundKirks = this.props.kirks.filter(curr =>
       curr.subject.includes(this.state.keyword)
     );
@@ -204,7 +208,10 @@ class Header extends Component {
                     this.state.isNavOpen ? 'col-6' : 'col-6 align-self-center'
                   }
                 >
-                  <Search findKirks={this.findKirks} />
+                  <Search
+                    findKirks={this.findKirks}
+                    // isNavOpen={this.state.isNavOpen}
+                  />
                 </div>
                 <div className='col-6' align='right'>
                   <div className='ml-auto'>
@@ -280,6 +287,15 @@ class Header extends Component {
                           onClick={this.closeNavbar}
                         >
                           Pro
+                        </NavLink>
+                      </Nav>
+                      <Nav className='ml-auto'>
+                        <NavLink
+                          tag={Link}
+                          to='/chronicle'
+                          onClick={this.closeNavbar}
+                        >
+                          Chron
                         </NavLink>
                       </Nav>
                       <Nav className='ml-auto'>
