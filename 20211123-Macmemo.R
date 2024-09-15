@@ -12933,51 +12933,7 @@ names(m) <- c("ch", "vin", "vout", "cur", "temp")
 #dm <- m %>% gather(name, data, -ch)
 dm <- expand.grid(vin = m$vin, vout=m$vout, cur=m$cur, temp=m$temp)
 
-g <- ggplot(dm, aes(x=vin, y=vout, color=factor(temp)))
-p <- g + geom_point() + geom_line() 
-#p <- p + labs(y="Interest[%]", x="Date", title="10 year bond yield gap" )
-#p <- p + ylim(0, 6)
-#p <- p + xlim(0, 3.0)
-#p <- p + geom_hline(yintercept=2575163, linetype="dotted", color="grey")
-#p <- p + geom_vline(xintercept=2.5, linetype="dotted", color="red")
-p <- p + facet_grid(cur~.)
-ggplotly(p, dynamicTicks = TRUE)
-#ggplotly(p)
 
-# Create a data frame with the polygon's vertices (x, y)
-polygon_data <- data.frame(
-  x = c(2, 4, 6, 4),    # x-coordinates of the polygon's vertices
-  y = c(3, 7, 3, 1)     # y-coordinates of the polygon's vertices
-)
-
-# Plot the polygon
-ggplot(polygon_data, aes(x = x, y = y)) +
-  geom_polygon(fill = "blue", color = "black") +
-  labs(title = "Polygon Example") +
-  theme_minimal()
-
-ggplot(dm, aes(x = vin, y = vout)) +
-  geom_polygon(fill = "blue", color = "black") +
-  labs(title = "Polygon Example") +
-  theme_minimal()
-
-
-ch <- c("M","M")
-vin <- seq(7,39)
-vout <- seq(3,5.5, by=0.5)
-cur <- seq(0,2.5, by=0.5)
-temp <- c(-25,150)
-
-#m <- cbind(ch, vin, vout, cur, temp)
-#names(m) <- c("ch", "vin", "vout", "cur", "temp")
-
-#dm <- m %>% gather(name, data, -ch)
-dm <- expand.grid(vin = vin, vout=vout, cur=cur, temp=temp)
-
-ggplot(dm, aes(x = vin, y = vout)) +
-  geom_polygon(fill = "blue", color = "black") +
-  labs(title = "Polygon Example") +
-  theme_minimal()
 
 # ------------------------------------------------------
 
@@ -13341,28 +13297,51 @@ k <- c(3, 4, 5, 2, 7, 6, 2, 6, 7, 6, 6, 7)  # third vertex of each triangle
 
 # Create a 3D mesh plot for the cube, using rectangles (2 triangles per rectangle)
 plot_ly(
-  x = x, 
-  y = y, 
-  z = z, 
+  x = 5*x+3, 
+  y = 3.5*y+0.8, 
+  z = 1.3*z, 
   i = i, 
   j = j, 
   k = k, 
   type = "mesh3d",  # Use mesh3d to fill the faces
-  color = "lightblue",  # Color of the cube
-  opacity = 0.8  # Adjust transparency for better visualization
+  color = "grey",  # Color of the cube
+  opacity = 1  # Adjust transparency for better visualization
 ) %>%
   layout(
     scene = list(
-      xaxis = list(title = "X Axis"),
-      yaxis = list(title = "Y Axis"),
-      zaxis = list(title = "Z Axis")
+      xaxis = list(title = "Vin"),
+      yaxis = list(title = "Vout"),
+      zaxis = list(title = "Current")
     ),
     title = "Cube Using Rectangular Faces (Defined with Triangles)"
   )
 
 
+library(plotly)
 
+# Define the vertices of the cube (8 vertices)
+x <- c(0, 1, 1, 0, 0, 1, 1, 0)
+y <- c(0, 0, 1, 1, 0, 0, 1, 1)
+z <- c(0, 0, 0, 0, 1, 1, 1, 1)
 
+# Define the rectangular faces using two triangles each
+i <- c(0, 0, 1, 1, 4, 4, 5, 5, 0, 0, 3, 3)  # first vertex of each triangle
+j <- c(1, 3, 2, 5, 5, 7, 6, 2, 4, 7, 2, 6)  # second vertex of each triangle
+k <- c(3, 4, 5, 2, 7, 6, 2, 6, 7, 6, 6, 7)  # third vertex of each triangle
+# Create the 3D plot using plotly's mesh3d
+plot <- plot_ly(
+  type = 'mesh3d',
+  x = x,
+  y = y,
+  z = z,
+  i = i,  # Vertex indices for triangle 1
+  j = j,  # Vertex indices for triangle 2
+  k = k,  # Vertex indices for triangle 3
+  facecolor = rep("red", length(i)),  # Same color for all triangles
+  opacity = 1                       # Optional transparency
+)
+
+plot
 
 
 # ------------------------------------------------------
@@ -13459,5 +13438,153 @@ bcurp <- ggplot(bcur, aes(x = vin, y = cur)) +
 # Use patchwork to arrange plots vertically
 combined_plot <- (moutp |aoutp | boutp) / (mcurp | acurp | bcurp)  # 2x2 layout
 combined_plot
+
+
+
+
+# ------------------------------------------------------
+# 2024.9.14 Creating material for the Rohm IC
+# ------------------------------------------------------
+
+# --- OCP acceptable duty for Ach ---
+library(ggplot2)
+
+vin = seq(3, 5.5, by=0.5)
+vout = seq(0.8, 3.5, by=0.5)
+a <- expand.grid(vin, vout)
+names(a) <- c("vin", "vout")
+a <- subset(a, vin-vout > 1)
+a$duty <- round(a$vout/a$vin, 2)
+a$ocp <- a$duty > 0.05 & a$duty < 0.35
+
+p1 <- ggplot(a, aes(x = (vin), y = (vout), fill = ocp)) +
+  geom_tile() +
+  #scale_fill_gradient(low = "white", high = "blue") +
+  #scale_fill_gradient2(low = "blue", high = "red", midpoint = 0) +
+  scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "#ffa1a1")) +  # Custom colors for TRUE/FALSE
+  labs(x = "Vin", y = "Vout", fill = "Value") +
+  xlim(0, 6) +
+  ylim(0, 6) +
+  theme_minimal() +
+  theme(legend.position = "none")  # This hides the legend
+
+ggplotly(p1)
+
+# --- OCP acceptable duty for Bch ---
+library(ggplot2)
+
+vin = seq(3, 5.5, by=0.5)
+vout = seq(0.8, 3.5, by=0.5)
+a <- expand.grid(vin, vout)
+names(a) <- c("vin", "vout")
+a <- subset(a, vin-vout > 1)
+a$duty <- round(a$vout/a$vin, 2)
+a$ocp <- a$duty > 0.65 & a$duty < 0.75
+
+p2 <- ggplot(a, aes(x = (vin), y = (vout), fill = ocp)) +
+  geom_tile() +
+  #scale_fill_gradient(low = "white", high = "blue") +
+  #scale_fill_gradient2(low = "blue", high = "red", midpoint = 0) +
+  scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "#ffa1a1")) +  # Custom colors for TRUE/FALSE
+  labs(x = "Vin", y = "Vout", fill = "Value") +
+  xlim(0, 6) +
+  ylim(0, 6) +
+  theme_minimal() +
+  theme(legend.position = "none")  # This hides the legend
+
+ggplotly(p2)
+
+
+# Use patchwork to arrange plots vertically
+combined_plot <- (p1 |p2)  # 2x2 layout
+combined_plot
+
+# --- Vout ---
+# Vout = D x Vin - Io x Ron - Vf x (1-D) - Io x DCR
+
+D = 0.9
+Vin = 5
+Io = seq(0, 3, by=0.1)
+Ron = 0.3
+Vf = c(0.3, 0.5, 1.0)
+DCR = seq(0.1, 0.2, by=0.1)
+
+d <- expand.grid(Io, Vf, DCR)
+names(d) <- c("Io", "Vf", "DCR")
+d$D = 0.9
+d$Vin = 5
+d$Ron = 0.3
+d$Vout = d$D * d$Vin - d$Io * d$Ron - d$Vf * (1-d$D) - d$Io * d$DCR
+d$drive <- d$Io < 1.9 & d$Vo > 3.3
+
+#d <- data.frame(D, Vin, Io, Ron, Vf, DCR, Vout)
+
+g <- ggplot(d, aes(x=Io, y=Vout, color=factor(Vf)))
+p <- g + geom_point() + geom_line() 
+p <- p + labs(x="電流", y="出力電圧", title="出力可能最大電圧 @D=0.9" )
+#p <- p + ylim(0, 6)
+#p <- p + xlim(0, 3.0)
+p <- p + geom_hline(yintercept=3.3, linetype="dotted", color="grey")
+p <- p + geom_vline(xintercept=1.9, linetype="dotted", color="grey")
+p <- p + facet_grid(.~DCR)
+ggplotly(p, dynamicTicks = TRUE)
+
+
+
+
+
+library(ggplot2)
+library(plotly)
+#Vin = seq(3, 5.5, by=1)
+#Vout = c(0.8, 0.9, 1.1, 3.3, 3.5)
+
+Vin = seq(3, 5.5, by=0.5)
+Vout = seq(0.8, 3.5, by=0.5)
+#d <- expand.grid(Vin, Vout)
+#names(d) <- c("Vin", "Vout")
+#d <- subset(d, Vin-Vout > 1)  #入出力電圧差1V以上を満たすデータ
+#D <- round(a$vout/a$vin, 2)
+
+
+#D = 0.9
+#Vin = seq(0, 5.5
+#Io = seq(0, 3, by=1)
+Io = c(1.5,1.9,2.0,2.5)
+Ron = 0.3
+Vf = c(0.5, 1.0)
+DCR = seq(0.1, 0.2, by=0.1)
+
+d <- expand.grid(Vin, Vout, Io, Ron, Vf, DCR)
+names(d) <- c("Vin", "Vout", "Io", "Ron", "Vf", "DCR")
+d <- subset(d, Vin-Vout > 1)  #入出力電圧差1V以上を満たすデータ
+d$D = 0.9
+#d$Vin = 5
+#d$Ron = 0.3
+d$Vout2 = d$D * d$Vin - d$Io * d$Ron - d$Vf * (1-d$D) - d$Io * d$DCR
+#d <- subset(d, Vin-Vout > 1)  #入出力電圧差1V以上を満たすデータ
+d$drive <- d$Vout2 > d$Vout
+d$tooltip_text <- paste("Vin:", d$Vin, "<br>Vout:", d$Vout, "<br>Drive:", d$drive)
+
+#d2 <- d[,c(1, 2, 9)]
+#d2 <- subset(d, Io==2)
+p2 <- ggplot(d, aes(x = (Vin), y = (Vout), fill = drive, text = tooltip_text)) +
+  
+#p2 <- ggplot(d, aes(x = (Vin), y = (Vout), fill = drive, 
+#                   text = paste("Vin:", Vin, "<br>Vout:", Vout, "<br>Drive:", drive))) +
+  geom_tile() +
+  #scale_fill_gradient(low = "white", high = "blue") +
+  #scale_fill_gradient2(low = "blue", high = "red", midpoint = 0) +
+  scale_fill_manual(values = c("TRUE" = "lightblue", "FALSE" = "#ffa1a1")) +  # Custom colors for TRUE/FALSE
+  facet_grid(.~Io) +
+  labs(x = "Vin", y = "Vout", fill = "Value") +
+  xlim(0, 6) +
+  ylim(0, 6) +
+  theme_minimal() +
+  theme(legend.position = "none")  # This hides the legend
+  #facet_grid(.~Io)
+
+#ggplotly(p2, tooltip = "text")
+ggplotly(p2)
+
 
 
