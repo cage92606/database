@@ -1,7 +1,5 @@
 // import vis from 'react-visjs-timeline';
 import Timeline from 'react-visjs-timeline';
-
-// import { Timeline } from 'vis-timeline';
 // import moment from 'moment';
 // import * as moment from 'moment';
 
@@ -55,6 +53,10 @@ const Chronicle = ({ proInputs }) => {
       ? group.condition5.split(',').map(char => parseInt(char, 10))
       : undefined,
     treeLevel: parseInt(group.condition6, 10)
+    // style: 'background: rgba(82, 226, 233, 0.2)'
+    // visible: false // Hide the group hierarchy
+    // style: 'background-color: transparent; z-index: 1;'
+    // style: 'opacity: 0.5;' // Adjust the opacity value as needed
   }));
 
   // const groups = timelineGroups.map(group => {
@@ -82,16 +84,18 @@ const Chronicle = ({ proInputs }) => {
     content: item.condition3,
     start: item.condition8,
     end: item.condition9,
-    type: item.condition10.toLowerCase(),
+    type: item.condition10.trim().toLowerCase(),
     title: item.condition11,
     style: item.condition12
+    // className: 'myClassName'
   }));
 
   // console.log('items', items);
 
   return (
     <Timeline
-      // className="container vis-timeline"
+      className='container vis-timeline vis-item'
+      id='timeline'
       options={options}
       items={items}
       groups={groups}

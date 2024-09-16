@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import {
   Navbar,
   Nav,
@@ -16,467 +16,357 @@ import {
   NavLink,
   Container
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Search from './SearchComponent';
 
-class Header extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isNavOpen: false,
-      isModalOpen: false,
-      isSignupModalOpen: false,
-      isPwChangeModalOpen: false,
-      dropdownOpen: false,
-      showAll: false,
-      view: false
-      // keyword: '',
-      // kirkNum: 0,
-    };
-    // To use a method on JSX you have to bind it here.
-    this.toggleDropdownOpen = this.toggleDropdownOpen.bind(this);
-    this.toggleNav = this.toggleNav.bind(this);
-    this.closeNavbar = this.closeNavbar.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.togglePwChangeModal = this.togglePwChangeModal.bind(this);
-    this.toggleSignupModal = this.toggleSignupModal.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.handleSignup = this.handleSignup.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-    this.handlePwChange = this.handlePwChange.bind(this);
-    this.handleFiles = this.handleFiles.bind(this);
-    this.findKirks = this.findKirks.bind(this);
-    this.toggleShowAll = this.toggleShowAll.bind(this);
-    this.toggleView = this.toggleView.bind(this);
-  }
+const Header = props => {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isPwChangeModalOpen, setIsPwChangeModalOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [view, setView] = useState(true);
 
-  toggleDropdownOpen () {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-  toggleNav () {
-    this.setState({
-      isNavOpen: !this.state.isNavOpen
-    });
-  }
-  closeNavbar () {
-    this.setState({
-      isNavOpen: false
-    });
-  }
+  const location = useLocation();
+  const isChronicleRoute = location.pathname === '/chronicle';
 
-  toggleModal () {
-    this.setState({
-      isModalOpen: !this.state.isModalOpen
-    });
-    if (this.state.isNavOpen) {
-      this.toggleNav();
+  useEffect(() => {
+    if (!isChronicleRoute) {
+      document.body.classList.add('fixed-header');
+    } else {
+      document.body.classList.remove('fixed-header');
     }
-  }
+  }, [isChronicleRoute]);
 
-  togglePwChangeModal () {
-    this.setState({
-      isPwChangeModalOpen: !this.state.isPwChangeModalOpen
-    });
-  }
+  const toggleDropdownOpen = () => setDropdownOpen(!dropdownOpen);
+  const toggleNav = () => setIsNavOpen(!isNavOpen);
+  const closeNavbar = () => setIsNavOpen(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+  const togglePwChangeModal = () =>
+    setIsPwChangeModalOpen(!isPwChangeModalOpen);
+  const toggleSignupModal = () => setIsSignupModalOpen(!isSignupModalOpen);
 
-  toggleSignupModal () {
-    this.setState({
-      isSignupModalOpen: !this.state.isSignupModalOpen
-    });
-  }
-
-  handleLogin (event) {
-    this.toggleModal(); // Close the modal once the forms submitted
-    // alert(
-    //   `Username: ${this.username.value} Password: ${this.password.value} Remember: ${this.remember.checked}`
-    // );
-    this.props.loginUser({
-      username: this.username.value,
-      password: this.password.value
-    });
-    if (this.state.isNavOpen) {
-      this.toggleNav();
-    }
+  const handleLogin = event => {
     event.preventDefault();
-  }
-
-  handlePwChange (event) {
-    this.togglePwChangeModal(); // Close the modal once the forms submitted
-    this.props.pwChangeUser({
-      username: this.pwChangeUsername.value,
-      oldpassword: this.oldpassword.value,
-      newpassword: this.newpassword.value
+    toggleModal();
+    props.loginUser({
+      username: usernameRef.current.value,
+      password: passwordRef.current.value
     });
-    if (this.state.isNavOpen) {
-      this.toggleNav();
+    if (isNavOpen) {
+      toggleNav();
     }
-    event.preventDefault();
-  }
+  };
 
-  handleSignup (event) {
-    if (!this.signupEmail.value) {
+  const handlePwChange = event => {
+    event.preventDefault();
+    togglePwChangeModal();
+    props.pwChangeUser({
+      username: pwChangeUsernameRef.current.value,
+      oldpassword: oldpasswordRef.current.value,
+      newpassword: newpasswordRef.current.value
+    });
+    if (isNavOpen) {
+      toggleNav();
+    }
+  };
+
+  const handleSignup = event => {
+    event.preventDefault();
+    if (!signupEmailRef.current.value) {
       alert('No EMAIL');
     } else {
-      this.toggleSignupModal(); // Close the modal once the forms submitted
-      // alert(
-      //   `Username: ${this.username.value} Password: ${this.password.value} Remember: ${this.remember.checked}`
-      // );
-      this.props.signupUser({
-        username: this.signupUsername.value,
-        password: this.signupPassword.value,
-        email: this.signupEmail.value
+      toggleSignupModal();
+      props.signupUser({
+        username: signupUsernameRef.current.value,
+        password: signupPasswordRef.current.value,
+        email: signupEmailRef.current.value
       });
-      if (this.state.isNavOpen) {
-        this.toggleNav();
+      if (isNavOpen) {
+        toggleNav();
       }
     }
+  };
 
-    event.preventDefault();
-  }
-
-  handleLogout () {
-    this.props.logoutUser();
-    if (this.state.isNavOpen) {
-      this.toggleNav();
+  const handleLogout = () => {
+    props.logoutUser();
+    if (isNavOpen) {
+      toggleNav();
     }
-  }
+  };
 
-  handleFiles = files => {
+  const handleFiles = files => {
     var reader = new FileReader();
     reader.onload = function (e) {
-      // Use reader.result
       alert(reader.result);
     };
     reader.readAsText(files[0]);
   };
 
-  findKirks = keyword => {
-    // this.setState({
-    //   keyword: this.state.keyword,
-    // });
-    // const foundKirks = this.props.kirks.filter((curr) =>
-    //   curr.subject.includes(keyword)
-    // );
-    this.props.getKeyword(keyword);
+  const findKirks = keyword => {
+    props.getKeyword(keyword);
   };
 
-  toggleShowAll () {
-    this.setState({
-      showAll: !this.state.showAll
-    });
-    this.props.getShowAll(this.state.showAll);
-    // console.log('showAll on child is ', this.state.showAll);
-    if (this.state.isNavOpen) {
-      this.toggleNav();
+  const toggleShowAll = () => {
+    setShowAll(!showAll);
+    props.getShowAll(!showAll);
+    if (isNavOpen) {
+      toggleNav();
     }
-  }
+  };
 
-  toggleView () {
-    this.setState({
-      view: !this.state.view
-    });
-    this.props.getView(this.state.view);
-    // console.log('view on child is ', this.state.view);
-    if (this.state.isNavOpen) {
-      this.toggleNav();
+  const toggleView = () => {
+    setView(!view);
+    props.getView(!view);
+    if (isNavOpen) {
+      toggleNav();
     }
-  }
+  };
 
-  // prettier-ignore ignore
-  render () {
-    // const isHamburgerMenu = window.innerWidth <= 1206; // Replace 768 with your actual breakpoint
-    // console.log(
-    //   `Is the menu currently a hamburger menu? ${isHamburgerMenu} and the width is ${window.innerWidth}`
-    // );
-    const foundKirks = this.props.kirks.filter(curr =>
-      curr.subject.includes(this.state.keyword)
-    );
-    // const csvData = this.props.inputs;
-    // console.log('auth.id on Header is ', this.props.auth.id);
-    return (
-      <Fragment>
-        {/* <Navbar dark expand="lg" className="header mr-auto" fixed="top"> */}
-        {/* <Navbar dark expand='xl' className='header mr-auto' fixed='top'> */}
-        <Navbar dark expand='xl' className='header ml-auto' fixed='top'>
-          <Container>
-            <div className='container'>
-              <div className='row'>
-                <div
-                  className={
-                    this.state.isNavOpen ? 'col-6' : 'col-6 align-self-center'
-                  }
-                >
-                  <Search
-                    findKirks={this.findKirks}
-                    // isNavOpen={this.state.isNavOpen}
-                  />
-                </div>
-                <div className='col-6' align='right'>
-                  <div className='ml-auto'>
-                    <NavbarToggler onClick={this.toggleNav} />
-                    <Collapse
-                      isOpen={this.state.isNavOpen}
-                      navbar
-                      className='ml-auto'
-                    >
-                      <Nav className='ml-auto'>
-                        {this.state.showAll ? (
-                          <Button
-                            outline
-                            color='primary'
-                            onClick={this.toggleShowAll}
-                            className={
-                              this.state.isNavOpen ? 'header-buttons' : ''
-                            }
-                          >
-                            All
-                          </Button>
+  const usernameRef = React.createRef();
+  const passwordRef = React.createRef();
+  const pwChangeUsernameRef = React.createRef();
+  const oldpasswordRef = React.createRef();
+  const newpasswordRef = React.createRef();
+  const signupUsernameRef = React.createRef();
+  const signupPasswordRef = React.createRef();
+  const signupEmailRef = React.createRef();
+
+  const foundKirks = props.kirks.filter(curr =>
+    curr.subject.includes(props.keyword)
+  );
+
+  return (
+    <Fragment>
+      <Navbar
+        dark
+        expand='xl'
+        // className={isChronicleRoute ? 'header-unfixed' : 'header-fixed'}
+        className='header'
+        fixed={isChronicleRoute ? '' : 'top'}
+
+        // fixed='top'
+      >
+        <Container>
+          <div className='container'>
+            <div className='row'>
+              <div className={isNavOpen ? 'col-6' : 'col-6 align-self-center'}>
+                <Search findKirks={findKirks} />
+              </div>
+              <div className='col-6' align='right'>
+                <div className='ml-auto'>
+                  <NavbarToggler onClick={toggleNav} />
+                  <Collapse isOpen={isNavOpen} navbar className='ml-auto'>
+                    <Nav className='ml-auto'>
+                      {showAll ? (
+                        <Button
+                          outline
+                          color='primary'
+                          onClick={toggleShowAll}
+                          className={isNavOpen ? 'header-buttons' : ''}
+                        >
+                          All
+                        </Button>
+                      ) : (
+                        <Button
+                          outline
+                          color='secondary'
+                          onClick={toggleShowAll}
+                          className={isNavOpen ? 'header-buttons' : ''}
+                        >
+                          Mine
+                        </Button>
+                      )}
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      {view ? (
+                        <Button outline color='primary' onClick={toggleView}>
+                          Spreadsheet
+                        </Button>
+                      ) : (
+                        <Button outline color='secondary' onClick={toggleView}>
+                          List
+                        </Button>
+                      )}
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      <NavLink tag={Link} to='/kirks' onClick={closeNavbar}>
+                        Kirk
+                      </NavLink>
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      <NavLink tag={Link} to='/' onClick={closeNavbar}>
+                        Data
+                      </NavLink>
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      <NavLink tag={Link} to='/proInputs' onClick={closeNavbar}>
+                        Pro
+                      </NavLink>
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      <NavLink tag={Link} to='/chronicle' onClick={closeNavbar}>
+                        Chron
+                      </NavLink>
+                    </Nav>
+                    <Nav className='ml-auto'>
+                      <NavItem>
+                        {!props.auth.isAuthenticated ? (
+                          <Fragment>
+                            <Button outline onClick={toggleSignupModal}>
+                              <span className='fa fa-sign-in fa-lg'></span>{' '}
+                              Signup
+                              {props.auth.isFetching ? (
+                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                              ) : null}
+                            </Button>{' '}
+                            <Button outline onClick={toggleModal}>
+                              <span className='fa fa-sign-in fa-lg'></span>{' '}
+                              Login
+                              {props.auth.isFetching ? (
+                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                              ) : null}
+                            </Button>
+                          </Fragment>
                         ) : (
-                          <Button
-                            outline
-                            color='secondary'
-                            onClick={this.toggleShowAll}
-                            className={
-                              this.state.isNavOpen ? 'header-buttons' : ''
-                            }
-                          >
-                            Mine
-                          </Button>
+                          <Fragment className='navbar-text mr-3 user-info'>
+                            {props.auth.user.username}
+                            {'  '}
+                            <Button outline onClick={handleLogout}>
+                              <span className='fa fa-sign-out'></span> Logout
+                              {props.auth.isFetching ? (
+                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                              ) : null}
+                            </Button>
+                            <Button outline onClick={togglePwChangeModal}>
+                              <span className='fa fa-key'></span>
+                              {props.auth.isFetching ? (
+                                <span className='fa fa-spinner fa-pulse fa-fw'></span>
+                              ) : null}
+                            </Button>
+                          </Fragment>
                         )}
-                      </Nav>
-                      <Nav className='ml-auto'>
-                        {this.state.view ? (
-                          <Button
-                            outline
-                            color='primary'
-                            onClick={this.toggleView}
-                          >
-                            Spreadsheet
-                          </Button>
-                        ) : (
-                          <Button
-                            outline
-                            color='secondary'
-                            onClick={this.toggleView}
-                          >
-                            List
-                          </Button>
-                        )}
-                      </Nav>
-                      {/* </div> */}
-                      <Nav className='ml-auto'>
-                        <NavLink
-                          tag={Link}
-                          to='/kirks'
-                          onClick={this.closeNavbar}
-                        >
-                          Kirk
-                        </NavLink>
-                      </Nav>
-                      <Nav className='ml-auto'>
-                        <NavLink tag={Link} to='/' onClick={this.closeNavbar}>
-                          Data
-                        </NavLink>
-                      </Nav>
-                      <Nav className='ml-auto'>
-                        <NavLink
-                          tag={Link}
-                          to='/proInputs'
-                          onClick={this.closeNavbar}
-                        >
-                          Pro
-                        </NavLink>
-                      </Nav>
-                      <Nav className='ml-auto'>
-                        <NavLink
-                          tag={Link}
-                          to='/chronicle'
-                          onClick={this.closeNavbar}
-                        >
-                          Chron
-                        </NavLink>
-                      </Nav>
-                      <Nav className='ml-auto'>
-                        <NavItem>
-                          {!this.props.auth.isAuthenticated ? (
-                            <Fragment>
-                              <Button outline onClick={this.toggleSignupModal}>
-                                <span className='fa fa-sign-in fa-lg'></span>{' '}
-                                Signup
-                                {this.props.auth.isFetching ? (
-                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                                ) : null}
-                              </Button>{' '}
-                              <Button outline onClick={this.toggleModal}>
-                                <span className='fa fa-sign-in fa-lg'></span>{' '}
-                                Login
-                                {this.props.auth.isFetching ? (
-                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                                ) : null}
-                              </Button>
-                            </Fragment>
-                          ) : (
-                            <Fragment className='navbar-text mr-3 user-info'>
-                              {this.props.auth.user.username}
-                              {'  '}
-                              <Button outline onClick={this.handleLogout}>
-                                <span className='fa fa-sign-out'></span> Logout
-                                {this.props.auth.isFetching ? (
-                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                                ) : null}
-                              </Button>
-                              <Button
-                                outline
-                                onClick={this.togglePwChangeModal}
-                              >
-                                <span className='fa fa-key'></span>
-                                {this.props.auth.isFetching ? (
-                                  <span className='fa fa-spinner fa-pulse fa-fw'></span>
-                                ) : null}
-                              </Button>
-                            </Fragment>
-                          )}
-                        </NavItem>
-                      </Nav>
-                    </Collapse>
-                  </div>
+                      </NavItem>
+                    </Nav>
+                  </Collapse>
                 </div>
               </div>
             </div>
-          </Container>
-        </Navbar>
-        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-          <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
-          <ModalBody>
-            <Form onSubmit={this.handleLogin}>
-              <FormGroup>
-                <Label htmlFor='username'>Username</Label>
-                <Input
-                  type='text'
-                  id='username'
-                  name='username'
-                  innerRef={input => (this.username = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor='password'>Password</Label>
-                <Input
-                  type='password'
-                  id='password'
-                  name='password'
-                  innerRef={input => (this.password = input)}
-                />
-              </FormGroup>
-              {/* <FormGroup check>
-                <Label check>
-                  <Input
-                    type="checkbox"
-                    name="remember"
-                    innerRef={(input) => (this.remember = input)}
-                  />{' '}
-                  Remember me
-                </Label>
-              </FormGroup> */}
-              <p className='forgot-password text-right'>
-                <Link to={'/users/forgot-password'} onClick={this.toggleModal}>
-                  Forgot password?
-                </Link>
-              </p>
-              <Button type='submit' value='submit' color='primary'>
-                Login
-              </Button>
-            </Form>
-          </ModalBody>
-        </Modal>
+          </div>
+        </Container>
+      </Navbar>
+      <Modal isOpen={isModalOpen} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Login</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={handleLogin}>
+            <FormGroup>
+              <Label htmlFor='username'>Username</Label>
+              <Input
+                type='text'
+                id='username'
+                name='username'
+                innerRef={usernameRef}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='password'>Password</Label>
+              <Input
+                type='password'
+                id='password'
+                name='password'
+                innerRef={passwordRef}
+              />
+            </FormGroup>
+            <p className='forgot-password text-right'>
+              <Link to={'/users/forgot-password'} onClick={toggleModal}>
+                Forgot password?
+              </Link>
+            </p>
+            <Button type='submit' value='submit' color='primary'>
+              Login
+            </Button>
+          </Form>
+        </ModalBody>
+      </Modal>
 
-        <Modal
-          isOpen={this.state.isPwChangeModalOpen}
-          toggle={this.togglePwChangeModal}
-        >
-          <ModalHeader toggle={this.togglePwChangeModal}>
-            Password Change
-          </ModalHeader>
-          <ModalBody>
-            <Form onSubmit={this.handlePwChange}>
-              <FormGroup>
-                <Label htmlFor='pwChangeUsername'>Username</Label>
-                <Input
-                  type='text'
-                  id='pwChangeUsername'
-                  name='pwChangeUsername'
-                  innerRef={input => (this.pwChangeUsername = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor='oldpassword'>Old Password</Label>
-                <Input
-                  type='password'
-                  id='oldpassword'
-                  name='oldpassword'
-                  innerRef={input => (this.oldpassword = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor='newpassword'>New Password</Label>
-                <Input
-                  type='password'
-                  id='newpassword'
-                  name='newpassword'
-                  innerRef={input => (this.newpassword = input)}
-                />
-              </FormGroup>
-              <Button type='submit' value='submit' color='primary'>
-                Change Password
-              </Button>
-            </Form>
-          </ModalBody>
-        </Modal>
+      <Modal isOpen={isPwChangeModalOpen} toggle={togglePwChangeModal}>
+        <ModalHeader toggle={togglePwChangeModal}>Password Change</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={handlePwChange}>
+            <FormGroup>
+              <Label htmlFor='pwChangeUsername'>Username</Label>
+              <Input
+                type='text'
+                id='pwChangeUsername'
+                name='pwChangeUsername'
+                innerRef={pwChangeUsernameRef}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='oldpassword'>Old Password</Label>
+              <Input
+                type='password'
+                id='oldpassword'
+                name='oldpassword'
+                innerRef={oldpasswordRef}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='newpassword'>New Password</Label>
+              <Input
+                type='password'
+                id='newpassword'
+                name='newpassword'
+                innerRef={newpasswordRef}
+              />
+            </FormGroup>
+            <Button type='submit' value='submit' color='primary'>
+              Change Password
+            </Button>
+          </Form>
+        </ModalBody>
+      </Modal>
 
-        <Modal
-          isOpen={this.state.isSignupModalOpen}
-          toggle={this.toggleSignupModal}
-        >
-          <ModalHeader toggle={this.toggleSignupModal}>Signup</ModalHeader>
-          <ModalBody>
-            <Form onSubmit={this.handleSignup}>
-              <FormGroup>
-                <Label htmlFor='signupUsername'>Username</Label>
-                <Input
-                  type='text'
-                  id='signupUsername'
-                  name='signupUsername'
-                  innerRef={input => (this.signupUsername = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor='signupPassword'>Password</Label>
-                <Input
-                  type='password'
-                  id='signupPassword'
-                  name='signupPassword'
-                  innerRef={input => (this.signupPassword = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor='signupEmail'>Email</Label>
-                <Input
-                  type='email'
-                  id='signupEmail'
-                  name='signupEmail'
-                  innerRef={input => (this.signupEmail = input)}
-                />
-              </FormGroup>
-              <Button type='submit' value='submit' color='primary'>
-                Signup
-              </Button>
-            </Form>
-          </ModalBody>
-        </Modal>
-      </Fragment>
-    );
-  }
-}
+      <Modal isOpen={isSignupModalOpen} toggle={toggleSignupModal}>
+        <ModalHeader toggle={toggleSignupModal}>Signup</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={handleSignup}>
+            <FormGroup>
+              <Label htmlFor='signupUsername'>Username</Label>
+              <Input
+                type='text'
+                id='signupUsername'
+                name='signupUsername'
+                innerRef={signupUsernameRef}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='signupPassword'>Password</Label>
+              <Input
+                type='password'
+                id='signupPassword'
+                name='signupPassword'
+                innerRef={signupPasswordRef}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='signupEmail'>Email</Label>
+              <Input
+                type='email'
+                id='signupEmail'
+                name='signupEmail'
+                innerRef={signupEmailRef}
+              />
+            </FormGroup>
+            <Button type='submit' value='submit' color='primary'>
+              Signup
+            </Button>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </Fragment>
+  );
+};
 
 export default Header;

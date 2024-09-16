@@ -34,7 +34,7 @@ address {
 }
 
 body {
-  padding-top: 80px;
+  /* padding-top: 80px; */
 }
 
 .main {
@@ -74,6 +74,23 @@ ul li {
   font-family: 'メイリオ', 'Meiryo', sans-serif;
   /* font-family: Helvetica, Helvetica, sans-serif; */
   display: flex;
+}
+
+.header-fixed {
+  margin: 0px auto;
+  border-bottom: 1px ridge;
+  font-size: 20px;
+  font-family: 'メイリオ', 'Meiryo', sans-serif;
+  /* font-family: Helvetica, Helvetica, sans-serif; */
+  display: flex;
+  /* position: fixed; */
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+body.fixed-header {
+  padding-top: 60px; /* Adjust this value based on the height of your header */
 }
 
 body {
@@ -222,10 +239,6 @@ Table thead {
   background-color: rgba(213, 204, 204, 0.01);
 }
 
-.vis-timeline {
-  overflow-y: scroll;
-}
-
 .my-modal .modal-content {
   background-color: #f3faff;
   /* background-color: #e6e5e6; */
@@ -280,22 +293,73 @@ Table thead {
 .vis-item.vis-line {
   display: none;
 }
-.vis-item.vis-dot {
+/* .vis-item.vis-dot {
   display: none;
-}
+} */
+
+/* .vis-timeline {
+  border: none !important;
+} */
+
 /* .vis-time-axis .vis-grid.vis-minor {
   border-width: 1px; 
   border-color: grey; 
   }  */
 
-.vis-time-axis .vis-grid.vis-major {
+.vis-time-axis .vis-grid.vis-major .vis-timeline {
   border-width: 1px; /* Change this to adjust the thickness */
   border-color: black; /* Change this to adjust the color */
+  width: 100%;
+  overflow-y: scroll;
 }
+
+/* .vis-timeline {
+  overflow-y: scroll;
+} */
 
 .ellipsis {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  max-width: 100px; /* adjust this value as needed */
+  max-width: 150px; /* adjust this value as needed */
+}
+
+.react-bootstrap-table {
+  overflow-x: auto;
+}
+
+.container {
+  width: 100%;
+  overflow: hidden; /* Ensure no scrollbars */
+}
+/* Change the color of items whose type is range */
+.vis-item.vis-range {
+  background-color: #e3e6e8; /* Change this to your desired color */
+  border-color: #e3e6e8; /* Change this to your desired color */
+}
+
+/* Change the color of items whose type is box */
+.vis-item.vis-box {
+  background-color: #e3e6e8; /* Change this to your desired color */
+  border-color: #e3e6e8; /* Change this to your desired color */
+}
+
+/* Change the color of the dot for box items */
+.vis-item.vis-box .vis-dot {
+  background-color: #e3e6e8 !important; /* Change this to your desired color */
+}
+
+.vis-current-time {
+  background-color: darkgrey;
+  width: 2px;
+}
+/* Change the color of the dot for items whose type is point */
+.vis-item.vis-point .vis-dot {
+  background-color: #e3e6e8 !important; /* Change this to your desired color */
+  border-color: #e3e6e8 !important; /* Change this to your desired color */
+}
+
+.vis-item.vis-selected {
+  background-color: #d6eaf8 !important; /* Change this to your desired color */
+  border-color: #d6eaf8 !important; /* Change this to your desired color */
 }
