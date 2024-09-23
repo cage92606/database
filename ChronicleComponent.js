@@ -52,7 +52,8 @@ const Chronicle = ({ proInputs }) => {
     nestedGroups: group.condition5
       ? group.condition5.split(',').map(char => parseInt(char, 10))
       : undefined,
-    treeLevel: parseInt(group.condition6, 10)
+    treeLevel: parseInt(group.condition6, 10),
+    title: group.condition11
     // style: 'background: rgba(82, 226, 233, 0.2)'
     // visible: false // Hide the group hierarchy
     // style: 'background-color: transparent; z-index: 1;'

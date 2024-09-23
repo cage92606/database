@@ -182,7 +182,7 @@ const Header = props => {
                     <Nav className='ml-auto'>
                       {view ? (
                         <Button outline color='primary' onClick={toggleView}>
-                          Spreadsheet
+                          S/S
                         </Button>
                       ) : (
                         <Button outline color='secondary' onClick={toggleView}>
