@@ -3,7 +3,7 @@ import Timeline from 'react-visjs-timeline';
 // import moment from 'moment';
 // import * as moment from 'moment';
 
-const Chronicle = ({ proInputs }) => {
+const Chronicle = ({ proInputs, keyword }) => {
   const options = {
     stack: true,
     // maxHeight: 640,
@@ -22,9 +22,26 @@ const Chronicle = ({ proInputs }) => {
     }
   };
 
-  const timelineProInputs = proInputs.filter(item =>
-    item.subject.toLowerCase().includes('timeline')
-  );
+  // const timelineProInputs = proInputs.filter(
+  //   item =>
+  //     item.subject.toLowerCase().includes('timeline') &&
+  //     item.subject.toLowerCase().includes(keyword)
+  // );
+
+  // Split the keyword into individual words
+  const keywordsArray = keyword.toLowerCase().split(/\s+/);
+
+  // Filter proInputs based on the presence of 'timeline' in the subject and all keywords in the person field
+  const timelineProInputs = proInputs.filter(item => {
+    const subject = item.subject.toLowerCase();
+    const person = item.person.toLowerCase();
+    return (
+      subject.includes('timeline') &&
+      keywordsArray.every(kw => person.includes(kw))
+    );
+  });
+  console.log('timelineProInputs', timelineProInputs);
+
   const timelineGroups = timelineProInputs.filter(item =>
     item.condition1.toLowerCase().includes('group')
   );

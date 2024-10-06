@@ -573,7 +573,7 @@ class Main extends Component {
       }
       return (
         <div>
-          <Chronicle proInputs={myProInputs} />
+          <Chronicle proInputs={myProInputs} keyword={this.state.keyword} />
         </div>
       );
     };
