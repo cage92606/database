@@ -22,12 +22,6 @@ const Chronicle = ({ proInputs, keyword }) => {
     }
   };
 
-  // const timelineProInputs = proInputs.filter(
-  //   item =>
-  //     item.subject.toLowerCase().includes('timeline') &&
-  //     item.subject.toLowerCase().includes(keyword)
-  // );
-
   // Split the keyword into individual words
   const keywordsArray = keyword.toLowerCase().split(/\s+/);
 
@@ -49,19 +43,6 @@ const Chronicle = ({ proInputs, keyword }) => {
     item.condition1.toLowerCase().includes('item')
   );
 
-  // console.log('timelineProInputs', timelineProInputs);
-  // console.log('timelineGroups', timelineGroups);
-  // console.log('timelineItems', timelineItems);
-
-  // console.log(
-  //   'timelineGroups[0].condition2',
-  //   parseInt(timelineGroups[0].condition2)
-  // );
-  // console.log(
-  //   'timelineGroups[0].condition5',
-  //   timelineGroups[0].condition5.split(',').map(char => parseInt(char))
-  // );
-
   const groups = timelineGroups.map(group => ({
     id: parseInt(group.condition2, 10),
     content: group.condition3,
@@ -77,38 +58,33 @@ const Chronicle = ({ proInputs, keyword }) => {
     // style: 'opacity: 0.5;' // Adjust the opacity value as needed
   }));
 
-  // const groups = timelineGroups.map(group => {
-  //   const groupObj = {
-  //     id: parseInt(group.condition2, 10),
-  //     content: group.condition3,
-  //     value: parseInt(group.condition4, 10),
-  //     treeLevel: parseInt(group.condition6, 10)
-  //   };
+  // const items = timelineItems.map(item => ({
+  //   id: item._id,
+  //   group: parseInt(item.condition7, 10),
+  //   content: item.condition3,
+  //   start: item.condition8,
+  //   end: item.condition9,
+  //   type: item.condition10.trim().toLowerCase(),
+  //   title: item.condition11,
+  //   style: item.condition12
+  //   // className: 'myClassName'
+  // }));
 
-  //   if (group.condition5) {
-  //     groupObj.nestedGroups = group.condition5
-  //       .split(',')
-  //       .map(char => parseInt(char, 10));
-  //   }
-
-  //   return groupObj;
-  // });
-
-  // console.log('group', groups);
-
-  const items = timelineItems.map(item => ({
-    id: item._id,
-    group: parseInt(item.condition7, 10),
-    content: item.condition3,
-    start: item.condition8,
-    end: item.condition9,
-    type: item.condition10.trim().toLowerCase(),
-    title: item.condition11,
-    style: item.condition12
-    // className: 'myClassName'
-  }));
-
-  // console.log('items', items);
+  const items = timelineItems.flatMap(item => {
+    const groupNumbers = item.condition7
+      .split(',')
+      .map(num => parseInt(num.trim(), 10));
+    return groupNumbers.map(groupNumber => ({
+      id: item._id + '-' + groupNumber, // Ensure unique ID for each item
+      group: groupNumber,
+      content: item.condition3,
+      start: item.condition8,
+      end: item.condition9,
+      type: item.condition10.trim().toLowerCase(),
+      title: item.condition11,
+      style: item.condition12
+    }));
+  });
 
   return (
     <Timeline
