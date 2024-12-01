@@ -58,32 +58,46 @@ const Chronicle = ({ proInputs, keyword }) => {
     // style: 'opacity: 0.5;' // Adjust the opacity value as needed
   }));
 
-  // const items = timelineItems.map(item => ({
-  //   id: item._id,
-  //   group: parseInt(item.condition7, 10),
-  //   content: item.condition3,
-  //   start: item.condition8,
-  //   end: item.condition9,
-  //   type: item.condition10.trim().toLowerCase(),
-  //   title: item.condition11,
-  //   style: item.condition12
-  //   // className: 'myClassName'
-  // }));
+  // const items = timelineItems.flatMap(item => {
+  //   const groupNumbers = item.condition7
+  //     .split(',')
+  //     .map(num => parseInt(num.trim(), 10));
+  //   return groupNumbers.map(groupNumber => ({
+  //     id: item._id + '-' + groupNumber, // Ensure unique ID for each item
+  //     group: groupNumber,
+  //     content: item.condition3,
+  //     start: item.condition8,
+  //     end: item.condition9,
+  //     type: item.condition10.trim().toLowerCase(),
+  //     title: item.condition11,
+  //     style: item.condition12
+  //   }));
+  // });
 
   const items = timelineItems.flatMap(item => {
     const groupNumbers = item.condition7
       .split(',')
       .map(num => parseInt(num.trim(), 10));
-    return groupNumbers.map(groupNumber => ({
-      id: item._id + '-' + groupNumber, // Ensure unique ID for each item
-      group: groupNumber,
-      content: item.condition3,
-      start: item.condition8,
-      end: item.condition9,
-      type: item.condition10.trim().toLowerCase(),
-      title: item.condition11,
-      style: item.condition12
-    }));
+
+    return groupNumbers.map(groupNumber => {
+      const message = item.condition3.trim();
+      const url = item.condition4.trim();
+      const content = url
+        ? `<a href="${url}" target="_blank">${message}</a>`
+        : message;
+
+      console.log('content', content);
+      return {
+        id: item._id + '-' + groupNumber, // Ensure unique ID for each item
+        group: groupNumber,
+        content: content,
+        start: item.condition8,
+        end: item.condition9,
+        type: item.condition10.trim().toLowerCase(),
+        title: item.condition11,
+        style: item.condition12
+      };
+    });
   });
 
   return (
