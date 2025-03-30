@@ -687,7 +687,7 @@ function RenderProInputTable ({
                     {proInput.place.split('//')[1].split('/')[0].split('.')[1]}
                   </span>
                 ) : proInput.place.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {proInput.place.split('//')[1].split('/')[0].split('.')[0]}
@@ -786,7 +786,11 @@ function RenderProInputTable ({
             autoFocus
           />
         ) : (
-          proInput.reason
+          <div
+            name='reason'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.reason }}
+          />
         )}
       </td>
 
@@ -831,7 +835,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition1.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -878,7 +882,12 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition1
+          // proInput.condition1
+          <div
+            name='condition1'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition1 }}
+          />
         )}
       </td>
       <td
@@ -922,7 +931,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition2.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -969,7 +978,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition2
+          <div
+            name='condition2'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition2 }}
+          />
         )}
       </td>
       <td
@@ -1013,7 +1026,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition3.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1060,7 +1073,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition3
+          <div
+            name='condition3'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition3 }}
+          />
         )}
       </td>
       <td
@@ -1104,7 +1121,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition4.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1151,7 +1168,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition4
+          <div
+            name='condition4'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition4 }}
+          />
         )}
       </td>
 
@@ -1196,7 +1217,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition5.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1243,7 +1264,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition5
+          <div
+            name='condition5'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition5 }}
+          />
         )}
       </td>
 
@@ -1288,7 +1313,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition6.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1335,7 +1360,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition6
+          <div
+            name='condition6'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition6 }}
+          />
         )}
       </td>
 
@@ -1380,7 +1409,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition7.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1427,7 +1456,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition7
+          <div
+            name='condition7'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition7 }}
+          />
         )}
       </td>
 
@@ -1472,7 +1505,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition8.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1519,7 +1552,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition8
+          <div
+            name='condition8'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition8 }}
+          />
         )}
       </td>
 
@@ -1564,7 +1601,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition9.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1611,7 +1648,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition9
+          <div
+            name='condition9'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition9 }}
+          />
         )}
       </td>
 
@@ -1656,7 +1697,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition10.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1705,7 +1746,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition10
+          <div
+            name='condition10'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition10 }}
+          />
         )}
       </td>
 
@@ -1750,7 +1795,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition11.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1799,7 +1844,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition11
+          <div
+            name='condition11'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition11 }}
+          />
         )}
       </td>
       <td
@@ -1843,7 +1892,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition12.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1892,7 +1941,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition12
+          <div
+            name='condition12'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition12 }}
+          />
         )}
       </td>
 
@@ -1937,7 +1990,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition13.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -1986,7 +2039,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition13
+          <div
+            name='condition13'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition13 }}
+          />
         )}
       </td>
 
@@ -2031,7 +2088,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition14.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2080,7 +2137,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition14
+          <div
+            name='condition14'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition14 }}
+          />
         )}
       </td>
 
@@ -2125,7 +2186,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition15.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2174,7 +2235,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition15
+          <div
+            name='condition15'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition15 }}
+          />
         )}
       </td>
       <td
@@ -2218,7 +2283,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition16.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2267,7 +2332,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition16
+          <div
+            name='condition16'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition16 }}
+          />
         )}
       </td>
       <td
@@ -2311,7 +2380,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition17.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2360,7 +2429,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition17
+          <div
+            name='condition17'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition17 }}
+          />
         )}
       </td>
       <td
@@ -2404,7 +2477,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition18.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2453,7 +2526,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition18
+          <div
+            name='condition18'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition18 }}
+          />
         )}
       </td>
 
@@ -2498,7 +2575,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition19.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2547,7 +2624,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition19
+          <div
+            name='condition19'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition19 }}
+          />
         )}
       </td>
       <td
@@ -2591,7 +2672,7 @@ function RenderProInputTable ({
                     }
                   </span>
                 ) : proInput.condition20.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {
@@ -2641,7 +2722,11 @@ function RenderProInputTable ({
             ''
           )
         ) : (
-          proInput.condition20
+          <div
+            name='condition20'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: proInput.condition20 }}
+          />
         )}
       </td>
 
@@ -2685,7 +2770,7 @@ function RenderProInputTable ({
                     {proInput.data.split('//')[1].split('/')[0].split('.')[1]}
                   </span>
                 ) : proInput.data.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {proInput.data.split('//')[1].split('/')[0].split('.')[0]}

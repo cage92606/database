@@ -511,7 +511,12 @@ function RenderKirkItem ({
         {kirk.subject === '' ? '' : [<b>{kirk.subject}</b>, <br key='br' />]}
         {/* <b>{kirk.subject} </b>
         <br /> */}
-        {kirk.reason === '' ? '' : [kirk.reason, <br key='br' />]}
+        {/* {kirk.reason === '' ? '' : [kirk.reason, <br key='br' />]} */}
+        {!kirk.reason ? (
+          ''
+        ) : (
+          <div dangerouslySetInnerHTML={{ __html: kirk.reason }} />
+        )}
         {kirk.condition1 === ''
           ? ''
           : [
@@ -535,7 +540,7 @@ function RenderKirkItem ({
                       ) : kirk.condition1
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -584,7 +589,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition1
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition1 }} />
               ),
               <br key='br' />
             ]}
@@ -611,7 +616,7 @@ function RenderKirkItem ({
                       ) : kirk.condition2
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -660,7 +665,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition2
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition2 }} />
               ),
               <br key='br' />
             ]}
@@ -688,7 +693,7 @@ function RenderKirkItem ({
                       ) : kirk.condition3
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -737,7 +742,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition3
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition3 }} />
               ),
               <br key='br' />
             ]}
@@ -764,7 +769,7 @@ function RenderKirkItem ({
                       ) : kirk.condition4
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -813,7 +818,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition4
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition4 }} />
               ),
               <br key='br' />
             ]}
@@ -841,7 +846,7 @@ function RenderKirkItem ({
                       ) : kirk.condition5
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -890,7 +895,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition5
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition5 }} />
               ),
               <br key='br' />
             ]}
@@ -918,7 +923,7 @@ function RenderKirkItem ({
                       ) : kirk.condition6
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -967,7 +972,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition6
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition6 }} />
               ),
               <br key='br' />
             ]}
@@ -995,7 +1000,7 @@ function RenderKirkItem ({
                       ) : kirk.condition7
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1044,7 +1049,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition7
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition7 }} />
               ),
               <br key='br' />
             ]}
@@ -1072,7 +1077,7 @@ function RenderKirkItem ({
                       ) : kirk.condition8
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1121,7 +1126,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition8
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition8 }} />
               ),
               <br key='br' />
             ]}
@@ -1149,7 +1154,7 @@ function RenderKirkItem ({
                       ) : kirk.condition9
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1198,7 +1203,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition9
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition9 }} />
               ),
               <br key='br' />
             ]}
@@ -1226,7 +1231,7 @@ function RenderKirkItem ({
                       ) : kirk.condition10
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1277,7 +1282,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition10
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition10 }} />
               ),
               <br key='br' />
             ]}
@@ -1305,7 +1310,7 @@ function RenderKirkItem ({
                       ) : kirk.condition11
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1356,7 +1361,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition11
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition11 }} />
               ),
               <br key='br' />
             ]}
@@ -1383,7 +1388,7 @@ function RenderKirkItem ({
                       ) : kirk.condition12
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1434,7 +1439,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition12
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition12 }} />
               ),
               <br key='br' />
             ]}
@@ -1462,7 +1467,7 @@ function RenderKirkItem ({
                       ) : kirk.condition13
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1513,7 +1518,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition13
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition13 }} />
               ),
               <br key='br' />
             ]}
@@ -1540,7 +1545,7 @@ function RenderKirkItem ({
                       ) : kirk.condition14
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1591,7 +1596,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition14
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition14 }} />
               ),
               <br key='br' />
             ]}
@@ -1619,7 +1624,7 @@ function RenderKirkItem ({
                       ) : kirk.condition15
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1670,7 +1675,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition15
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition15 }} />
               ),
               <br key='br' />
             ]}
@@ -1698,7 +1703,7 @@ function RenderKirkItem ({
                       ) : kirk.condition16
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1749,7 +1754,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition16
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition16 }} />
               ),
               <br key='br' />
             ]}
@@ -1777,7 +1782,7 @@ function RenderKirkItem ({
                       ) : kirk.condition17
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1828,7 +1833,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition17
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition17 }} />
               ),
               <br key='br' />
             ]}
@@ -1856,7 +1861,7 @@ function RenderKirkItem ({
                       ) : kirk.condition18
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1907,7 +1912,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition18
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition18 }} />
               ),
               <br key='br' />
             ]}
@@ -1935,7 +1940,7 @@ function RenderKirkItem ({
                       ) : kirk.condition19
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -1986,7 +1991,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition19
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition19 }} />
               ),
               <br key='br' />
             ]}
@@ -2014,7 +2019,7 @@ function RenderKirkItem ({
                       ) : kirk.condition20
                           .split('//')[1]
                           .split('/')[0]
-                          .split('.').length === 2 ? (
+                          .split('.').length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {
@@ -2065,7 +2070,7 @@ function RenderKirkItem ({
                   ''
                 )
               ) : (
-                kirk.condition20
+                <div dangerouslySetInnerHTML={{ __html: kirk.condition20 }} />
               ),
               <br key='br' />
             ]}
@@ -2086,7 +2091,7 @@ function RenderKirkItem ({
                           {kirk.data.split('//')[1].split('/')[0].split('.')[1]}
                         </span>
                       ) : kirk.data.split('//')[1].split('/')[0].split('.')
-                          .length === 2 ? (
+                          .length === 2 || 1 ? (
                         // otherwise and if domain consists of 2 words, use the first word
                         <span>
                           {kirk.data.split('//')[1].split('/')[0].split('.')[0]}

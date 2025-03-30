@@ -385,13 +385,15 @@ function RenderInputTable ({
               >
                 {0 ? (
                   <span className='fa fa-link'></span>
-                ) : input.place.indexOf('www') !== -1 ? (
+                ) : // ) : input.place.indexOf('//')[1].split('.').length === 1 ? (
+                //   <span>{input.place.split('//')[1]}</span>
+                input.place.indexOf('www') !== -1 ? (
                   // If the first word is 'www', use the second word
                   <span>
                     {input.place.split('//')[1].split('/')[0].split('.')[1]}
                   </span>
                 ) : input.place.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {input.place.split('//')[1].split('/')[0].split('.')[0]}
@@ -490,7 +492,11 @@ function RenderInputTable ({
             autoFocus
           />
         ) : (
-          input.reason
+          <div
+            name='reason'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: input.reason }}
+          />
         )}
       </td>
       <td
@@ -512,7 +518,11 @@ function RenderInputTable ({
             autoFocus
           />
         ) : (
-          input.condition
+          <div
+            name='condition'
+            onDoubleClick={handleDoubleClick} // Ensure double-click works
+            dangerouslySetInnerHTML={{ __html: input.condition }}
+          />
         )}
       </td>
       <td
@@ -554,7 +564,7 @@ function RenderInputTable ({
                     {input.data.split('//')[1].split('/')[0].split('.')[1]}
                   </span>
                 ) : input.data.split('//')[1].split('/')[0].split('.')
-                    .length === 2 ? (
+                    .length === 2 || 1 ? (
                   // otherwise and if domain consists of 2 words, use the first word
                   <span>
                     {input.data.split('//')[1].split('/')[0].split('.')[0]}
