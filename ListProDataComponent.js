@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useEffect, Fragment } from 'react';
+import React, { useEffect, Fragment, useRef } from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -22,6 +22,7 @@ import { Loading } from './LoadingComponent';
 import { Control, Form } from 'react-redux-form';
 import { CSVLink, CSVDownload } from 'react-csv';
 import Pagination from './Pagination';
+import DOMPurify from 'dompurify';
 
 function RenderProInputTable ({
   proInput,
@@ -31,7 +32,9 @@ function RenderProInputTable ({
   auth,
   isUpdating,
   isFullContentShown,
-  toggleIsFullContentShown
+  toggleIsFullContentShown,
+  saveScrollPosition, // Add this
+  restoreScrollPosition // Add this
 }) {
   const [isOpen, setIsOpen] = useState(false);
   // const [itemColors, setItemColors] = useState({});
@@ -75,7 +78,6 @@ function RenderProInputTable ({
         value.data,
         value.unit
       );
-      // resetProInputForm();
     }
   };
 
@@ -212,6 +214,10 @@ function RenderProInputTable ({
       // Check if the proInput has changed
       const newproInput = { ...proInput, [fieldName]: tempValue }; // Use the temporary value to update the proInput
       if (window.confirm('OK to change data?')) {
+        if (saveScrollPosition) {
+          saveScrollPosition();
+        }
+
         updateProInput(
           proInput._id,
           newproInput.date,
@@ -241,7 +247,12 @@ function RenderProInputTable ({
           newproInput.condition20,
           newproInput.data,
           newproInput.unit
-        );
+        ).then(() => {
+          // Restore the scroll position after the update
+          if (restoreScrollPosition) {
+            restoreScrollPosition();
+          }
+        });
       }
     }
     if (fieldName === 'date') setIsDateEditing(false);
@@ -789,7 +800,9 @@ function RenderProInputTable ({
           <div
             name='reason'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.reason }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.reason)
+            }}
           />
         )}
       </td>
@@ -886,7 +899,9 @@ function RenderProInputTable ({
           <div
             name='condition1'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition1 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition1)
+            }}
           />
         )}
       </td>
@@ -981,7 +996,9 @@ function RenderProInputTable ({
           <div
             name='condition2'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition2 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition2)
+            }}
           />
         )}
       </td>
@@ -1076,7 +1093,9 @@ function RenderProInputTable ({
           <div
             name='condition3'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition3 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition3)
+            }}
           />
         )}
       </td>
@@ -1171,7 +1190,9 @@ function RenderProInputTable ({
           <div
             name='condition4'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition4 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition4)
+            }}
           />
         )}
       </td>
@@ -1267,7 +1288,9 @@ function RenderProInputTable ({
           <div
             name='condition5'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition5 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition5)
+            }}
           />
         )}
       </td>
@@ -1363,7 +1386,9 @@ function RenderProInputTable ({
           <div
             name='condition6'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition6 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition6)
+            }}
           />
         )}
       </td>
@@ -1459,7 +1484,9 @@ function RenderProInputTable ({
           <div
             name='condition7'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition7 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition7)
+            }}
           />
         )}
       </td>
@@ -1555,7 +1582,9 @@ function RenderProInputTable ({
           <div
             name='condition8'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition8 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition8)
+            }}
           />
         )}
       </td>
@@ -1651,7 +1680,9 @@ function RenderProInputTable ({
           <div
             name='condition9'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition9 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition9)
+            }}
           />
         )}
       </td>
@@ -1749,7 +1780,9 @@ function RenderProInputTable ({
           <div
             name='condition10'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition10 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition10)
+            }}
           />
         )}
       </td>
@@ -1847,7 +1880,9 @@ function RenderProInputTable ({
           <div
             name='condition11'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition11 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition11)
+            }}
           />
         )}
       </td>
@@ -1944,7 +1979,9 @@ function RenderProInputTable ({
           <div
             name='condition12'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition12 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition12)
+            }}
           />
         )}
       </td>
@@ -2042,7 +2079,9 @@ function RenderProInputTable ({
           <div
             name='condition13'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition13 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition13)
+            }}
           />
         )}
       </td>
@@ -2140,7 +2179,9 @@ function RenderProInputTable ({
           <div
             name='condition14'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition14 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition14)
+            }}
           />
         )}
       </td>
@@ -2238,7 +2279,9 @@ function RenderProInputTable ({
           <div
             name='condition15'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition15 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition15)
+            }}
           />
         )}
       </td>
@@ -2335,7 +2378,9 @@ function RenderProInputTable ({
           <div
             name='condition16'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition16 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition16)
+            }}
           />
         )}
       </td>
@@ -2432,7 +2477,9 @@ function RenderProInputTable ({
           <div
             name='condition17'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition17 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition17)
+            }}
           />
         )}
       </td>
@@ -2529,7 +2576,9 @@ function RenderProInputTable ({
           <div
             name='condition18'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition18 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition18)
+            }}
           />
         )}
       </td>
@@ -2627,7 +2676,9 @@ function RenderProInputTable ({
           <div
             name='condition19'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition19 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition19)
+            }}
           />
         )}
       </td>
@@ -2725,7 +2776,9 @@ function RenderProInputTable ({
           <div
             name='condition20'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: proInput.condition20 }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(proInput.condition20)
+            }}
           />
         )}
       </td>
@@ -2859,9 +2912,7 @@ function RenderProInputTable ({
 export let proInput_num;
 
 export default function ListData (props) {
-  // const searchDone = (display) => {
-  //   setDisplay(display);
-  // };
+  const scrollContainerRef = useRef(null); // Define the ref here
 
   const isFullContentShown = useSelector(
     state => state.fieldButtons.isFullContentShown
@@ -3073,7 +3124,7 @@ export default function ListData (props) {
     var keywords = [];
     var exwords = [];
     for (let k = 0; k < keywordAndArray.length; k++) {
-      let keywordArray = keywordAndArray[k].split(/(\s+)/);
+      let keywordArray = keywordAndArray[k].split(/[\s\u3000]+/);
       var keywords_temp = [];
       var exwords_temp = [];
       let j = 0;
@@ -3837,6 +3888,8 @@ export default function ListData (props) {
             isUpdating={props.isUpdating}
             isFullContentShown={isFullContentShown}
             toggleIsFullContentShown={toggleIsFullContentShown}
+            saveScrollPosition={props.saveScrollPosition} // Pass saveScrollPosition
+            restoreScrollPosition={props.restoreScrollPosition} // Pass restoreScrollPosition
           />
           {/* </div> */}
         </Fragment>
@@ -3854,7 +3907,7 @@ export default function ListData (props) {
       .slice(indexOfFirstProInputList, indexOfLastProInputList);
 
     return (
-      <div>
+      <div class='table-responsive'>
         <Card>
           <Row className='form-group'>
             <Col>
@@ -3890,258 +3943,273 @@ export default function ListData (props) {
                     ></CSVLink>
                   </div>
                 </div>
-                <Table bordered responsive hover striped>
-                  <thead>
-                    <tr>
-                      <th></th> {/* for Edit */}
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputDateAscending}
-                        >
-                          date
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputPlaceAscending}
-                        >
-                          place
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputPersonAscending}
-                        >
-                          person
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputSubjectAscending}
-                        >
-                          subject
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputReasonAscending}
-                        >
-                          reason
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition1Ascending}
-                        >
-                          c1
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition2Ascending}
-                        >
-                          c2
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition3Ascending}
-                        >
-                          c3
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition4Ascending}
-                        >
-                          c4
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition5Ascending}
-                        >
-                          c5
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition6Ascending}
-                        >
-                          c6
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition7Ascending}
-                        >
-                          c7
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition8Ascending}
-                        >
-                          c8
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition9Ascending}
-                        >
-                          c9
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition10Ascending}
-                        >
-                          c10
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition11Ascending}
-                        >
-                          c11
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition12Ascending}
-                        >
-                          c12
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition13Ascending}
-                        >
-                          c13
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition14Ascending}
-                        >
-                          c14
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition15Ascending}
-                        >
-                          c15
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition16Ascending}
-                        >
-                          c16
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition17Ascending}
-                        >
-                          c17
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition18Ascending}
-                        >
-                          c18
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition19Ascending}
-                        >
-                          c19
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition20Ascending}
-                        >
-                          c20
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputDataAscending}
-                        >
-                          data
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputUnitAscending}
-                        >
-                          unit
-                        </Button>
-                      </th>
-                      <th></th> {/* for Delete */}
-                    </tr>
-                  </thead>
-                  <tbody>{currentProInputList}</tbody>
-                </Table>
+                <div
+                  class='table-responsive'
+                  ref={props.scrollContainerRef} // Attach the ref to the Card
+                  onScroll={props.saveScrollPosition} // Attach the onScroll event
+                  style={{ overflowX: 'auto', whiteSpace: 'nowrap' }} // Ensure scrolling is enabled
+                >
+                  <Table
+                    bordered
+                    hover
+                    striped
+                    style={{
+                      wordWrap: 'break-word', // Enable word wrapping
+                      whiteSpace: 'normal' // Allow content to wrap
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th></th> {/* for Edit */}
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputDateAscending}
+                          >
+                            date
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputPlaceAscending}
+                          >
+                            place
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputPersonAscending}
+                          >
+                            person
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputSubjectAscending}
+                          >
+                            subject
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputReasonAscending}
+                          >
+                            reason
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition1Ascending}
+                          >
+                            c1
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition2Ascending}
+                          >
+                            c2
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition3Ascending}
+                          >
+                            c3
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition4Ascending}
+                          >
+                            c4
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition5Ascending}
+                          >
+                            c5
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition6Ascending}
+                          >
+                            c6
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition7Ascending}
+                          >
+                            c7
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition8Ascending}
+                          >
+                            c8
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition9Ascending}
+                          >
+                            c9
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition10Ascending}
+                          >
+                            c10
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition11Ascending}
+                          >
+                            c11
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition12Ascending}
+                          >
+                            c12
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition13Ascending}
+                          >
+                            c13
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition14Ascending}
+                          >
+                            c14
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition15Ascending}
+                          >
+                            c15
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition16Ascending}
+                          >
+                            c16
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition17Ascending}
+                          >
+                            c17
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition18Ascending}
+                          >
+                            c18
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition19Ascending}
+                          >
+                            c19
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition20Ascending}
+                          >
+                            c20
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputDataAscending}
+                          >
+                            data
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputUnitAscending}
+                          >
+                            unit
+                          </Button>
+                        </th>
+                        <th></th> {/* for Delete */}
+                      </tr>
+                    </thead>
+                    <tbody>{currentProInputList}</tbody>
+                  </Table>
+                </div>
               </CardBody>
             </Col>
           </Row>
@@ -4166,6 +4234,8 @@ export default function ListData (props) {
             isUpdating={props.isUpdating}
             isFullContentShown={isFullContentShown}
             toggleIsFullContentShown={toggleIsFullContentShown}
+            saveScrollPosition={props.saveScrollPosition} // Pass saveScrollPosition
+            restoreScrollPosition={props.restoreScrollPosition} // Pass restoreScrollPosition
           />
           {/* </div> */}
         </Fragment>
@@ -4778,259 +4848,274 @@ export default function ListData (props) {
                     ></CSVLink>
                   </div>
                 </div>
-                <Table bordered responsive hover striped class='table'>
-                  {/* <Table bordered responsive hover striped class="tableFixHead"> */}
-                  <thead>
-                    <tr>
-                      <th></th> {/* for Edit */}
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputDateAscending}
-                        >
-                          date
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputPlaceAscending}
-                        >
-                          place
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputPersonAscending}
-                        >
-                          person
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputSubjectAscending}
-                        >
-                          subject
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputReasonAscending}
-                        >
-                          reason
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition1Ascending}
-                        >
-                          c1
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition2Ascending}
-                        >
-                          c2
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition3Ascending}
-                        >
-                          c3
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition4Ascending}
-                        >
-                          c4
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition5Ascending}
-                        >
-                          c5
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition6Ascending}
-                        >
-                          c6
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition7Ascending}
-                        >
-                          c7
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition8Ascending}
-                        >
-                          c8
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition9Ascending}
-                        >
-                          c9
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition10Ascending}
-                        >
-                          c10
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition11Ascending}
-                        >
-                          c11
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition12Ascending}
-                        >
-                          c12
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition13Ascending}
-                        >
-                          c13
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition14Ascending}
-                        >
-                          c14
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition15Ascending}
-                        >
-                          c15
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition16Ascending}
-                        >
-                          c16
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition17Ascending}
-                        >
-                          c17
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition18Ascending}
-                        >
-                          c18
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition19Ascending}
-                        >
-                          c19
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputCondition20Ascending}
-                        >
-                          c20
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputDataAscending}
-                        >
-                          data
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsProInputUnitAscending}
-                        >
-                          unit
-                        </Button>
-                      </th>
-                      <th></th> {/* for Delete */}
-                    </tr>
-                  </thead>
-                  <tbody>{currentProInputList}</tbody>
-                </Table>
+                <div
+                  class='table-responsive'
+                  ref={props.scrollContainerRef} // Attach the ref to the Card
+                  onScroll={props.saveScrollPosition} // Attach the onScroll event
+                  style={{ overflowX: 'auto', whiteSpace: 'nowrap' }} // Ensure scrolling is enabled
+                >
+                  <Table
+                    bordered
+                    hover
+                    striped
+                    class='table'
+                    style={{
+                      wordWrap: 'break-word', // Enable word wrapping
+                      whiteSpace: 'normal' // Allow content to wrap
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th></th> {/* for Edit */}
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputDateAscending}
+                          >
+                            date
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputPlaceAscending}
+                          >
+                            place
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputPersonAscending}
+                          >
+                            person
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputSubjectAscending}
+                          >
+                            subject
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputReasonAscending}
+                          >
+                            reason
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition1Ascending}
+                          >
+                            c1
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition2Ascending}
+                          >
+                            c2
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition3Ascending}
+                          >
+                            c3
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition4Ascending}
+                          >
+                            c4
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition5Ascending}
+                          >
+                            c5
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition6Ascending}
+                          >
+                            c6
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition7Ascending}
+                          >
+                            c7
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition8Ascending}
+                          >
+                            c8
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition9Ascending}
+                          >
+                            c9
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition10Ascending}
+                          >
+                            c10
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition11Ascending}
+                          >
+                            c11
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition12Ascending}
+                          >
+                            c12
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition13Ascending}
+                          >
+                            c13
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition14Ascending}
+                          >
+                            c14
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition15Ascending}
+                          >
+                            c15
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition16Ascending}
+                          >
+                            c16
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition17Ascending}
+                          >
+                            c17
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition18Ascending}
+                          >
+                            c18
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition19Ascending}
+                          >
+                            c19
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputCondition20Ascending}
+                          >
+                            c20
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputDataAscending}
+                          >
+                            data
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsProInputUnitAscending}
+                          >
+                            unit
+                          </Button>
+                        </th>
+                        <th></th> {/* for Delete */}
+                      </tr>
+                    </thead>
+                    <tbody>{currentProInputList}</tbody>
+                  </Table>
+                </div>
               </CardBody>
             </Col>
           </Row>

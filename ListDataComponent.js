@@ -36,6 +36,7 @@ import { CSVLink, CSVDownload } from 'react-csv';
 import Pagination from './Pagination';
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 // import ReactTooltip from 'react-tooltip';
+import DOMPurify from 'dompurify';
 
 function RenderInputTable ({
   input,
@@ -45,7 +46,9 @@ function RenderInputTable ({
   auth,
   isUpdating,
   isFullContentShown,
-  toggleIsFullContentShown
+  toggleIsFullContentShown,
+  saveScrollPosition, // Add this
+  restoreScrollPosition // Add this
 }) {
   const [isOpen, setIsOpen] = useState(false);
   // const classNameForEditAndDelete = this.props.isMobile ? '' : 'sticky-td';
@@ -170,6 +173,10 @@ function RenderInputTable ({
       // Check if the input has changed
       const newInput = { ...input, [fieldName]: tempValue }; // Use the temporary value to update the input
       if (window.confirm('OK to change data?')) {
+        if (saveScrollPosition) {
+          saveScrollPosition();
+        }
+
         updateInput(
           input._id,
           newInput.date,
@@ -180,7 +187,12 @@ function RenderInputTable ({
           newInput.condition,
           newInput.data,
           newInput.unit
-        );
+        ).then(() => {
+          // Restore the scroll position after the update
+          if (restoreScrollPosition) {
+            restoreScrollPosition();
+          }
+        });
       }
     }
     // to know which field is being edited
@@ -495,7 +507,9 @@ function RenderInputTable ({
           <div
             name='reason'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: input.reason }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(input.reason)
+            }}
           />
         )}
       </td>
@@ -521,7 +535,9 @@ function RenderInputTable ({
           <div
             name='condition'
             onDoubleClick={handleDoubleClick} // Ensure double-click works
-            dangerouslySetInnerHTML={{ __html: input.condition }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(input.condition)
+            }}
           />
         )}
       </td>
@@ -664,10 +680,10 @@ export default function ListData (props) {
   useEffect(() => {
     const handleScroll = () => {
       if (tableRef.current) {
-        console.log(
-          'tableRef.current.scrollLeft: ',
-          tableRef.current.scrollLeft
-        ); // Logs the horizontal scroll position
+        // console.log(
+        //   'tableRef.current.scrollLeft: ',
+        //   tableRef.current.scrollLeft
+        // ); // Logs the horizontal scroll position
       }
     };
 
@@ -798,7 +814,8 @@ export default function ListData (props) {
     var keywords = [];
     var exwords = [];
     for (let k = 0; k < keywordAndArray.length; k++) {
-      let keywordArray = keywordAndArray[k].split(/(\s+)/);
+      let keywordArray = keywordAndArray[k].split(/[\s\u3000]+/);
+      // let keywordArray = keywordAndArray[k].split(/(\s+)/);
       var keywords_temp = [];
       var exwords_temp = [];
       let j = 0;
@@ -1114,6 +1131,8 @@ export default function ListData (props) {
             isUpdating={props.isUpdating}
             isFullContentShown={isFullContentShown}
             toggleIsFullContentShown={toggleIsFullContentShown}
+            saveScrollPosition={props.saveScrollPosition} // Pass saveScrollPosition
+            restoreScrollPosition={props.restoreScrollPosition} // Pass restoreScrollPosition
           />
           {/* </div> */}
         </Fragment>
@@ -1170,92 +1189,105 @@ export default function ListData (props) {
                     ></CSVLink>
                   </div>
                 </div>
-                <Table bordered responsive hover striped>
-                  {' '}
-                  {/*2024.3.2*/}
-                  <thead>
-                    <tr>
-                      <th></th> {/* for Edit */}
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputDateAscending}
-                        >
-                          date
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputPlaceAscending}
-                        >
-                          place
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputPersonAscending}
-                        >
-                          person
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputSubjectAscending}
-                        >
-                          subject
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputReasonAscending}
-                        >
-                          reason
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputConditionAscending}
-                        >
-                          condition
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputDataAscending}
-                        >
-                          data
-                        </Button>
-                      </th>
-                      <th>
-                        <Button
-                          outline
-                          color='secondary'
-                          onClick={toggleIsInputUnitAscending}
-                          // innerRef={tableRef}
-                        >
-                          unit
-                        </Button>
-                      </th>
-                      <th></th> {/* for Delete */}
-                    </tr>
-                  </thead>
-                  <tbody>{currentInputList}</tbody>
-                  {/* <tbody>{currentInputList.reverse()}</tbody> */}
-                  {/* <tbody>{currentInputs}</tbody> */}
-                </Table>
+                <div
+                  class='table-responsive'
+                  ref={props.scrollContainerRef} // Attach the ref to the Card
+                  onScroll={props.saveScrollPosition} // Attach the onScroll event
+                  style={{ overflowX: 'auto', whiteSpace: 'nowrap' }} // Ensure scrolling is enabled
+                >
+                  <Table
+                    bordered
+                    hover
+                    striped
+                    style={{
+                      wordWrap: 'break-word', // Enable word wrapping
+                      whiteSpace: 'normal' // Allow content to wrap
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th></th> {/* for Edit */}
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputDateAscending}
+                          >
+                            date
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputPlaceAscending}
+                          >
+                            place
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputPersonAscending}
+                          >
+                            person
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputSubjectAscending}
+                          >
+                            subject
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputReasonAscending}
+                          >
+                            reason
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputConditionAscending}
+                          >
+                            condition
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputDataAscending}
+                          >
+                            data
+                          </Button>
+                        </th>
+                        <th>
+                          <Button
+                            outline
+                            color='secondary'
+                            onClick={toggleIsInputUnitAscending}
+                            // innerRef={tableRef}
+                          >
+                            unit
+                          </Button>
+                        </th>
+                        <th></th> {/* for Delete */}
+                      </tr>
+                    </thead>
+                    <tbody>{currentInputList}</tbody>
+                    {/* <tbody>{currentInputList.reverse()}</tbody> */}
+                    {/* <tbody>{currentInputs}</tbody> */}
+                  </Table>
+                </div>
               </CardBody>
             </Col>
           </Row>
@@ -1285,6 +1317,8 @@ export default function ListData (props) {
             isUpdating={props.isUpdating}
             isFullContentShown={isFullContentShown}
             toggleIsFullContentShown={toggleIsFullContentShown}
+            saveScrollPosition={props.saveScrollPosition} // Pass saveScrollPosition
+            restoreScrollPosition={props.restoreScrollPosition} // Pass restoreScrollPosition
           />
           {/* </div> */}
         </Fragment>
@@ -1524,8 +1558,22 @@ export default function ListData (props) {
                     ></CSVLink>
                   </div>
                 </div>
-                <div ref={tableRef} style={{ overflowX: 'auto' }}>
-                  <Table bordered responsive hover striped class='table'>
+                <div
+                  class='table-responsive'
+                  ref={props.scrollContainerRef} // Attach the ref to the Card
+                  onScroll={props.saveScrollPosition} // Attach the onScroll event
+                  style={{ overflowX: 'auto', whiteSpace: 'nowrap' }} // Ensure scrolling is enabled
+                >
+                  <Table
+                    bordered
+                    hover
+                    striped
+                    class='table'
+                    style={{
+                      wordWrap: 'break-word', // Enable word wrapping
+                      whiteSpace: 'normal' // Allow content to wrap
+                    }}
+                  >
                     <thead>
                       <tr>
                         <th></th> {/* for Edit */}

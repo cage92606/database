@@ -1,20 +1,13 @@
-import React, { Component, useEffect } from 'react';
-import ReactSearchBox from 'react-search-box';
-import Kirk from './KirkComponent';
-import Data from './DataComponent';
-import Pro from './ProComponent';
-import Header from './HeaderComponent';
-import Graph from './GraphComponent';
-import Chronicle from './ChronicleComponent';
-import {
-  Link,
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Redirect
-} from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react'
+import ReactSearchBox from 'react-search-box'
+import Kirk from './KirkComponent'
+import Data from './DataComponent'
+import Pro from './ProComponent'
+import Header from './HeaderComponent'
+// import Graph from './GraphComponent';
+import Chronicle from './ChronicleComponent'
+import { Routes, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
 import {
   postKirk,
   fetchKirks,
@@ -33,58 +26,30 @@ import {
   deleteProInput,
   updateProInput,
   forgotPassword
-  // showAll,
-  // showMine,
-  // getSearchWord,
-  // updateKirkNum,
-  // getKirkNum,
-  // updateKirkNum,
-} from '../redux/ActionCreators';
-import { actions } from 'react-redux-form';
-import ListKirk from './ListKirkComponent';
-import ListKirk2 from './ListKirk2Component';
-import ListKirkPro from './ListKirkProComponent';
-import ListData from './ListDataComponent';
-import ListProData from './ListProDataComponent';
-import { foundKirks } from './SearchComponent';
-import Forgot from './ForgotComponent';
-import Reset from './ResetComponent';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-// import * as ReactDOM from 'react-dom/client';
+} from '../redux/ActionCreators'
+import { actions } from 'react-redux-form'
+import ListKirk from './ListKirkComponent'
+import ListKirk2 from './ListKirk2Component'
+import ListKirkPro from './ListKirkProComponent'
+import ListData from './ListDataComponent'
+import ListProData from './ListProDataComponent'
+import Forgot from './ForgotComponent'
+import Reset from './ResetComponent'
 
-const mapStateToProps = state => {
-  return {
-    kirks: state.kirks,
-    auth: state.auth,
-    inputs: state.inputs,
-    proInputs: state.proInputs
-    // kirkNum: state.kirkNum,
-  };
-};
-
-window.addEventListener('offline', e => {
-  console.log('offline');
-});
+const mapStateToProps = state => ({
+  kirks: state.kirks,
+  auth: state.auth,
+  inputs: state.inputs,
+  proInputs: state.proInputs
+})
 
 const mapDispatchToProps = dispatch => ({
-  fetchKirks: () => {
-    dispatch(fetchKirks());
-  }, // This is a THUNK
-  fetchInputs: () => {
-    dispatch(fetchInputs());
-  }, // This is a THUNK
-  fetchProInputs: () => {
-    dispatch(fetchProInputs());
-  }, // This is a THUNK
-  resetKirkForm: () => {
-    dispatch(actions.reset('kirk'));
-  }, // This is a THUNK
-  resetInputForm: () => {
-    dispatch(actions.reset('input'));
-  }, // This is a THUNK
-  resetProInputForm: () => {
-    dispatch(actions.reset('proInput'));
-  }, // This is a THUNK
+  fetchKirks: () => dispatch(fetchKirks()),
+  fetchInputs: () => dispatch(fetchInputs()),
+  fetchProInputs: () => dispatch(fetchProInputs()),
+  resetKirkForm: () => dispatch(actions.reset('kirk')),
+  resetInputForm: () => dispatch(actions.reset('input')),
+  resetProInputForm: () => dispatch(actions.reset('proInput')),
   loginUser: creds => dispatch(loginUser(creds)),
   pwChangeUser: creds => dispatch(pwChangeUser(creds)),
   signupUser: creds => dispatch(signupUser(creds)),
@@ -102,7 +67,6 @@ const mapDispatchToProps = dispatch => ({
     news,
     buy,
     utilities,
-    // symptoms,
     events,
     health,
     foods,
@@ -121,7 +85,6 @@ const mapDispatchToProps = dispatch => ({
         news,
         buy,
         utilities,
-        // symptoms,
         events,
         health,
         foods,
@@ -208,7 +171,6 @@ const mapDispatchToProps = dispatch => ({
     news,
     buy,
     utilities,
-    // symptoms,
     events,
     health,
     foods,
@@ -228,7 +190,6 @@ const mapDispatchToProps = dispatch => ({
         news,
         buy,
         utilities,
-        // symptoms,
         events,
         health,
         foods,
@@ -321,299 +282,292 @@ const mapDispatchToProps = dispatch => ({
         unit
       )
     )
-});
+})
 
-class Main extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      keyword: '',
-      showAll: true,
-      view: true,
-      display: []
-      // refresh: false,
-      // kirkNum2: 0,
-    };
-    this.getKeyword = this.getKeyword.bind(this);
-    this.getShowAll = this.getShowAll.bind(this);
-    this.getView = this.getView.bind(this);
-    this.getDisplay = this.getDisplay.bind(this);
-  }
-  // a lifecycle method, will be called or will be executed just after this component gets mounted into the view of my application.
-  componentDidMount () {
-    this.props.fetchKirks();
-    this.props.fetchInputs();
-    this.props.fetchProInputs();
-    // console.log('kirkNum on main is ', this.props.kirkNum);
-    // window.addEventListener(
-    //   'resize',
-    //   () => {
-    //     this.setState({
-    //       isMobile: window.innerWidth < 1200,
-    //     });
-    //   },
-    //   false
-    // );
-  }
+const Main = props => {
+  const [keyword, setKeyword] = useState('')
+  const [showAll, setShowAll] = useState(true)
+  const [view, setView] = useState(true)
+  const [display, setDisplay] = useState([])
 
-  // componentDidUnmount() {
-  //   this.props.dispatch(actions.reset('proInput'));
-  // }
+  useEffect(() => {
+    props.fetchKirks()
+    props.fetchInputs()
+    props.fetchProInputs()
+  }, [])
 
-  getKeyword (keyword) {
-    this.setState({
-      keyword: keyword
-    });
-    // console.log('keyword on main is ', keyword);
-    // console.log('this.state.keyword on main is ', this.state.keyword);
-  }
+  const getKeyword = keyword => setKeyword(keyword)
+  const getShowAll = showAll => setShowAll(showAll)
+  const getView = view => setView(view)
+  const getDisplay = display => setDisplay(display)
 
-  getShowAll (showAll) {
-    // console.log('showAll on main is ', showAll);
-    this.setState({ showAll: showAll });
-  }
-
-  getView (view) {
-    // console.log('view on main is ', view);
-    this.setState({ view: view });
-  }
-
-  getDisplay (display) {
-    this.setState({ display: display });
-  }
-
-  render () {
-    const ForgotPasswordPage = () => {
-      return (
-        <div>
-          <Forgot forgotPassword={this.props.forgotPassword} />
-        </div>
-      );
-    };
-    const ResetPasswordPage = () => {
-      return (
-        <div>
-          <Reset />
-        </div>
-      );
-    };
-    const KirkPage = () => {
-      let myKirks = [];
-      // console.log('showAll on main is ', this.props.showAll.value);
-      // console.log('showAll on DataPage of main is ', this.state.showAll);
-      for (let i = 0; i < this.props.kirks.kirks.length; i++) {
-        if (this.state.showAll === true) {
-          myKirks = this.props.kirks.kirks;
-          break;
-        } else if (this.props.kirks.kirks[i].user === this.props.auth.id) {
-          myKirks.push(this.props.kirks.kirks[i]);
-        } else {
-          // meaning if the data is someone else's, go on next.
-          continue;
-        }
+  const KirkPage = () => {
+    let myKirks = []
+    for (let i = 0; i < props.kirks.kirks.length; i++) {
+      if (showAll) {
+        myKirks = props.kirks.kirks
+        break
+      } else if (props.kirks.kirks[i].user === props.auth.id) {
+        myKirks.push(props.kirks.kirks[i])
       }
-      return (
-        <div>
-          <Kirk
-            resetKirkForm={this.props.resetKirkForm}
-            postKirk={this.props.postKirk}
-            isUpdating={this.props.kirks.isUpdating} // 2023.11.18
-
-            // fetchKirks={this.props.fetchKirks}
-          />
-
-          <div className='col-12 mt-3'>
-            <ListKirk
-              resetKirkForm={this.props.resetKirkForm}
-              // kirks={this.props.kirks.kirks}
-              kirks={myKirks}
-              isLoading={this.props.kirks.isLoading}
-              errMess={this.props.kirks.errMess}
-              deleteKirk={this.props.deleteKirk}
-              updateKirk={this.props.updateKirk}
-              keyword={this.state.keyword}
-              auth={this.props.auth}
-              isUpdating={this.props.kirks.isUpdating} // 2023.11.18
-              // kirkNum2={this.props.kirkNum2}
-              // getKirkNum2={this.getKirkNum2}
-            />
-          </div>
-        </div>
-      );
-    };
-
-    const DataPage = () => {
-      let myInputs = [];
-      for (let i = 0; i < this.props.inputs.inputs.length; i++) {
-        if (this.state.showAll === true) {
-          myInputs = this.props.inputs.inputs;
-          break;
-        } else if (this.props.inputs.inputs[i].user === this.props.auth.id) {
-          myInputs.push(this.props.inputs.inputs[i]);
-        } else {
-          continue;
-        }
-      }
-
-      return (
-        <div>
-          <Data
-            resetInputForm={this.props.resetInputForm}
-            postInput={this.props.postInput}
-            isLoading={this.props.inputs.isLoading} // 2023.11.18
-            isUpdating={this.props.inputs.isUpdating} // 2023.11.18
-          />
-          <div className='col-12 mt-3'>
-            {this.state.view ? (
-              <ListData
-                resetInputForm={this.props.resetInputForm}
-                inputs={myInputs}
-                isLoading={this.props.inputs.isLoading}
-                errMess={this.props.inputs.errMess}
-                deleteInput={this.props.deleteInput}
-                updateInput={this.props.updateInput}
-                keyword={this.state.keyword}
-                auth={this.props.auth}
-                getDisplay={this.getDisplay}
-                // isMobile={this.props.isMobile}
-                isUpdating={this.props.inputs.isUpdating} // 2023.11.18
-              />
-            ) : (
-              <ListKirk2
-                resetKirkForm={this.props.resetInputForm}
-                kirks={myInputs}
-                isLoading={this.props.inputs.isLoading}
-                errMess={this.props.inputs.errMess}
-                deleteKirk={this.props.deleteInput}
-                updateKirk={this.props.updateInput}
-                keyword={this.state.keyword}
-                auth={this.props.auth}
-                isUpdating={this.props.inputs.isUpdating} // 2023.11.18
-              />
-            )}
-          </div>
-        </div>
-      );
-    };
-
-    const ProPage = () => {
-      let myProInputs = [];
-      for (let i = 0; i < this.props.proInputs.proInputs.length; i++) {
-        if (this.state.showAll === true) {
-          myProInputs = this.props.proInputs.proInputs;
-          break;
-        } else if (
-          this.props.proInputs.proInputs[i].user === this.props.auth.id
-        ) {
-          myProInputs.push(this.props.proInputs.proInputs[i]);
-        } else {
-          continue;
-        }
-      }
-      return (
-        <div>
-          <Pro
-            resetProInputForm={this.props.resetProInputForm}
-            postProInput={this.props.postProInput}
-            isUpdating={this.props.proInputs.isUpdating} // 2023.11.18
-          />
-          <div className='col-12 mt-3'>
-            {this.state.view ? (
-              <ListProData
-                resetProInputForm={this.props.resetProInputForm}
-                proInputs={myProInputs}
-                isLoading={this.props.proInputs.isLoading}
-                errMess={this.props.proInputs.errMess}
-                deleteProInput={this.props.deleteProInput}
-                updateProInput={this.props.updateProInput}
-                keyword={this.state.keyword}
-                auth={this.props.auth}
-                getDisplay={this.getDisplay}
-                isUpdating={this.props.proInputs.isUpdating} // 2023.11.18
-              />
-            ) : (
-              <ListKirkPro
-                resetKirkForm={this.props.resetProInputForm}
-                kirks={myProInputs}
-                isLoading={this.props.proInputs.isLoading}
-                errMess={this.props.proInputs.errMess}
-                deleteKirk={this.props.deleteProInput}
-                updateKirk={this.props.updateProInput}
-                keyword={this.state.keyword}
-                auth={this.props.auth}
-                isUpdating={this.props.proInputs.isUpdating} // 2023.11.18
-              />
-            )}
-          </div>
-        </div>
-      );
-    };
-
-    const GraphPage = () => {
-      return (
-        <div>
-          <Graph />
-        </div>
-      );
-    };
-
-    const ChroniclePage = () => {
-      let myProInputs = [];
-      for (let i = 0; i < this.props.proInputs.proInputs.length; i++) {
-        if (this.state.showAll === true) {
-          myProInputs = this.props.proInputs.proInputs;
-          break;
-        } else if (
-          this.props.proInputs.proInputs[i].user === this.props.auth.id
-        ) {
-          myProInputs.push(this.props.proInputs.proInputs[i]);
-        } else {
-          continue;
-        }
-      }
-      return (
-        <div>
-          <Chronicle proInputs={myProInputs} keyword={this.state.keyword} />
-        </div>
-      );
-    };
+    }
 
     return (
       <div>
-        <Header
-          auth={this.props.auth}
-          loginUser={this.props.loginUser}
-          pwChangeUser={this.props.pwChangeUser}
-          signupUser={this.props.signupUser}
-          logoutUser={this.props.logoutUser}
-          kirks={this.props.kirks.kirks}
-          inputs={this.props.inputs.inputs}
-          getKeyword={this.getKeyword}
-          getShowAll={this.getShowAll}
-          getView={this.getView}
-          display={this.state.display}
+        <Kirk
+          resetKirkForm={props.resetKirkForm}
+          postKirk={props.postKirk}
+          isUpdating={props.kirks.isUpdating}
         />
-        <Routes>
-          {/* <Route path="/inputs" element={ <Navigate to="/inputs" /> } /> */}
-          <Route exact path='/' element={<DataPage />} />
-          <Route exact path='/inputs' element={<DataPage />} />
-          <Route exact path='/kirks' element={<KirkPage />} />
-          <Route exact path='/proInputs' element={<ProPage />} />
-          <Route exact path='/graph' element={<GraphPage />} />
-          <Route exact path='/chronicle' element={<ChroniclePage />} />
-          <Route
-            exact
-            path='/users/forgot-password'
-            element={<ForgotPasswordPage />}
+        <div className='col-12 mt-3'>
+          <ListKirk
+            resetKirkForm={props.resetKirkForm}
+            kirks={myKirks}
+            isLoading={props.kirks.isLoading}
+            errMess={props.kirks.errMess}
+            deleteKirk={props.deleteKirk}
+            updateKirk={props.updateKirk}
+            keyword={keyword}
+            auth={props.auth}
+            isUpdating={props.kirks.isUpdating}
           />
-        </Routes>
-        <div className='row justify-content-center'>
-          <div className='col-auto'>
-            <p>© 2022-2023 Keiji Harada</p>
-          </div>
         </div>
       </div>
-    );
+    )
   }
+
+  const DataPage = () => {
+    let myInputs = []
+    for (let i = 0; i < props.inputs.inputs.length; i++) {
+      if (showAll) {
+        myInputs = props.inputs.inputs
+        break
+      } else if (props.inputs.inputs[i].user === props.auth.id) {
+        myInputs.push(props.inputs.inputs[i])
+      }
+    }
+
+    const scrollContainerRef = useRef(null)
+
+    // Save the current scroll position
+    const saveScrollPosition = () => {
+      if (scrollContainerRef.current) {
+        const scrollLeft = scrollContainerRef.current.scrollLeft
+        // console.log('Saving scroll position:', scrollLeft); // Debug log
+        localStorage.setItem('horizontalScrollPosition', scrollLeft)
+      } else {
+        // console.log('scrollContainerRef.current is null'); // Debug log
+      }
+    }
+
+    // Restore the saved scroll position
+    const restoreScrollPosition = () => {
+      const savedScrollPosition = localStorage.getItem(
+        'horizontalScrollPosition'
+      )
+      // console.log('Restoring scroll position:', savedScrollPosition);
+      if (scrollContainerRef.current && savedScrollPosition) {
+        scrollContainerRef.current.scrollLeft = parseInt(
+          savedScrollPosition,
+          10
+        )
+      }
+    }
+
+    useEffect(() => {
+      // Restore scroll position when the component mounts
+      restoreScrollPosition()
+    }, [])
+
+    return (
+      <div>
+        <Data
+          resetInputForm={props.resetInputForm}
+          postInput={props.postInput}
+          isLoading={props.inputs.isLoading}
+          isUpdating={props.inputs.isUpdating}
+        />
+        <div className='col-12 mt-3'>
+          {view ? (
+            <ListData
+              resetInputForm={props.resetInputForm}
+              inputs={myInputs}
+              isLoading={props.inputs.isLoading}
+              errMess={props.inputs.errMess}
+              deleteInput={props.deleteInput}
+              updateInput={props.updateInput}
+              keyword={keyword}
+              auth={props.auth}
+              getDisplay={getDisplay}
+              isUpdating={props.inputs.isUpdating}
+              saveScrollPosition={saveScrollPosition} // Pass saveScrollPosition
+              restoreScrollPosition={restoreScrollPosition} // Pass restoreScrollPosition
+              scrollContainerRef={scrollContainerRef} // Pass scrollContainerRef
+            />
+          ) : (
+            <ListKirk2
+              resetKirkForm={props.resetInputForm}
+              kirks={myInputs}
+              isLoading={props.inputs.isLoading}
+              errMess={props.inputs.errMess}
+              deleteKirk={props.deleteInput}
+              updateKirk={props.updateInput}
+              keyword={keyword}
+              auth={props.auth}
+              isUpdating={props.inputs.isUpdating}
+            />
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  const ProPage = () => {
+    let myProInputs = []
+    for (let i = 0; i < props.proInputs.proInputs.length; i++) {
+      if (showAll) {
+        myProInputs = props.proInputs.proInputs
+        break
+      } else if (props.proInputs.proInputs[i].user === props.auth.id) {
+        myProInputs.push(props.proInputs.proInputs[i])
+      }
+    }
+
+    const scrollContainerRef = useRef(null)
+
+    // Save the current scroll position
+    const saveScrollPosition = () => {
+      if (scrollContainerRef.current) {
+        const scrollLeft = scrollContainerRef.current.scrollLeft
+        // console.log('Saving scroll position:', scrollLeft); // Debug log
+        localStorage.setItem('horizontalScrollPosition', scrollLeft)
+      } else {
+        // console.log('scrollContainerRef.current is null'); // Debug log
+      }
+    }
+
+    // Restore the saved scroll position
+    const restoreScrollPosition = () => {
+      const savedScrollPosition = localStorage.getItem(
+        'horizontalScrollPosition'
+      )
+      // console.log('Restoring scroll position:', savedScrollPosition);
+      if (scrollContainerRef.current && savedScrollPosition) {
+        scrollContainerRef.current.scrollLeft = parseInt(
+          savedScrollPosition,
+          10
+        )
+      }
+    }
+
+    useEffect(() => {
+      // Restore scroll position when the component mounts
+      restoreScrollPosition()
+    }, [])
+
+    return (
+      <div>
+        <Pro
+          resetProInputForm={props.resetProInputForm}
+          postProInput={props.postProInput}
+          isUpdating={props.proInputs.isUpdating}
+        />
+        <div className='col-12 mt-3'>
+          {view ? (
+            <ListProData
+              resetProInputForm={props.resetProInputForm}
+              proInputs={myProInputs}
+              isLoading={props.proInputs.isLoading}
+              errMess={props.proInputs.errMess}
+              deleteProInput={props.deleteProInput}
+              updateProInput={props.updateProInput}
+              keyword={keyword}
+              auth={props.auth}
+              getDisplay={getDisplay}
+              isUpdating={props.proInputs.isUpdating}
+              saveScrollPosition={saveScrollPosition} // Pass saveScrollPosition
+              restoreScrollPosition={restoreScrollPosition} // Pass restoreScrollPosition
+              scrollContainerRef={scrollContainerRef} // Pass scrollContainerRef
+            />
+          ) : (
+            <ListKirkPro
+              resetKirkForm={props.resetProInputForm}
+              kirks={myProInputs}
+              isLoading={props.proInputs.isLoading}
+              errMess={props.proInputs.errMess}
+              deleteKirk={props.deleteProInput}
+              updateKirk={props.updateProInput}
+              keyword={keyword}
+              auth={props.auth}
+              isUpdating={props.proInputs.isUpdating}
+            />
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // const GraphPage = () => <Graph />;
+
+  const ChroniclePage = () => {
+    let myProInputs = []
+    for (let i = 0; i < props.proInputs.proInputs.length; i++) {
+      if (showAll) {
+        myProInputs = props.proInputs.proInputs
+        break
+      } else if (props.proInputs.proInputs[i].user === props.auth.id) {
+        myProInputs.push(props.proInputs.proInputs[i])
+      }
+    }
+
+    return (
+      <div>
+        <Chronicle proInputs={myProInputs} keyword={keyword} />
+      </div>
+    )
+  }
+
+  const ForgotPasswordPage = () => (
+    <div>
+      <Forgot forgotPassword={props.forgotPassword} />
+    </div>
+  )
+
+  return (
+    <div>
+      <Header
+        auth={props.auth}
+        loginUser={props.loginUser}
+        pwChangeUser={props.pwChangeUser}
+        signupUser={props.signupUser}
+        logoutUser={props.logoutUser}
+        kirks={props.kirks.kirks}
+        inputs={props.inputs.inputs}
+        getKeyword={getKeyword}
+        getShowAll={getShowAll}
+        getView={getView}
+        display={display}
+      />
+      <Routes>
+        <Route exact path='/' element={<DataPage />} />
+        <Route exact path='/inputs' element={<DataPage />} />
+        <Route exact path='/kirks' element={<KirkPage />} />
+        <Route exact path='/proInputs' element={<ProPage />} />
+        {/* <Route exact path='/graph' element={<GraphPage />} /> */}
+        <Route exact path='/chronicle' element={<ChroniclePage />} />
+        <Route
+          exact
+          path='/users/forgot-password'
+          element={<ForgotPasswordPage />}
+        />
+      </Routes>
+      <div className='row justify-content-center'>
+        <div className='col-auto'>
+          <p>© 2022-2023 Keiji Harada</p>
+        </div>
+      </div>
+    </div>
+  )
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
