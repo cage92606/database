@@ -35,13 +35,46 @@ const Chronicle = ({ proInputs, keyword }) => {
   // Split the keyword into individual words
   const keywordsArray = keyword.toLowerCase().split(/\s+/);
 
+  // Parse the keyword string into logical expressions
+  const parseKeywords = keywords => {
+    return keywords
+      .split('|') // Split by OR operator
+      .map(group => {
+        const andConditions = group
+          .trim()
+          .split(/\s+/)
+          .map(condition => {
+            if (condition.startsWith('!')) {
+              return { type: 'NOT', value: condition.slice(1).toLowerCase() }; // Handle NOT
+            }
+            return { type: 'AND', value: condition.toLowerCase() }; // Handle AND
+          });
+        return andConditions;
+      });
+  };
+
+  // Evaluate the parsed keyword conditions
+  const evaluateConditions = (conditions, person) => {
+    return conditions.some(andConditions =>
+      andConditions.every(condition => {
+        if (condition.type === 'NOT') {
+          return !person.includes(condition.value); // NOT condition
+        }
+        return person.includes(condition.value); // AND condition
+      })
+    );
+  };
+
+  // Parse the keyword string
+  const parsedKeywords = parseKeywords(keyword);
+
   // Filter proInputs based on the presence of 'timeline' in the subject and all keywords in the person field
   const timelineProInputs = proInputs.filter(item => {
     const subject = item.subject.toLowerCase();
     const person = item.person.toLowerCase();
     return (
-      subject.includes('timeline') &&
-      keywordsArray.every(kw => person.includes(kw))
+      subject.includes('timeline') && evaluateConditions(parsedKeywords, person)
+      // keywordsArray.every(kw => person.includes(kw))
     );
   });
   // console.log('timelineProInputs', timelineProInputs);
