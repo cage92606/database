@@ -44,9 +44,6 @@ const Chronicle = ({ proInputs, keyword }) => {
           .trim()
           .split(/\s+/)
           .map(condition => {
-            if (condition.startsWith('!')) {
-              return { type: 'NOT', value: condition.slice(1).toLowerCase() }; // Handle NOT
-            }
             return { type: 'AND', value: condition.toLowerCase() }; // Handle AND
           });
         return andConditions;
@@ -57,9 +54,6 @@ const Chronicle = ({ proInputs, keyword }) => {
   const evaluateConditions = (conditions, person) => {
     return conditions.some(andConditions =>
       andConditions.every(condition => {
-        if (condition.type === 'NOT') {
-          return !person.includes(condition.value); // NOT condition
-        }
         return person.includes(condition.value); // AND condition
       })
     );
@@ -68,21 +62,82 @@ const Chronicle = ({ proInputs, keyword }) => {
   // Parse the keyword string
   const parsedKeywords = parseKeywords(keyword);
 
-  // Filter proInputs based on the presence of 'timeline' in the subject and all keywords in the person field
-  const timelineProInputs = proInputs.filter(item => {
-    const subject = item.subject.toLowerCase();
-    const person = item.person.toLowerCase();
-    return (
-      subject.includes('timeline') && evaluateConditions(parsedKeywords, person)
-      // keywordsArray.every(kw => person.includes(kw))
+  // Helper function to recursively find child and grandchild Groups
+  const findChildGroups = (groups, parentCondition2Numbers) => {
+    const childGroups = groups.filter(
+      group =>
+        group.condition5 &&
+        group.condition5
+          .split(',')
+          .map(num => parseInt(num.trim(), 10)) // Parse numbers from condition5
+          .some(num => parentCondition2Numbers.has(num)) // Check if any number matches parentCondition2Numbers
     );
-  });
-  // console.log('timelineProInputs', timelineProInputs);
 
-  const timelineGroups = timelineProInputs.filter(item =>
+    const childCondition2Numbers = new Set(
+      childGroups.map(group => parseInt(group.condition2, 10)) // Collect condition2 numbers of child groups
+    );
+
+    if (childGroups.length > 0) {
+      // Recursively find deeper child groups
+      const deeperChildCondition2Numbers = findChildGroups(
+        groups,
+        childCondition2Numbers
+      );
+      // Combine current child groups with deeper child groups
+      return new Set([
+        ...childCondition2Numbers,
+        ...deeperChildCondition2Numbers
+      ]);
+    }
+
+    return parentCondition2Numbers;
+  };
+
+  // Filter proInputs based on the keyword search in the person field
+  const timelineProInputs = keyword
+    ? proInputs.filter(item => {
+        const subject = item.subject.toLowerCase();
+        const person = item.person.toLowerCase();
+        return (
+          subject.includes('timeline') &&
+          evaluateConditions(parsedKeywords, person)
+        );
+      })
+    : proInputs.filter(item => item.subject.toLowerCase().includes('timeline'));
+
+  // Identify Group proInputs whose person field matches the keyword(s)
+  const groupProInputs = timelineProInputs.filter(
+    item => item.condition1.toLowerCase() === 'group'
+  );
+
+  // Collect all condition2 numbers from the matched Group proInputs
+  const initialGroupCondition2Numbers = new Set(
+    groupProInputs.map(group => parseInt(group.condition2, 10))
+  );
+
+  // Recursively find all child and grandchild Groups
+  const allGroupCondition2Numbers = findChildGroups(
+    proInputs.filter(item => item.condition1.toLowerCase() === 'group'),
+    initialGroupCondition2Numbers
+  );
+
+  // Include all Item proInputs without any filtering
+  const itemProInputs = proInputs.filter(
+    item => item.condition1.toLowerCase() === 'item'
+  );
+
+  // Combine Groups and Items, ensuring no duplicates
+  const finalProInputs = [
+    ...new Map(
+      [...groupProInputs, ...itemProInputs].map(item => [item._id, item])
+    ).values()
+  ];
+
+  // Separate finalProInputs into groups and items
+  const timelineGroups = finalProInputs.filter(item =>
     item.condition1.toLowerCase().includes('group')
   );
-  const timelineItems = timelineProInputs.filter(item =>
+  const timelineItems = finalProInputs.filter(item =>
     item.condition1.toLowerCase().includes('item')
   );
 
